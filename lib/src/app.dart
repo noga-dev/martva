@@ -22,6 +22,7 @@ class MyApp extends ConsumerWidget {
       // theme: AppTheme.lightTheme,
       // darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
+      darkTheme: ThemeData.dark(),
       routerConfig: router,
       builder: (context, child) {
         child = botToastBuilder(context, child);
