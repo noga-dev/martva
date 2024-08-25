@@ -1,25 +1,32 @@
-// File: lib/app.dart
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:martva/src/core/router/router.dart';
 
-import 'core/router/router.r.dart';
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: MyApp()));
+}
 
-class App extends ConsumerWidget {
-  const App({super.key});
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final botToastBuilder = BotToastInit();
 
     return MaterialApp.router(
+      title: 'Driving License App',
+      // theme: AppTheme.lightTheme,
+      // darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
       routerConfig: router,
-      title: 'Driving License Theory',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
+      builder: (context, child) {
+        child = botToastBuilder(context, child);
+        return child;
+      },
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -30,7 +37,7 @@ class App extends ConsumerWidget {
         Locale('ge'),
         Locale('ru'),
       ],
-      builder: BotToastInit(),
+      locale: const Locale('en'),
     );
   }
 }

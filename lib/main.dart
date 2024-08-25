@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/app.dart';
-import 'package:martva/src/data/repositories/auth_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -15,11 +13,9 @@ void main() async {
   );
 
   runApp(
-    ProviderScope(
-      overrides: [
-        useMockDataProvider.overrideWith((ref) => kDebugMode),
-      ],
-      child: const App(),
+    const ProviderScope(
+      overrides: [],
+      child: MyApp(),
     ),
   );
 }

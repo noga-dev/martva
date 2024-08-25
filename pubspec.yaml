@@ -47,6 +47,9 @@ dependencies:
   # models
   freezed_annotation: ^2.4.4
 
+  # ui
+  cached_network_image: ^3.4.1
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
