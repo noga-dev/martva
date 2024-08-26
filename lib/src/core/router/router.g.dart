@@ -13,7 +13,9 @@ List<RouteBase> get $appRoutes => [
       $ticketsRoute,
       $examRoute,
       $chatRoute,
+      $chatRoomRoute,
       $userProfileRoute,
+      $talkerRoute,
     ];
 
 RouteBase get $mainRoute => GoRouteData.$route(
@@ -129,12 +131,6 @@ extension $ExamRouteExtension on ExamRoute {
 RouteBase get $chatRoute => GoRouteData.$route(
       path: '/chat',
       factory: $ChatRouteExtension._fromState,
-      routes: [
-        GoRouteData.$route(
-          path: ':type/:id',
-          factory: $ChatRoomRouteExtension._fromState,
-        ),
-      ],
     );
 
 extension $ChatRouteExtension on ChatRoute {
@@ -153,6 +149,11 @@ extension $ChatRouteExtension on ChatRoute {
 
   void replace(BuildContext context) => context.replace(location);
 }
+
+RouteBase get $chatRoomRoute => GoRouteData.$route(
+      path: '/chat/:type/:id',
+      factory: $ChatRoomRouteExtension._fromState,
+    );
 
 extension $ChatRoomRouteExtension on ChatRoomRoute {
   static ChatRoomRoute _fromState(GoRouterState state) => ChatRoomRoute(
@@ -196,6 +197,28 @@ extension $UserProfileRouteExtension on UserProfileRoute {
 
   String get location => GoRouteData.$location(
         '/profile',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $talkerRoute => GoRouteData.$route(
+      path: '/debug-talker',
+      factory: $TalkerRouteExtension._fromState,
+    );
+
+extension $TalkerRouteExtension on TalkerRoute {
+  static TalkerRoute _fromState(GoRouterState state) => const TalkerRoute();
+
+  String get location => GoRouteData.$location(
+        '/debug-talker',
       );
 
   void go(BuildContext context) => context.go(location);

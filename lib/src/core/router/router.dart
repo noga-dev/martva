@@ -98,9 +98,7 @@ class ExamRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<ChatRoute>(path: '/chat', routes: [
-  TypedGoRoute<ChatRoomRoute>(path: ':type/:id'),
-])
+@TypedGoRoute<ChatRoute>(path: '/chat')
 class ChatRoute extends GoRouteData {
   const ChatRoute();
 
@@ -110,6 +108,7 @@ class ChatRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<ChatRoomRoute>(path: '/chat/:type/:id')
 class ChatRoomRoute extends GoRouteData {
   const ChatRoomRoute({
     required this.type,
@@ -136,5 +135,15 @@ class UserProfileRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const UserProfileScreen();
+  }
+}
+
+@TypedGoRoute<TalkerRoute>(path: '/debug-talker')
+class TalkerRoute extends GoRouteData {
+  const TalkerRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return TalkerScreen(talker: talker);
   }
 }

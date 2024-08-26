@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/router/router.dart';
@@ -43,6 +44,11 @@ class MainScreen extends HookConsumerWidget {
               onPressed: () => const ChatRoute().push(context),
               child: const Text('Chat Rooms'),
             ),
+            if (kDebugMode)
+              ElevatedButton(
+                onPressed: () => const TalkerRoute().push(context),
+                child: const Text('Talker'),
+              ),
           ]
               .intersperse(
                 const SizedBox(
