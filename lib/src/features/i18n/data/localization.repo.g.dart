@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'ticket.repo.dart';
+part of 'localization.repo.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ticketRepositoryHash() => r'c8817da27c139faf1f3116df28d6e9ffd3ec6e32';
+String _$localizationRepoHash() => r'82768f71f97e09b355798d75eaad5bbbf9037406';
 
-/// See also [TicketRepository].
-@ProviderFor(TicketRepository)
-final ticketRepositoryProvider = AutoDisposeAsyncNotifierProvider<
-    TicketRepository, List<TicketDto>>.internal(
-  TicketRepository.new,
-  name: r'ticketRepositoryProvider',
+/// See also [LocalizationRepo].
+@ProviderFor(LocalizationRepo)
+final localizationRepoProvider =
+    AutoDisposeNotifierProvider<LocalizationRepo, Locale>.internal(
+  LocalizationRepo.new,
+  name: r'localizationRepoProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$ticketRepositoryHash,
+      : _$localizationRepoHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$TicketRepository = AutoDisposeAsyncNotifier<List<TicketDto>>;
+typedef _$LocalizationRepo = AutoDisposeNotifier<Locale>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

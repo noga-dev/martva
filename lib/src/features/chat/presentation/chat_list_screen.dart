@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/core/features/chat/presentation/chat_room_screen.dart';
+import 'package:martva/src/features/chat/presentation/chat_room_screen.dart';
 import 'package:martva/src/services/chat_service.dart';
 import 'package:martva/src/services/user_profile_service.dart';
 

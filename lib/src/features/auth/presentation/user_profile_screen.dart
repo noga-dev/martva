@@ -1,7 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/core/features/auth/auth_service.dart';
+import 'package:martva/src/features/auth/auth_service.dart';
 import 'package:martva/src/services/user_profile_service.dart';
 
 class UserProfileScreen extends HookConsumerWidget {

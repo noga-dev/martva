@@ -2,31 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/core/features/auth/auth_service.dart';
+import 'package:martva/src/features/auth/auth_service.dart';
 
-class LoginScreen extends HookConsumerWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends HookConsumerWidget {
+  const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final emailController = useTextEditingController();
     final passwordController = useTextEditingController();
+    final confirmPasswordController = useTextEditingController();
+
     final isLoading = useState(false);
 
-    void login() async {
+    void signup() async {
+      if (passwordController.text != confirmPasswordController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passwords do not match')),
+        );
+        return;
+      }
+
       isLoading.value = true;
       try {
-        await ref.read(authServiceProvider.notifier).signIn(
+        await ref.read(authServiceProvider.notifier).signUp(
               email: emailController.text,
               password: passwordController.text,
             );
         if (context.mounted) {
-          context.go('/'); // Navigate to home page after successful login
+          context.go('/'); // Navigate to home page after successful signup
         }
       } catch (e) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error logging in: $e')),
+            SnackBar(content: Text('Error signing up: $e')),
           );
         }
       } finally {
@@ -35,7 +44,7 @@ class LoginScreen extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('Sign Up')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -58,17 +67,26 @@ class LoginScreen extends HookConsumerWidget {
               ),
               obscureText: true,
             ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: confirmPasswordController,
+              decoration: const InputDecoration(
+                labelText: 'Confirm Password',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: isLoading.value ? null : login,
+              onPressed: isLoading.value ? null : signup,
               child: isLoading.value
                   ? const CircularProgressIndicator()
-                  : const Text('Login'),
+                  : const Text('Sign Up'),
             ),
             const SizedBox(height: 16),
             TextButton(
-              onPressed: () => context.go('/signup'),
-              child: const Text('Don\'t have an account? Sign up'),
+              onPressed: () => context.go('/login'),
+              child: const Text('Already have an account? Log in'),
             ),
           ],
         ),

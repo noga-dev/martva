@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:martva/gen/assets.gen.dart';
-import 'package:martva/src/core/features/tickets/repos/ticket_translation.repo.dart';
+import 'package:martva/src/features/tickets/data/ticket_translation.repo.dart';
 import 'package:martva/src/models/ticket.dto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'ticket.repo.g.dart';
 
 @riverpod
-class TicketRepository extends _$TicketRepository {
+class TicketRepo extends _$TicketRepo {
   @override
   Future<List<TicketDto>> build() async {
     final ticketTranslation = ref.watch(ticketTranslationRepoProvider);

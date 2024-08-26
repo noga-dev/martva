@@ -1,4 +1,4 @@
-import 'package:martva/src/core/features/tickets/repos/ticket.repo.dart';
+import 'package:martva/src/features/tickets/data/ticket.repo.dart';
 import 'package:martva/src/models/ticket.dto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -46,7 +46,7 @@ class SpacedRepetitionItem {
 class SpacedRepetitionService extends _$SpacedRepetitionService {
   @override
   Future<List<SpacedRepetitionItem>> build() async {
-    final tickets = await ref.watch(ticketRepositoryProvider.future);
+    final tickets = await ref.watch(ticketRepoProvider.future);
 
     return tickets
         .map((ticket) => SpacedRepetitionItem(ticket: ticket))

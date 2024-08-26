@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/core/features/auth/presentation/user_profile_screen.dart';
-import 'package:martva/src/core/features/chat/presentation/chat_list_screen.dart';
-import 'package:martva/src/core/features/tickets/presentation/screens/exam_screen.dart';
-import 'package:martva/src/core/features/tickets/presentation/screens/tickets_screen.dart';
+import 'package:martva/src/features/auth/presentation/user_profile_screen.dart';
+import 'package:martva/src/features/chat/presentation/chat_list_screen.dart';
+import 'package:martva/src/features/tickets/presentation/screens/exam_screen.dart';
+import 'package:martva/src/features/tickets/presentation/screens/tickets_screen.dart';
 
 class MainScreen extends HookConsumerWidget {
   const MainScreen({super.key});

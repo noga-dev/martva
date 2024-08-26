@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/core/features/tickets/presentation/screens/ticket_details_screen.dart';
-import 'package:martva/src/core/features/tickets/repos/ticket.repo.dart';
+import 'package:martva/src/features/tickets/data/ticket.repo.dart';
+import 'package:martva/src/features/tickets/presentation/screens/ticket_details_screen.dart';
 import 'package:martva/src/models/ticket.dto.dart';
 import 'package:martva/src/services/spaced_repetition_service.dart';
 
@@ -10,7 +10,7 @@ class TicketsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ticketsAsyncValue = ref.watch(ticketRepositoryProvider);
+    final ticketsAsyncValue = ref.watch(ticketRepoProvider);
 
     return Scaffold(
       appBar: AppBar(

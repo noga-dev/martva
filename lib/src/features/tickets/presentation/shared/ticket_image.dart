@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/core/features/tickets/repos/image_size.repo.dart';
+import 'package:martva/src/features/tickets/data/image_size.repo.dart';
 import 'package:martva/src/models/ticket.dto.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -23,19 +24,29 @@ class TicketImage extends ConsumerWidget {
     return ClipRect(
       clipper: const _BorderPixelClipper(2),
       child: CachedNetworkImage(
-        imageUrl: 'https://teoria.on.ge/files/new/$ticket',
+        cacheManager: DefaultCacheManager(),
+        fadeInDuration: Duration.zero,
+        placeholderFadeInDuration: Duration.zero,
+        imageUrl: 'https://teoria.on.ge/files/new/${ticket.image}',
         imageBuilder: (context, imageProvider) => _Image(
           aspectRatio: aspectRatio,
-          image: imageProvider,
+          imageProvider: imageProvider,
+          imageUrl: 'https://teoria.on.ge/files/new/${ticket.image}',
         ),
         placeholder: (context, url) => _Shimmer(aspectRatio: aspectRatio),
         errorWidget: (context, url, error) => CachedNetworkImage(
+          cacheManager: DefaultCacheManager(),
+          fadeInDuration: Duration.zero,
+          placeholderFadeInDuration: Duration.zero,
           imageUrl: Supabase.instance.client.storage
               .from('ticket-images')
               .getPublicUrl(ticket.image),
           imageBuilder: (context, imageProvider) => _Image(
             aspectRatio: aspectRatio,
-            image: imageProvider,
+            imageProvider: imageProvider,
+            imageUrl: Supabase.instance.client.storage
+                .from('ticket-images')
+                .getPublicUrl(ticket.image),
           ),
           placeholder: (context, url) => _Shimmer(aspectRatio: aspectRatio),
           errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -62,11 +73,13 @@ class _BorderPixelClipper extends CustomClipper<Rect> {
 class _Image extends StatelessWidget {
   const _Image({
     required this.aspectRatio,
-    required this.image,
+    required this.imageProvider,
+    required this.imageUrl,
   });
 
   final double aspectRatio;
-  final ImageProvider image;
+  final ImageProvider imageProvider;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +91,23 @@ class _Image extends StatelessWidget {
           decoration: BoxDecoration(
             image: DecorationImage(
               alignment: const Alignment(0, -1),
-              image: image,
+              image: imageProvider,
               fit: BoxFit.cover,
+            ),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => showDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (context) => InteractiveViewer(
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                  ),
+                ),
+              ),
+              child: const SizedBox.expand(),
             ),
           ),
         ),

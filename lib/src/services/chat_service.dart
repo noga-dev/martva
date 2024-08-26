@@ -1,4 +1,4 @@
-import 'package:martva/src/core/features/auth/auth_service.dart';
+import 'package:martva/src/features/auth/auth_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -46,19 +46,19 @@ class ChatService extends _$ChatService {
     if (user == null) return Stream.value([]);
 
     String table;
-    String column;
+    // String column;
     switch (type) {
       case ChatType.direct:
         table = 'direct_messages';
-        column = 'receiver_id';
+        // column = 'receiver_id';
         break;
       case ChatType.group:
         table = 'group_messages';
-        column = 'group_id';
+        // column = 'group_id';
         break;
       case ChatType.city:
         table = 'city_messages';
-        column = 'city_id';
+        // column = 'city_id';
         break;
     }
 

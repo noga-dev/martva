@@ -1,13 +1,13 @@
 import 'package:go_router/go_router.dart';
-import 'package:martva/src/core/features/auth/auth_service.dart';
-import 'package:martva/src/core/features/auth/login_screen.dart';
-import 'package:martva/src/core/features/auth/presentation/user_profile_screen.dart';
-import 'package:martva/src/core/features/auth/signup_screen.dart';
-import 'package:martva/src/core/features/chat/presentation/chat_list_screen.dart';
-import 'package:martva/src/core/features/chat/presentation/chat_room_screen.dart';
-import 'package:martva/src/core/features/home/presentation/main_screen.dart';
-import 'package:martva/src/core/features/tickets/presentation/screens/exam_screen.dart';
-import 'package:martva/src/core/features/tickets/presentation/screens/tickets_screen.dart';
+import 'package:martva/src/features/auth/auth_service.dart';
+import 'package:martva/src/features/auth/login_screen.dart';
+import 'package:martva/src/features/auth/presentation/user_profile_screen.dart';
+import 'package:martva/src/features/auth/signup_screen.dart';
+import 'package:martva/src/features/chat/presentation/chat_list_screen.dart';
+import 'package:martva/src/features/chat/presentation/chat_room_screen.dart';
+import 'package:martva/src/features/home/presentation/main_screen.dart';
+import 'package:martva/src/features/tickets/presentation/screens/exam_screen.dart';
+import 'package:martva/src/features/tickets/presentation/screens/tickets_screen.dart';
 import 'package:martva/src/services/chat_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

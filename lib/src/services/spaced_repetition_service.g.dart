@@ -7,7 +7,7 @@ part of 'spaced_repetition_service.dart';
 // **************************************************************************
 
 String _$spacedRepetitionServiceHash() =>
-    r'52ea4b9c6c07c2d9c6d4d85c2d25ca4cc8b8a660';
+    r'c60443cd4ce551a2505907845647c26e2e5885f6';
 
 /// See also [SpacedRepetitionService].
 @ProviderFor(SpacedRepetitionService)
