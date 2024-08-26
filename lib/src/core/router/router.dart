@@ -1,4 +1,8 @@
+import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:martva/src/core/utils/messaging/talker.dart';
 import 'package:martva/src/features/auth/auth_service.dart';
 import 'package:martva/src/features/auth/login_screen.dart';
 import 'package:martva/src/features/auth/presentation/user_profile_screen.dart';
@@ -10,6 +14,7 @@ import 'package:martva/src/features/tickets/presentation/screens/exam_screen.dar
 import 'package:martva/src/features/tickets/presentation/screens/tickets_screen.dart';
 import 'package:martva/src/services/chat_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 part 'router.g.dart';
 
@@ -18,7 +23,12 @@ GoRouter router(RouterRef ref) {
   final authState = ref.watch(authServiceProvider);
 
   return GoRouter(
+    debugLogDiagnostics: kDebugMode,
     initialLocation: '/',
+    observers: [
+      BotToastNavigatorObserver(),
+      TalkerRouteObserver(talker),
+    ],
     redirect: (context, state) {
       final isLoggedIn = authState != null;
       final isLoggingIn = state.matchedLocation == '/login';
@@ -34,51 +44,97 @@ GoRouter router(RouterRef ref) {
 
       return null;
     },
-    routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const MainScreen(),
-      ),
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
-      GoRoute(
-        path: '/signup',
-        builder: (context, state) => const SignupScreen(),
-      ),
-      GoRoute(
-        path: '/tickets',
-        builder: (context, state) => const TicketsScreen(),
-      ),
-      GoRoute(
-        path: '/exam',
-        builder: (context, state) => const ExamScreen(),
-      ),
-      GoRoute(
-        path: '/chat',
-        builder: (context, state) => const ChatListScreen(),
-        routes: [
-          GoRoute(
-            path: ':type/:id',
-            builder: (context, state) {
-              final type = ChatType.values.firstWhere(
-                (e) =>
-                    e.toString() == 'ChatType.${state.pathParameters['type']}',
-              );
-              return ChatRoomScreen(
-                type: type,
-                id: state.pathParameters['id']!,
-                name: state.uri.queryParameters['name'] ?? 'Chat',
-              );
-            },
-          )
-        ],
-      ),
-      GoRoute(
-        path: '/profile',
-        builder: (context, state) => const UserProfileScreen(),
-      ),
-    ],
+    routes: $appRoutes,
   );
+}
+
+@TypedGoRoute<MainRoute>(path: '/')
+class MainRoute extends GoRouteData {
+  const MainRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const MainScreen();
+  }
+}
+
+@TypedGoRoute<LoginRoute>(path: '/login')
+class LoginRoute extends GoRouteData {
+  const LoginRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const LoginScreen();
+  }
+}
+
+@TypedGoRoute<SignupRoute>(path: '/signup')
+class SignupRoute extends GoRouteData {
+  const SignupRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const SignupScreen();
+  }
+}
+
+@TypedGoRoute<TicketsRoute>(path: '/tickets')
+class TicketsRoute extends GoRouteData {
+  const TicketsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const TicketsScreen();
+  }
+}
+
+@TypedGoRoute<ExamRoute>(path: '/exam')
+class ExamRoute extends GoRouteData {
+  const ExamRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ExamScreen();
+  }
+}
+
+@TypedGoRoute<ChatRoute>(path: '/chat', routes: [
+  TypedGoRoute<ChatRoomRoute>(path: ':type/:id'),
+])
+class ChatRoute extends GoRouteData {
+  const ChatRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ChatListScreen();
+  }
+}
+
+class ChatRoomRoute extends GoRouteData {
+  const ChatRoomRoute({
+    required this.type,
+    required this.id,
+  });
+
+  final ChatType type;
+  final String id;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return ChatRoomScreen(
+      type: type,
+      id: id,
+      name: state.uri.queryParameters['name'] ?? 'Chat',
+    );
+  }
+}
+
+@TypedGoRoute<UserProfileRoute>(path: '/profile')
+class UserProfileRoute extends GoRouteData {
+  const UserProfileRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const UserProfileScreen();
+  }
 }

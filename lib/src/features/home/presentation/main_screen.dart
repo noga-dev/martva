@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:martva/src/core/router/router.dart';
+import 'package:martva/src/core/utils/extensions/list.dart';
 import 'package:martva/src/features/auth/presentation/user_profile_screen.dart';
-import 'package:martva/src/features/chat/presentation/chat_list_screen.dart';
-import 'package:martva/src/features/tickets/presentation/screens/exam_screen.dart';
-import 'package:martva/src/features/tickets/presentation/screens/tickets_screen.dart';
 
 class MainScreen extends HookConsumerWidget {
   const MainScreen({super.key});
@@ -27,31 +26,30 @@ class MainScreen extends HookConsumerWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             ElevatedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const TicketsScreen()),
-              ),
-              child: const Text('Study Tickets'),
+              onPressed: () => const TicketsRoute().push(context),
+              child: const Text('Study tickets'),
             ),
-            const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ExamScreen()),
-              ),
+              onPressed: () => const TicketsRoute().push(context),
+              child: const Text('All Tickets'),
+            ),
+            ElevatedButton(
+              onPressed: () => const ExamRoute().push(context),
               child: const Text('Take Exam'),
             ),
-            const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ChatListScreen()),
-              ),
+              onPressed: () => const ChatRoute().push(context),
               child: const Text('Chat Rooms'),
             ),
-          ],
+          ]
+              .intersperse(
+                const SizedBox(
+                  height: 12,
+                ),
+              )
+              .toList(),
         ),
       ),
     );

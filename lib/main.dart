@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/app.dart';
+import 'package:martva/src/core/utils/messaging/talker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:talker/talker.dart';
 import 'package:talker_riverpod_logger/talker_riverpod_logger.dart';
 
 void main() async {
@@ -18,8 +18,10 @@ void main() async {
     ProviderScope(
       observers: [
         TalkerRiverpodObserver(
-          settings: const TalkerRiverpodLoggerSettings(),
-          talker: Talker(),
+          settings: const TalkerRiverpodLoggerSettings(
+            printStateFullData: false,
+          ),
+          talker: talker,
         ),
       ],
       overrides: const [],
