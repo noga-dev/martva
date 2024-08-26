@@ -1,3 +1,4 @@
+import 'package:martva/src/core/features/tickets/repos/ticket.repo.dart';
 import 'package:martva/src/models/ticket.dto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -44,14 +45,16 @@ class SpacedRepetitionItem {
 @riverpod
 class SpacedRepetitionService extends _$SpacedRepetitionService {
   @override
-  List<SpacedRepetitionItem> build(List<TicketDto> tickets) {
+  Future<List<SpacedRepetitionItem>> build() async {
+    final tickets = await ref.watch(ticketRepositoryProvider.future);
+
     return tickets
         .map((ticket) => SpacedRepetitionItem(ticket: ticket))
         .toList();
   }
 
-  void updateItemGrade(int ticketId, int grade) {
-    state = state.map((item) {
+  void updateItemGrade(String ticketId, int grade) {
+    state.value?.map((item) {
       if (item.ticket.id == ticketId) {
         item.updateWithGrade(grade);
       }
@@ -61,6 +64,20 @@ class SpacedRepetitionService extends _$SpacedRepetitionService {
 
   List<SpacedRepetitionItem> getDueItems() {
     final now = DateTime.now();
-    return state.where((item) => item.nextReviewDate.isBefore(now)).toList();
+
+    if (state.valueOrNull == null) {
+      return [];
+    }
+
+    return state.requireValue
+        .where((item) => item.nextReviewDate.isBefore(now))
+        .toList();
+  }
+
+  SpacedRepetitionItem getDueItem(TicketDto ticket) {
+    return getDueItems().singleWhere(
+      (element) => element.ticket.id == ticket.id,
+      orElse: () => SpacedRepetitionItem(ticket: ticket),
+    );
   }
 }

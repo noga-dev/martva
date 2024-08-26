@@ -20,15 +20,16 @@ class ProgressService extends _$ProgressService {
     return response;
   }
 
-  Future<void> updateProgress(int ticketId, bool isCorrect) async {
+  Future<void> updateProgress(String ticketId, bool isCorrect) async {
     final user = ref.read(authServiceProvider);
+
     if (user == null) return;
 
     final currentProgress = await future;
     final answeredTickets =
-        List<int>.from(currentProgress['answered_tickets'] ?? []);
+        List<String>.from(currentProgress['answered_tickets'] ?? []);
     final correctTickets =
-        List<int>.from(currentProgress['correct_tickets'] ?? []);
+        List<String>.from(currentProgress['correct_tickets'] ?? []);
 
     if (!answeredTickets.contains(ticketId)) {
       answeredTickets.add(ticketId);

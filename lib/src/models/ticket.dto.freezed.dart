@@ -14,17 +14,18 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-TicketDto _$TicketDtoFromJson(Map<String, dynamic> json) {
-  return _TicketDto.fromJson(json);
-}
-
 /// @nodoc
 mixin _$TicketDto {
-  int get id => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: '', fromJson: _parseId)
+  String get id => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: '')
   String get question => throw _privateConstructorUsedError;
-  String? get image => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: '')
   String get explanation => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<AnswerDto> get answers => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: '')
+  String get image => throw _privateConstructorUsedError;
 
   /// Serializes this TicketDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,11 +43,11 @@ abstract class $TicketDtoCopyWith<$Res> {
       _$TicketDtoCopyWithImpl<$Res, TicketDto>;
   @useResult
   $Res call(
-      {int id,
-      String question,
-      String? image,
-      String explanation,
-      List<AnswerDto> answers});
+      {@JsonKey(defaultValue: '', fromJson: _parseId) String id,
+      @JsonKey(defaultValue: '') String question,
+      @JsonKey(defaultValue: '') String explanation,
+      @JsonKey(defaultValue: []) List<AnswerDto> answers,
+      @JsonKey(defaultValue: '') String image});
 }
 
 /// @nodoc
@@ -66,23 +67,19 @@ class _$TicketDtoCopyWithImpl<$Res, $Val extends TicketDto>
   $Res call({
     Object? id = null,
     Object? question = null,
-    Object? image = freezed,
     Object? explanation = null,
     Object? answers = null,
+    Object? image = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
               as String,
-      image: freezed == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String?,
       explanation: null == explanation
           ? _value.explanation
           : explanation // ignore: cast_nullable_to_non_nullable
@@ -91,6 +88,10 @@ class _$TicketDtoCopyWithImpl<$Res, $Val extends TicketDto>
           ? _value.answers
           : answers // ignore: cast_nullable_to_non_nullable
               as List<AnswerDto>,
+      image: null == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -104,11 +105,11 @@ abstract class _$$TicketDtoImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int id,
-      String question,
-      String? image,
-      String explanation,
-      List<AnswerDto> answers});
+      {@JsonKey(defaultValue: '', fromJson: _parseId) String id,
+      @JsonKey(defaultValue: '') String question,
+      @JsonKey(defaultValue: '') String explanation,
+      @JsonKey(defaultValue: []) List<AnswerDto> answers,
+      @JsonKey(defaultValue: '') String image});
 }
 
 /// @nodoc
@@ -126,23 +127,19 @@ class __$$TicketDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? question = null,
-    Object? image = freezed,
     Object? explanation = null,
     Object? answers = null,
+    Object? image = null,
   }) {
     return _then(_$TicketDtoImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
               as String,
-      image: freezed == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String?,
       explanation: null == explanation
           ? _value.explanation
           : explanation // ignore: cast_nullable_to_non_nullable
@@ -151,34 +148,37 @@ class __$$TicketDtoImplCopyWithImpl<$Res>
           ? _value._answers
           : answers // ignore: cast_nullable_to_non_nullable
               as List<AnswerDto>,
+      image: null == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+@JsonSerializable(createFactory: false)
 class _$TicketDtoImpl implements _TicketDto {
   const _$TicketDtoImpl(
-      {required this.id,
-      required this.question,
-      this.image,
-      required this.explanation,
-      required final List<AnswerDto> answers})
+      {@JsonKey(defaultValue: '', fromJson: _parseId) this.id = '',
+      @JsonKey(defaultValue: '') this.question = '',
+      @JsonKey(defaultValue: '') this.explanation = '',
+      @JsonKey(defaultValue: []) final List<AnswerDto> answers = const [],
+      @JsonKey(defaultValue: '') this.image = ''})
       : _answers = answers;
 
-  factory _$TicketDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TicketDtoImplFromJson(json);
-
   @override
-  final int id;
+  @JsonKey(defaultValue: '', fromJson: _parseId)
+  final String id;
   @override
+  @JsonKey(defaultValue: '')
   final String question;
   @override
-  final String? image;
-  @override
+  @JsonKey(defaultValue: '')
   final String explanation;
   final List<AnswerDto> _answers;
   @override
+  @JsonKey(defaultValue: [])
   List<AnswerDto> get answers {
     if (_answers is EqualUnmodifiableListView) return _answers;
     // ignore: implicit_dynamic_type
@@ -186,8 +186,12 @@ class _$TicketDtoImpl implements _TicketDto {
   }
 
   @override
+  @JsonKey(defaultValue: '')
+  final String image;
+
+  @override
   String toString() {
-    return 'TicketDto(id: $id, question: $question, image: $image, explanation: $explanation, answers: $answers)';
+    return 'TicketDto(id: $id, question: $question, explanation: $explanation, answers: $answers, image: $image)';
   }
 
   @override
@@ -198,16 +202,16 @@ class _$TicketDtoImpl implements _TicketDto {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.question, question) ||
                 other.question == question) &&
-            (identical(other.image, image) || other.image == image) &&
             (identical(other.explanation, explanation) ||
                 other.explanation == explanation) &&
-            const DeepCollectionEquality().equals(other._answers, _answers));
+            const DeepCollectionEquality().equals(other._answers, _answers) &&
+            (identical(other.image, image) || other.image == image));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, question, image, explanation,
-      const DeepCollectionEquality().hash(_answers));
+  int get hashCode => Object.hash(runtimeType, id, question, explanation,
+      const DeepCollectionEquality().hash(_answers), image);
 
   /// Create a copy of TicketDto
   /// with the given fields replaced by the non-null parameter values.
@@ -227,25 +231,27 @@ class _$TicketDtoImpl implements _TicketDto {
 
 abstract class _TicketDto implements TicketDto {
   const factory _TicketDto(
-      {required final int id,
-      required final String question,
-      final String? image,
-      required final String explanation,
-      required final List<AnswerDto> answers}) = _$TicketDtoImpl;
-
-  factory _TicketDto.fromJson(Map<String, dynamic> json) =
-      _$TicketDtoImpl.fromJson;
+      {@JsonKey(defaultValue: '', fromJson: _parseId) final String id,
+      @JsonKey(defaultValue: '') final String question,
+      @JsonKey(defaultValue: '') final String explanation,
+      @JsonKey(defaultValue: []) final List<AnswerDto> answers,
+      @JsonKey(defaultValue: '') final String image}) = _$TicketDtoImpl;
 
   @override
-  int get id;
+  @JsonKey(defaultValue: '', fromJson: _parseId)
+  String get id;
   @override
+  @JsonKey(defaultValue: '')
   String get question;
   @override
-  String? get image;
-  @override
+  @JsonKey(defaultValue: '')
   String get explanation;
   @override
+  @JsonKey(defaultValue: [])
   List<AnswerDto> get answers;
+  @override
+  @JsonKey(defaultValue: '')
+  String get image;
 
   /// Create a copy of TicketDto
   /// with the given fields replaced by the non-null parameter values.

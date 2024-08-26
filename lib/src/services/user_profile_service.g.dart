@@ -7,12 +7,12 @@ part of 'user_profile_service.dart';
 // **************************************************************************
 
 String _$userProfileServiceHash() =>
-    r'3b418d47f0460b79236b3c7690f58737054a64b7';
+    r'c8c89d439f8b6427b0d90bddd5794df90946bb70';
 
 /// See also [UserProfileService].
 @ProviderFor(UserProfileService)
 final userProfileServiceProvider =
-    AutoDisposeAsyncNotifierProvider<UserProfileService, UserProfile?>.internal(
+    AutoDisposeAsyncNotifierProvider<UserProfileService, ProfileDto?>.internal(
   UserProfileService.new,
   name: r'userProfileServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final userProfileServiceProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$UserProfileService = AutoDisposeAsyncNotifier<UserProfile?>;
+typedef _$UserProfileService = AutoDisposeAsyncNotifier<ProfileDto?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

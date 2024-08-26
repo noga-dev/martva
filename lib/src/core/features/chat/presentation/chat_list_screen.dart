@@ -21,7 +21,7 @@ class ChatListScreen extends HookConsumerWidget {
 
           return ListView(
             children: [
-              if (userProfile.city != null)
+              if (userProfile.city.isNotEmpty)
                 ListTile(
                   title: Text('${userProfile.city} Chat'),
                   subtitle: const Text('Chat with people in your city'),
@@ -31,7 +31,7 @@ class ChatListScreen extends HookConsumerWidget {
                     MaterialPageRoute(
                       builder: (context) => ChatRoomScreen(
                         type: ChatType.city,
-                        id: userProfile.city!,
+                        id: userProfile.city,
                         name: '${userProfile.city} Chat',
                       ),
                     ),

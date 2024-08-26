@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'progress_service.dart';
+part of 'ticket.repo.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$progressServiceHash() => r'9cd88cb5790941d8edb056aa7dea87cee22e6147';
+String _$ticketRepositoryHash() => r'c8817da27c139faf1f3116df28d6e9ffd3ec6e32';
 
-/// See also [ProgressService].
-@ProviderFor(ProgressService)
-final progressServiceProvider = AutoDisposeAsyncNotifierProvider<
-    ProgressService, Map<String, dynamic>>.internal(
-  ProgressService.new,
-  name: r'progressServiceProvider',
+/// See also [TicketRepository].
+@ProviderFor(TicketRepository)
+final ticketRepositoryProvider = AutoDisposeAsyncNotifierProvider<
+    TicketRepository, List<TicketDto>>.internal(
+  TicketRepository.new,
+  name: r'ticketRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$progressServiceHash,
+      : _$ticketRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ProgressService = AutoDisposeAsyncNotifier<Map<String, dynamic>>;
+typedef _$TicketRepository = AutoDisposeAsyncNotifier<List<TicketDto>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

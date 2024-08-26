@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -6,11 +7,11 @@ import 'package:martva/src/core/router/router.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: App()));
 }
 
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+class App extends ConsumerWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,9 +19,13 @@ class MyApp extends ConsumerWidget {
     final botToastBuilder = BotToastInit();
 
     return MaterialApp.router(
-      title: 'Driving License App',
+      title: 'Martva - Driving License App',
+      debugShowCheckedModeBanner: false,
       // theme: AppTheme.lightTheme,
       // darkTheme: AppTheme.darkTheme,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: PointerDeviceKind.values.toSet(),
+      ),
       themeMode: ThemeMode.system,
       darkTheme: ThemeData.dark(),
       routerConfig: router,

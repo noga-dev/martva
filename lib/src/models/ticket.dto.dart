@@ -3,18 +3,28 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'ticket.dto.freezed.dart';
 part 'ticket.dto.g.dart';
 
-@freezed
+@JsonSerializable()
+@Freezed(fromJson: false)
 class TicketDto with _$TicketDto {
   const factory TicketDto({
-    required int id,
-    required String question,
-    String? image,
-    required String explanation,
-    required List<AnswerDto> answers,
+    @Default('')
+    @JsonKey(
+      defaultValue: '',
+      fromJson: _parseId,
+    )
+    String id,
+    @Default('') @JsonKey(defaultValue: '') String question,
+    @Default('') @JsonKey(defaultValue: '') String explanation,
+    @Default([]) @JsonKey(defaultValue: []) List<AnswerDto> answers,
+    @Default('') @JsonKey(defaultValue: '') String image,
   }) = _TicketDto;
 
   factory TicketDto.fromJson(Map<String, dynamic> json) =>
       _$TicketDtoFromJson(json);
+}
+
+String _parseId(dynamic data) {
+  return data.toString();
 }
 
 @freezed

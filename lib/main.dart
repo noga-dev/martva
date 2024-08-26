@@ -15,7 +15,7 @@ void main() async {
   runApp(
     const ProviderScope(
       overrides: [],
-      child: MyApp(),
+      child: App(),
     ),
   );
 }

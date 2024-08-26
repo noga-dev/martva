@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/core/features/auth/mock_auth_service.dart';
+import 'package:martva/src/core/features/auth/auth_service.dart';
 
 class LoginScreen extends HookConsumerWidget {
   const LoginScreen({super.key});
@@ -16,7 +16,7 @@ class LoginScreen extends HookConsumerWidget {
     void login() async {
       isLoading.value = true;
       try {
-        await ref.read(mockAuthServiceProvider.notifier).signIn(
+        await ref.read(authServiceProvider.notifier).signIn(
               email: emailController.text,
               password: passwordController.text,
             );

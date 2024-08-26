@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'mock_auth_service.dart';
+part of 'ticket_translation.repo.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mockAuthServiceHash() => r'9da63344f42abcf550ad5ce5429105512135a6c9';
+String _$ticketTranslationRepoHash() =>
+    r'147cf13b8cf7bb6bea9210fd320079a2094d1b3f';
 
-/// See also [MockAuthService].
-@ProviderFor(MockAuthService)
-final mockAuthServiceProvider =
-    AutoDisposeNotifierProvider<MockAuthService, User?>.internal(
-  MockAuthService.new,
-  name: r'mockAuthServiceProvider',
+/// See also [TicketTranslationRepo].
+@ProviderFor(TicketTranslationRepo)
+final ticketTranslationRepoProvider = AutoDisposeNotifierProvider<
+    TicketTranslationRepo, TicketTranslation>.internal(
+  TicketTranslationRepo.new,
+  name: r'ticketTranslationRepoProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$mockAuthServiceHash,
+      : _$ticketTranslationRepoHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$MockAuthService = AutoDisposeNotifier<User?>;
+typedef _$TicketTranslationRepo = AutoDisposeNotifier<TicketTranslation>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

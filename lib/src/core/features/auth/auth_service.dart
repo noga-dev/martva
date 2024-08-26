@@ -21,7 +21,10 @@ class AuthService extends _$AuthService {
     state = response.user;
   }
 
-  Future<void> signIn(String email, String password) async {
+  Future<void> signIn({
+    required String email,
+    required String password,
+  }) async {
     final response = await Supabase.instance.client.auth.signInWithPassword(
       email: email,
       password: password,

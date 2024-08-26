@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/features/auth/auth_service.dart';
@@ -20,8 +21,8 @@ class UserProfileScreen extends HookConsumerWidget {
             return const Center(child: Text('User not logged in'));
           }
 
-          nameController.text = userProfile.name ?? '';
-          cityController.text = userProfile.city ?? '';
+          nameController.text = userProfile.name;
+          cityController.text = userProfile.city;
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -31,10 +32,10 @@ class UserProfileScreen extends HookConsumerWidget {
                 Center(
                   child: CircleAvatar(
                     radius: 50,
-                    backgroundImage: userProfile.avatarUrl != null
-                        ? NetworkImage(userProfile.avatarUrl!)
+                    backgroundImage: userProfile.avatarUrl.isNotEmpty
+                        ? NetworkImage(userProfile.avatarUrl)
                         : null,
-                    child: userProfile.avatarUrl == null
+                    child: userProfile.avatarUrl.isEmpty
                         ? const Icon(Icons.person, size: 50)
                         : null,
                   ),
@@ -62,9 +63,9 @@ class UserProfileScreen extends HookConsumerWidget {
                       await ref
                           .read(userProfileServiceProvider.notifier)
                           .updateProfile(updatedProfile);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Profile updated successfully')),
+                      BotToast.showText(
+                        text: 'Profile updated successfully',
+                        backgroundColor: Colors.green,
                       );
                     },
                     child: const Text('Update Profile'),
@@ -75,7 +76,7 @@ class UserProfileScreen extends HookConsumerWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       await ref.read(authServiceProvider.notifier).signOut();
-                      Navigator.of(context).pushReplacementNamed('/login');
+                      // Navigator.of(context).pushReplacementNamed('/login');
                     },
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.red),
