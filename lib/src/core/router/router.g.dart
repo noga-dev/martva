@@ -13,7 +13,6 @@ List<RouteBase> get $appRoutes => [
       $ticketsRoute,
       $examRoute,
       $chatRoute,
-      $chatRoomRoute,
       $userProfileRoute,
       $talkerRoute,
     ];
@@ -131,6 +130,12 @@ extension $ExamRouteExtension on ExamRoute {
 RouteBase get $chatRoute => GoRouteData.$route(
       path: '/chat',
       factory: $ChatRouteExtension._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: ':type/:id',
+          factory: $ChatRoomRouteExtension._fromState,
+        ),
+      ],
     );
 
 extension $ChatRouteExtension on ChatRoute {
@@ -149,11 +154,6 @@ extension $ChatRouteExtension on ChatRoute {
 
   void replace(BuildContext context) => context.replace(location);
 }
-
-RouteBase get $chatRoomRoute => GoRouteData.$route(
-      path: '/chat/:type/:id',
-      factory: $ChatRoomRouteExtension._fromState,
-    );
 
 extension $ChatRoomRouteExtension on ChatRoomRoute {
   static ChatRoomRoute _fromState(GoRouterState state) => ChatRoomRoute(

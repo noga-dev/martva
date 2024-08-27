@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/features/auth/auth_service.dart';
-import 'package:martva/src/services/chat_service.dart';
+import 'package:martva/src/features/auth/data/auth_service.dart';
+import 'package:martva/src/features/chat/domain/chat_service.dart';
 
 class ChatRoomScreen extends HookConsumerWidget {
   final ChatType type;

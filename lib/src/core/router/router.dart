@@ -3,16 +3,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:martva/src/core/utils/messaging/talker.dart';
-import 'package:martva/src/features/auth/auth_service.dart';
-import 'package:martva/src/features/auth/login_screen.dart';
-import 'package:martva/src/features/auth/presentation/user_profile_screen.dart';
-import 'package:martva/src/features/auth/signup_screen.dart';
+import 'package:martva/src/features/auth/data/auth_service.dart';
+import 'package:martva/src/features/auth/presentation/login_screen/login_screen.dart';
+import 'package:martva/src/features/auth/presentation/signup_screen/signup_screen.dart';
+import 'package:martva/src/features/auth/presentation/user_profile_screen/user_profile_screen.dart';
+import 'package:martva/src/features/chat/domain/chat_service.dart';
 import 'package:martva/src/features/chat/presentation/chat_list_screen.dart';
 import 'package:martva/src/features/chat/presentation/chat_room_screen.dart';
 import 'package:martva/src/features/home/presentation/main_screen.dart';
-import 'package:martva/src/features/tickets/presentation/screens/exam_screen.dart';
-import 'package:martva/src/features/tickets/presentation/screens/tickets_screen.dart';
-import 'package:martva/src/services/chat_service.dart';
+import 'package:martva/src/features/tickets/presentation/exam_screen/exam_screen.dart';
+import 'package:martva/src/features/tickets/presentation/ticket_list_screen/ticket_list_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -98,7 +98,14 @@ class ExamRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<ChatRoute>(path: '/chat')
+// chat start
+
+@TypedGoRoute<ChatRoute>(
+  path: '/chat',
+  routes: [
+    TypedGoRoute<ChatRoomRoute>(path: ':type/:id'),
+  ],
+)
 class ChatRoute extends GoRouteData {
   const ChatRoute();
 
@@ -108,7 +115,6 @@ class ChatRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<ChatRoomRoute>(path: '/chat/:type/:id')
 class ChatRoomRoute extends GoRouteData {
   const ChatRoomRoute({
     required this.type,
@@ -127,6 +133,8 @@ class ChatRoomRoute extends GoRouteData {
     );
   }
 }
+
+// chat end
 
 @TypedGoRoute<UserProfileRoute>(path: '/profile')
 class UserProfileRoute extends GoRouteData {

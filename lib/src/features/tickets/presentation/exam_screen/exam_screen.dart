@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:martva/src/core/design_system/data/theme.repo.dart';
 import 'package:martva/src/features/tickets/data/ticket.repo.dart';
 import 'package:martva/src/features/tickets/data/ticket_translation.repo.dart';
+import 'package:martva/src/features/tickets/domain/ticket.dto.dart';
 import 'package:martva/src/features/tickets/presentation/shared/ticket_image.dart';
-import 'package:martva/src/models/ticket.dto.dart';
 
 class ExamScreen extends HookConsumerWidget {
   const ExamScreen({super.key});

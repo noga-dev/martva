@@ -1,8 +1,8 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/features/auth/auth_service.dart';
-import 'package:martva/src/services/user_profile_service.dart';
+import 'package:martva/src/features/auth/data/auth_service.dart';
+import 'package:martva/src/features/auth/data/user_profile_service.dart';
 
 class UserProfileScreen extends HookConsumerWidget {
   const UserProfileScreen({super.key});

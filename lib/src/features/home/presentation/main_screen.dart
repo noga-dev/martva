@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/router/router.dart';
 import 'package:martva/src/core/utils/extensions/list.dart';
-import 'package:martva/src/features/auth/presentation/user_profile_screen.dart';
+import 'package:martva/src/features/auth/presentation/user_profile_screen/user_profile_screen.dart';
 
 class MainScreen extends HookConsumerWidget {
   const MainScreen({super.key});
@@ -30,7 +30,7 @@ class MainScreen extends HookConsumerWidget {
           children: <Widget>[
             ElevatedButton(
               onPressed: () => const TicketsRoute().push(context),
-              child: const Text('Study tickets'),
+              child: const Text('Study session'),
             ),
             ElevatedButton(
               onPressed: () => const TicketsRoute().push(context),

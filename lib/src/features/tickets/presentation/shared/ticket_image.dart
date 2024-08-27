@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/features/tickets/data/image_size.repo.dart';
-import 'package:martva/src/models/ticket.dto.dart';
+import 'package:martva/src/features/tickets/domain/ticket.dto.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

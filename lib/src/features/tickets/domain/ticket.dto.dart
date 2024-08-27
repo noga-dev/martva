@@ -15,8 +15,8 @@ class TicketDto with _$TicketDto {
     String id,
     @Default('') @JsonKey(defaultValue: '') String question,
     @Default('') @JsonKey(defaultValue: '') String explanation,
-    @Default([]) @JsonKey(defaultValue: []) List<AnswerDto> answers,
     @Default('') @JsonKey(defaultValue: '') String image,
+    @Default([]) @JsonKey(defaultValue: []) List<AnswerDto> answers,
   }) = _TicketDto;
 
   factory TicketDto.fromJson(Map<String, dynamic> json) =>

@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:martva/src/features/tickets/domain/spaced_repetition_service.dart';
 import 'package:martva/src/services/progress_service.dart';
-import 'package:martva/src/services/spaced_repetition_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TicketDetailScreen extends HookConsumerWidget {
