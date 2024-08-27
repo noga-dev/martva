@@ -42,8 +42,8 @@ class TicketListItem extends ConsumerWidget {
         ref.watch(spacedRepetitionServiceProvider.notifier).getDueItem(ticket);
 
     return ListTile(
-      leading: Text(dueItem.ticket.id),
-      title: Text(dueItem.ticket.question),
+      leading: Text(ticket.id),
+      title: Text(ticket.question),
       trailing: Text(
           'Next review:\n${dueItem.nextReviewDate.toString().split(' ')[0]}'),
       subtitle: const Wrap(

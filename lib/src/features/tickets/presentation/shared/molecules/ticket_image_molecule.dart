@@ -7,8 +7,8 @@ import 'package:martva/src/features/tickets/domain/ticket.dto.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class TicketImage extends ConsumerWidget {
-  const TicketImage({
+class TicketImageMolecule extends ConsumerWidget {
+  const TicketImageMolecule({
     super.key,
     required this.ticket,
   });

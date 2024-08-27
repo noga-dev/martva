@@ -53,7 +53,7 @@ class SpacedRepetitionService extends _$SpacedRepetitionService {
         .toList();
   }
 
-  void updateItemGrade(String ticketId, int grade) {
+  void updateItemGrade(String ticketId, int grade) async {
     state.value?.map((item) {
       if (item.ticket.id == ticketId) {
         item.updateWithGrade(grade);

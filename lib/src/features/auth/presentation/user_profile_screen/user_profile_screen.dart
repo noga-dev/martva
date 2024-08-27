@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/features/auth/data/auth_service.dart';
 import 'package:martva/src/features/auth/data/user_profile_service.dart';
@@ -10,8 +11,17 @@ class UserProfileScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userProfileAsyncValue = ref.watch(userProfileServiceProvider);
-    final nameController = TextEditingController();
-    final cityController = TextEditingController();
+
+    final nameController = useTextEditingController();
+    final cityController = useTextEditingController();
+
+    useEffect(() {
+      if (userProfileAsyncValue.value != null) {
+        nameController.text = userProfileAsyncValue.value!.name;
+        cityController.text = userProfileAsyncValue.value!.city;
+      }
+      return null;
+    }, [userProfileAsyncValue]);
 
     return Scaffold(
       appBar: AppBar(title: const Text('User Profile')),
@@ -20,9 +30,6 @@ class UserProfileScreen extends HookConsumerWidget {
           if (userProfile == null) {
             return const Center(child: Text('User not logged in'));
           }
-
-          nameController.text = userProfile.name;
-          cityController.text = userProfile.city;
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
