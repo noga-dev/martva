@@ -1,11 +1,10 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/design_system/data/theme.repo.dart';
-import 'package:martva/src/core/design_system/tokens/themes.dart';
 import 'package:martva/src/core/router/router.dart';
+import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,17 +20,15 @@ class App extends ConsumerWidget {
     final botToastBuilder = BotToastInit();
     final theme = ref.watch(themeRepoProvider);
 
-    return MaterialApp.router(
+    return ShadcnApp.router(
       title: 'Martva - Driving License App',
       debugShowCheckedModeBanner: false,
       // theme: AppTheme.lightTheme,
       // darkTheme: AppTheme.darkTheme,
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
+      scrollBehavior: const ScrollBehavior().copyWith(
         dragDevices: PointerDeviceKind.values.toSet(),
       ),
-      themeMode: theme.mode,
-      theme: Themes.lightTheme,
-      darkTheme: Themes.darkTheme,
+      theme: theme.data,
       routerConfig: router,
       builder: (context, child) {
         child = botToastBuilder(context, child);

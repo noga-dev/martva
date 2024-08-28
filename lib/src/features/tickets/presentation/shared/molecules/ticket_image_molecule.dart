@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:martva/src/core/design_system/presentation/tokens/ds_color_tokens.dart';
 import 'package:martva/src/features/tickets/data/image_size.repo.dart';
 import 'package:martva/src/features/tickets/domain/ticket.dto.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -49,9 +50,22 @@ class TicketImageMolecule extends ConsumerWidget {
                 .getPublicUrl(ticket.image),
           ),
           placeholder: (context, url) => _Shimmer(aspectRatio: aspectRatio),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
+          errorWidget: (context, url, error) => const _Error(),
         ),
       ),
+    );
+  }
+}
+
+class _Error extends StatelessWidget {
+  const _Error();
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      icon: const Icon(Icons.error),
+      label: const Text('Error'),
+      onPressed: null,
     );
   }
 }
@@ -98,11 +112,13 @@ class _Image extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
+              splashColor: ColorTokens.primary.withOpacity(0.2),
               onTap: () => showDialog(
                 context: context,
                 barrierDismissible: true,
                 builder: (context) => InteractiveViewer(
                   child: CachedNetworkImage(
+                    cacheManager: DefaultCacheManager(),
                     imageUrl: imageUrl,
                   ),
                 ),

@@ -9,7 +9,10 @@ import 'package:martva/src/features/tickets/presentation/shared/organisms/ticket
 class TicketDetailScreen extends HookConsumerWidget {
   final SpacedRepetitionItem item;
 
-  const TicketDetailScreen({super.key, required this.item});
+  const TicketDetailScreen({
+    super.key,
+    required this.item,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

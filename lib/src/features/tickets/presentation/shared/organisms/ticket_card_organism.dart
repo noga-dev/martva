@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:intl/intl.dart';
+import 'package:martva/src/core/design_system/presentation/tokens/ds_duration_tokens.dart';
 import 'package:martva/src/features/tickets/domain/ticket.dto.dart';
 import 'package:martva/src/features/tickets/presentation/shared/molecules/ticket_image_molecule.dart';
+import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class TicketCardOrganism extends StatelessWidget {
   final TicketDto ticket;
@@ -49,29 +51,28 @@ class TicketCardOrganism extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               ...[
-                AnimatedCrossFade(
-                  duration: Durations.medium2,
-                  crossFadeState: userAnswer.showExplanation
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond,
-                  secondChild: const SizedBox.shrink(),
-                  firstChild: Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Text(
-                          ticket.explanation,
-                          textAlign: TextAlign.justify,
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
+                AnimatedSwitcher(
+                  switchInCurve: Curves.easeInOut,
+                  switchOutCurve: Curves.easeInOut,
+                  duration: DurationTokens.quick,
+                  transitionBuilder: (child, animation) => SizeTransition(
+                    axis: Axis.vertical,
+                    sizeFactor: animation,
+                    child: child,
                   ),
+                  child: userAnswer.showExplanation
+                      ? Card(
+                          child: Text(
+                            ticket.explanation,
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
                 ),
-              ]
+              ],
             ],
           ),
         ),
@@ -96,13 +97,14 @@ class TicketCardOrganism extends StatelessWidget {
             (index) => Stack(
               fit: StackFit.expand,
               children: [
-                ElevatedButton(
+                material.ElevatedButton(
                   onPressed: userAnswer.answer == null
                       ? () => onAnswerSelected(ticket, ticket.answers[index])
                       : null,
-                  style: ElevatedButton.styleFrom(
+                  style: material.ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(8),
                     shape: const BeveledRectangleBorder(),
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     disabledBackgroundColor: _getAnswerColor(
                       userAnswer: userAnswer.answer,
                       actualAnswer: ticket.answers[index],
@@ -136,7 +138,7 @@ class TicketCardOrganism extends StatelessWidget {
     required AnswerDto actualAnswer,
   }) {
     if (userAnswer == null) {
-      return Colors.grey.withOpacity(0.2);
+      return Colors.gray.withOpacity(0.2);
     }
 
     if (actualAnswer.correct) {
@@ -149,6 +151,6 @@ class TicketCardOrganism extends StatelessWidget {
       return Colors.red.withOpacity(0.4);
     }
     // Grey for other answers
-    return Colors.grey.withOpacity(0.2);
+    return Colors.gray.withOpacity(0.2);
   }
 }

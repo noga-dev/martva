@@ -42,6 +42,9 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   bot_toast: ^4.1.3
 
+  # design system
+  shadcn_flutter: ^0.0.19
+
   # routing
   go_router: ^14.2.7
 
@@ -53,18 +56,17 @@ dependencies:
   smooth_page_indicator: ^1.2.0+3
   skeletonizer: ^1.4.2
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
-
   # dart
   collection: ^1.18.0
 
   # dev
-  # loggerx: ^2.0.0 
   talker: ^4.4.1
   talker_flutter: ^4.4.1
   talker_riverpod_logger: ^4.4.1
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  # cupertino_icons: ^1.0.8
 
 dev_dependencies:
   flutter_test:
@@ -133,3 +135,50 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+  fonts:
+    - family: BootstrapIcons
+      fonts:
+        - asset: "packages/shadcn_flutter/icons/BootstrapIcons.otf"
+    - family: RadixIcons
+      fonts:
+        - asset: "packages/shadcn_flutter/icons/RadixIcons.otf"
+    - family: "GeistSans"
+      fonts:
+        - asset: "packages/shadcn_flutter/fonts/Geist-Black.otf"
+          weight: 800
+        - asset: "packages/shadcn_flutter/fonts/Geist-Bold.otf"
+          weight: 700
+        - asset: "packages/shadcn_flutter/fonts/Geist-Light.otf"
+          weight: 300
+        - asset: "packages/shadcn_flutter/fonts/Geist-Medium.otf"
+          weight: 500
+        - asset: "packages/shadcn_flutter/fonts/Geist-SemiBold.otf"
+          weight: 600
+        - asset: "packages/shadcn_flutter/fonts/Geist-Thin.otf"
+          weight: 100
+        - asset: "packages/shadcn_flutter/fonts/Geist-UltraBlack.otf"
+          weight: 900
+        - asset: "packages/shadcn_flutter/fonts/Geist-UltraLight.otf"
+          weight: 200
+        - asset: "packages/shadcn_flutter/fonts/Geist-Regular.otf"
+          weight: 400
+    - family: "GeistMono"
+      fonts:
+        - asset: "packages/shadcn_flutter/fonts/GeistMono-Black.otf"
+          weight: 800
+        - asset: "packages/shadcn_flutter/fonts/GeistMono-Bold.otf"
+          weight: 700
+        - asset: "packages/shadcn_flutter/fonts/GeistMono-Light.otf"
+          weight: 300
+        - asset: "packages/shadcn_flutter/fonts/GeistMono-Medium.otf"
+          weight: 500
+        - asset: "packages/shadcn_flutter/fonts/GeistMono-Regular.otf"
+          weight: 400
+        - asset: "packages/shadcn_flutter/fonts/GeistMono-SemiBold.otf"
+          weight: 600
+        - asset: "packages/shadcn_flutter/fonts/GeistMono-Thin.otf"
+          weight: 100
+        - asset: "packages/shadcn_flutter/fonts/GeistMono-UltraBlack.otf"
+          weight: 900
+        - asset: "packages/shadcn_flutter/fonts/GeistMono-UltraLight.otf"
+          weight: 200

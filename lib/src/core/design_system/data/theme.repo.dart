@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:martva/src/core/design_system/models/theme.dto.dart';
-import 'package:martva/src/core/design_system/tokens/themes.dart';
+import 'package:martva/src/core/design_system/presentation/tokens/ds_theme_tokens.dart';
+import 'package:martva/src/core/utils/messaging/talker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme.repo.g.dart';
@@ -10,7 +10,7 @@ class ThemeRepo extends _$ThemeRepo {
   @override
   ThemeDto build() {
     final theme = ThemeDto(
-      data: Themes.darkTheme,
+      data: DSThemeTokens.darkTheme,
       mode: ThemeMode.dark,
     );
 
@@ -18,14 +18,15 @@ class ThemeRepo extends _$ThemeRepo {
   }
 
   void toggleBrightness() {
-    if (state.data.brightness == Brightness.dark) {
+    talker.debug(state.data.brightness);
+    if (state.mode == ThemeMode.dark) {
       state = state.copyWith(
-        data: Themes.lightTheme,
+        data: DSThemeTokens.lightTheme,
         mode: ThemeMode.light,
       );
     } else {
       state = state.copyWith(
-        data: Themes.darkTheme,
+        data: DSThemeTokens.darkTheme,
         mode: ThemeMode.dark,
       );
     }
@@ -34,6 +35,9 @@ class ThemeRepo extends _$ThemeRepo {
   void apply(ThemeMode mode) {
     state = state.copyWith(
       mode: mode,
+      data: mode == ThemeMode.dark
+          ? DSThemeTokens.darkTheme
+          : DSThemeTokens.lightTheme,
     );
   }
 }
