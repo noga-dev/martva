@@ -1,15 +1,14 @@
 import 'dart:async';
-import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/design_system/data/theme.repo.dart';
 import 'package:martva/src/core/design_system/presentation/tokens/ds_duration_tokens.dart';
-import 'package:martva/src/core/design_system/presentation/tokens/ds_theme_tokens.dart';
+import 'package:martva/src/core/utils/messaging/toaster.dart';
 import 'package:martva/src/features/tickets/data/ticket_translation.repo.dart';
 import 'package:martva/src/features/tickets/domain/ticket.dto.dart';
 import 'package:martva/src/features/tickets/presentation/exam_screen/exam_screen_controller.dart';
 import 'package:martva/src/features/tickets/presentation/shared/organisms/ticket_card_organism.dart';
-import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class ExamScreen extends HookConsumerWidget {
   const ExamScreen({super.key});
@@ -21,12 +20,12 @@ class ExamScreen extends HookConsumerWidget {
     return ticketsAsyncValue.when(
       data: (tickets) => ExamContent(examTickets: tickets),
       loading: () => const Scaffold(
-        child: Center(
+        body: Center(
           child: CircularProgressIndicator(),
         ),
       ),
       error: (error, stack) => Scaffold(
-        child: Center(
+        body: Center(
           child: Text('Error: $error'),
         ),
       ),
@@ -123,24 +122,26 @@ class ExamContentState extends State<ExamContent> {
 
         // Delay moving to the next question to allow the user to see the result
         Future.delayed(const Duration(milliseconds: 500), () {
-          if (currentQuestionIndex < widget.examTickets.length - 1) {
-            if (userAnswers[widget.examTickets.indexOf(ticket)]
-                    .answer
-                    ?.correct ??
-                false) {
-              _goToNextQuestion();
-            } else {
-              userAnswers[widget.examTickets.indexOf(ticket)] = (
-                ticket: ticket,
-                index: userAnswers[currentQuestionIndex].index,
-                answer: answer,
-                showExplanation: true,
-              );
+          setState(() {
+            if (currentQuestionIndex < widget.examTickets.length - 1) {
+              if (userAnswers[widget.examTickets.indexOf(ticket)]
+                      .answer
+                      ?.correct ??
+                  false) {
+                _goToNextQuestion();
+              } else {
+                userAnswers[widget.examTickets.indexOf(ticket)] = (
+                  ticket: ticket,
+                  index: userAnswers[currentQuestionIndex].index,
+                  answer: answer,
+                  showExplanation: true,
+                );
+              }
+            } else if (_allQuestionsAnswered()) {
+              _timer.cancel();
+              _showResults();
             }
-          } else if (_allQuestionsAnswered()) {
-            _timer.cancel();
-            _showResults();
-          }
+          });
         });
       }
     });
@@ -155,7 +156,7 @@ class ExamContentState extends State<ExamContent> {
       setState(() {
         currentQuestionIndex--;
         questionPageController.previousPage(
-          duration: DurationTokens.quicker,
+          duration: DurationTokens.shorter,
           curve: Curves.linear,
         );
       });
@@ -167,7 +168,7 @@ class ExamContentState extends State<ExamContent> {
       setState(() {
         currentQuestionIndex++;
         questionPageController.nextPage(
-          duration: DurationTokens.quicker,
+          duration: DurationTokens.shorter,
           curve: Curves.linear,
         );
       });
@@ -177,134 +178,149 @@ class ExamContentState extends State<ExamContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      headers: [
-        ColoredBox(
-          color: Colors.transparent,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Row(
+      body: Column(
+        children: [
+          Expanded(
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar.large(
+                  flexibleSpace: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                          'Exam - Question ${currentQuestionIndex + 1}/${widget.examTickets.length}'),
+                      Text(
+                        '${_secondsRemaining ~/ 60}:${(_secondsRemaining % 60).toString().padLeft(2, '0')}',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      ElevatedButton(
+                        child: const Icon(Icons.settings),
+                        onPressed: () => showModalBottomSheet(
+                          context: context,
+                          builder: (context) => const _SettingsBottomSheet(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SliverFillRemaining(
+                  child: PageView.builder(
+                    controller: questionPageController,
+                    itemCount: widget.examTickets.length,
+                    onPageChanged: (value) {
+                      setState(() {
+                        currentQuestionIndex = value;
+                      });
+                    },
+                    itemBuilder: (context, index) => TicketCardOrganism(
+                      ticket: widget.examTickets[index],
+                      userAnswer: userAnswers[index],
+                      onAnswerSelected: _answerQuestion,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              _QuestionIndexDotIndicatorsWidget(
+                currentTicket: widget.examTickets[currentQuestionIndex],
+                examTickets: widget.examTickets,
+                currentQuestionIndex: currentQuestionIndex,
+                userAnswers: userAnswers,
+                onTap: () => setState(() {
+                  Toaster.info('Going to first unanswered question');
+
+                  currentQuestionIndex = userAnswers.indexOf(
+                    userAnswers.firstWhere(
+                      (element) => element.answer == null,
+                    ),
+                  );
+                  questionPageController.animateToPage(
+                    currentQuestionIndex,
+                    duration: DurationTokens.shortest,
+                    curve: Curves.linear,
+                  );
+                }),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Button.ghost(
-                      child: const Icon(RadixIcons.arrowLeft),
-                      onPressed: () => Navigator.of(context).pop(),
+                    OutlinedButton(
+                      onPressed: currentQuestionIndex > 0
+                          ? _goToPreviousQuestion
+                          : null,
+                      child: const Text('Previous'),
                     ),
-                    Text(
-                        'Exam - Question ${currentQuestionIndex + 1}/${widget.examTickets.length}'),
-                    Text(
-                      '${_secondsRemaining ~/ 60}:${(_secondsRemaining % 60).toString().padLeft(2, '0')}',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    Button.ghost(
-                      child: const Icon(Icons.settings),
-                      onPressed: () => openSheet(
-                        context: context,
-                        position: OverlayPosition.bottom,
-                        builder: (context) => const _SettingsBottomSheet(),
+                    AnimatedSwitcher(
+                      duration: DurationTokens.shortest,
+                      transitionBuilder: (child, animation) => FadeTransition(
+                        opacity: animation,
+                        child: child,
                       ),
+                      child: userAnswers[currentQuestionIndex].answer != null
+                          ? TextButton(
+                              onPressed: userAnswers[currentQuestionIndex]
+                                          .answer ==
+                                      null
+                                  ? null
+                                  : () => setState(() {
+                                        userAnswers[currentQuestionIndex] = (
+                                          ticket: widget.examTickets[
+                                              currentQuestionIndex],
+                                          index:
+                                              userAnswers[currentQuestionIndex]
+                                                  .index,
+                                          answer:
+                                              userAnswers[currentQuestionIndex]
+                                                  .answer,
+                                          showExplanation:
+                                              !userAnswers[currentQuestionIndex]
+                                                  .showExplanation,
+                                        );
+                                      }),
+                              child: AnimatedSwitcher(
+                                duration: DurationTokens.short,
+                                transitionBuilder: (child, animation) =>
+                                    FadeTransition(
+                                  opacity: animation,
+                                  child: SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0, 1),
+                                      end: const Offset(0, 0),
+                                    ).animate(animation),
+                                    child: ScaleTransition(
+                                      scale: animation,
+                                      child: child,
+                                    ),
+                                  ),
+                                ),
+                                child: userAnswers[currentQuestionIndex]
+                                        .showExplanation
+                                    ? const Text(
+                                        key: ValueKey('Hide.Explanation.key'),
+                                        'Hide Explanation',
+                                      )
+                                    : const Text('Show Explanation'),
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                    OutlinedButton(
+                      onPressed:
+                          currentQuestionIndex < widget.examTickets.length - 1
+                              ? _goToNextQuestion
+                              : null,
+                      child: const Text('Next'),
                     ),
                   ],
                 ),
-                _QuestionIndexIndicatorsWidget(
-                  currentTicket: widget.examTickets[currentQuestionIndex],
-                  examTickets: widget.examTickets,
-                  currentQuestionIndex: currentQuestionIndex,
-                  userAnswers: userAnswers,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-      child: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: questionPageController,
-              onPageChanged: (value) {
-                setState(() {
-                  currentQuestionIndex = value;
-                });
-              },
-              itemBuilder: (context, index) => TicketCardOrganism(
-                ticket: widget.examTickets[index],
-                userAnswer: userAnswers[index],
-                onAnswerSelected: _answerQuestion,
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                OutlineButton(
-                  onPressed:
-                      currentQuestionIndex > 0 ? _goToPreviousQuestion : null,
-                  child: const Text('Previous'),
-                ),
-                AnimatedSwitcher(
-                  duration: DurationTokens.quickest,
-                  transitionBuilder: (child, animation) => FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  ),
-                  child: userAnswers[currentQuestionIndex].answer != null
-                      ? Button.text(
-                          onPressed: userAnswers[currentQuestionIndex].answer ==
-                                  null
-                              ? null
-                              : () => setState(() {
-                                    userAnswers[currentQuestionIndex] = (
-                                      ticket: widget
-                                          .examTickets[currentQuestionIndex],
-                                      index: userAnswers[currentQuestionIndex]
-                                          .index,
-                                      answer: userAnswers[currentQuestionIndex]
-                                          .answer,
-                                      showExplanation:
-                                          !userAnswers[currentQuestionIndex]
-                                              .showExplanation,
-                                    );
-                                  }),
-                          child: AnimatedSwitcher(
-                            duration: DurationTokens.quick,
-                            transitionBuilder: (child, animation) =>
-                                FadeTransition(
-                              opacity: animation,
-                              child: SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: const Offset(0, 1),
-                                  end: const Offset(0, 0),
-                                ).animate(animation),
-                                child: ScaleTransition(
-                                  scale: animation,
-                                  child: child,
-                                ),
-                              ),
-                            ),
-                            child: userAnswers[currentQuestionIndex]
-                                    .showExplanation
-                                ? const Text(
-                                    key: ValueKey('Hide.Explanation.key'),
-                                    'Hide Explanation',
-                                  )
-                                : const Text('Show Explanation'),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ),
-                OutlineButton(
-                  onPressed:
-                      currentQuestionIndex < widget.examTickets.length - 1
-                          ? _goToNextQuestion
-                          : null,
-                  child: const Text('Next'),
-                ),
-              ],
-            ),
+            ],
           ),
         ],
       ),
@@ -318,17 +334,19 @@ class ExamContentState extends State<ExamContent> {
   }
 }
 
-class _QuestionIndexIndicatorsWidget extends StatelessWidget {
-  const _QuestionIndexIndicatorsWidget({
+class _QuestionIndexDotIndicatorsWidget extends StatelessWidget {
+  const _QuestionIndexDotIndicatorsWidget({
     required this.currentTicket,
     required this.examTickets,
     required this.currentQuestionIndex,
     required this.userAnswers,
+    required this.onTap,
   });
 
   final TicketDto currentTicket;
   final List<TicketDto> examTickets;
   final int currentQuestionIndex;
+  final Function() onTap;
   final List<
       ({
         AnswerDto? answer,
@@ -339,30 +357,33 @@ class _QuestionIndexIndicatorsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      tooltip: Text('Current question #${currentTicket.id}'),
-      child: SizedBox(
-        height: 16,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(examTickets.length, (index) {
-              Color dotColor = Colors.gray;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        onLongPress: () =>
+            Toaster.info('Current question #${currentTicket.id}'),
+        child: SizedBox(
+          height: 24,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(examTickets.length, (index) {
+                Color dotColor = Colors.grey;
 
-              if (userAnswers[index].answer != null) {
-                dotColor = (userAnswers[index].answer?.correct ?? false)
-                    ? Colors.green
-                    : Colors.red;
-              }
+                if (userAnswers[index].answer != null) {
+                  dotColor = (userAnswers[index].answer?.correct ?? false)
+                      ? Colors.green
+                      : Colors.red;
+                }
 
-              final dotSize = currentQuestionIndex == index ? 12.0 : 6.0;
+                final dotSize = currentQuestionIndex == index ? 14.0 : 8.0;
 
-              return Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: AnimatedContainer(
+                return AnimatedContainer(
                   curve: Curves.easeOut,
-                  duration: DurationTokens.quick,
+                  duration: DurationTokens.short,
                   width: dotSize,
                   height: dotSize,
                   decoration: BoxDecoration(
@@ -377,9 +398,9 @@ class _QuestionIndexIndicatorsWidget extends StatelessWidget {
                       width: 2,
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           ),
         ),
       ),
@@ -398,79 +419,129 @@ class _SettingsBottomSheet extends HookConsumerWidget {
     final theme = ref.watch(themeRepoProvider);
     final themeNotifier = ref.watch(themeRepoProvider.notifier);
 
-    return Container(
-      padding: const EdgeInsets.all(12),
-      constraints: const BoxConstraints(maxWidth: 300),
-      child: Padding(
+    return BottomSheet(
+      onClosing: () => Toaster.info('Closing settings'),
+      builder: (context) => Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Card(
-              child: Row(
-                children: [
-                  const Text('Ticket language'),
-                  const Spacer(),
-                  Select<TicketTranslation>(
-                    onChanged: (value) => ticketTransNotifier.update(value!),
-                    itemBuilder: (context, item) => Text(item.name),
-                    value: ticketTrans,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    children: [
-                      SelectGroup(
-                        children: TicketTranslation.values
-                            .map((e) =>
-                                SelectItemButton(value: e, child: Text(e.name)))
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                ],
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: const Text('Ticket language'),
+                trailing: DropdownButton<TicketTranslation>(
+                  onChanged: (value) => ticketTransNotifier.update(value!),
+                  hint: Text(ticketTrans.name),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  elevation: 0,
+                  items: TicketTranslation.values
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(e.name),
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
-            ),
-            Card(
-              child: Row(
-                children: [
-                  const Text('Auto Advance'),
-                  const Spacer(),
-                  Toggle(
-                    value: false,
-                    onChanged: (value) {},
-                    child: const Icon(RadixIcons.arrowRight),
-                  ),
-                ],
+              CheckboxListTile(
+                value: false,
+                onChanged: (value) {},
+                title: const Text('Auto Advance'),
               ),
-            ),
-            Card(
-              child: Row(
-                children: [
-                  const Text('Appearance'),
-                  const Spacer(),
-                  Toggle(
-                    value: theme.mode == ThemeMode.dark,
-                    onChanged: (value) {
-                      if (theme.mode == ThemeMode.dark) {
-                        return;
-                      }
-                      themeNotifier.toggleBrightness();
-                    },
-                    child: const Icon(Icons.brightness_7),
-                  ),
-                  Toggle(
-                    value: theme.mode == ThemeMode.light,
-                    onChanged: (value) {
-                      if (theme.mode == ThemeMode.light) {
-                        return;
-                      }
+              ListTile(
+                title: const Text('Appearance'),
+                trailing: SegmentedButton<ThemeMode>(
+                  selected: {theme.mode},
+                  multiSelectionEnabled: false,
+                  showSelectedIcon: false,
+                  emptySelectionAllowed: false,
+                  onSelectionChanged: (val) {
+                    themeNotifier.apply(val.first);
+                  },
+                  segments: const [
+                    ButtonSegment(
+                      value: ThemeMode.system,
+                      icon: Icon(Icons.brightness_auto),
+                    ),
+                    ButtonSegment(
+                      value: ThemeMode.light,
+                      icon: Icon(Icons.brightness_7),
+                    ),
+                    ButtonSegment(
+                      value: ThemeMode.dark,
+                      icon: Icon(Icons.brightness_3),
+                    ),
+                  ],
+                ),
+              ),
+              // Card(
+              //   child: Row(
+              //     children: [
+              //       const Text('Ticket language'),
+              //       const Spacer(),
+              //       DropdownButton<TicketTranslation>(
+              //         onChanged: (value) => ticketTransNotifier.update(value!),
+              //         itemBuilder: (context, item) => Text(item.name),
+              //         value: ticketTrans,
+              //         padding: const EdgeInsets.symmetric(horizontal: 8),
+              //         children: [
+              //           SelectGroup(
+              //             children: TicketTranslation.values
+              //                 .map((e) => SelectItemButton(
+              //                     value: e, child: Text(e.name)))
+              //                 .toList(),
+              //           ),
+              //         ],
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // Card(
+              //   child: Row(
+              //     children: [
+              //       const Text('Auto Advance'),
+              //       const Spacer(),
+              //       Toggle(
+              //         value: false,
+              //         onChanged: (value) {},
+              //         child: const Icon(RadixIcons.arrowRight),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // Card(
+              //   child: Row(
+              //     children: [
+              //       const Text('Appearance'),
+              //       const Spacer(),
+              //       Toggle(
+              //         value: theme.mode == ThemeMode.dark,
+              //         onChanged: (value) {
+              //           if (theme.mode == ThemeMode.dark) {
+              //             return;
+              //           }
+              //           themeNotifier.toggleBrightness();
+              //         },
+              //         child: const Icon(Icons.brightness_7),
+              //       ),
+              //       Toggle(
+              //         value: theme.mode == ThemeMode.light,
+              //         onChanged: (value) {
+              //           if (theme.mode == ThemeMode.light) {
+              //             return;
+              //           }
 
-                      themeNotifier.toggleBrightness();
-                    },
-                    child: const Icon(Icons.brightness_3),
-                  ),
-                ],
-              ),
-            ),
-          ],
+              //           themeNotifier.toggleBrightness();
+              //         },
+              //         child: const Icon(Icons.brightness_3),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:martva/src/core/design_system/presentation/tokens/ds_duration_tokens.dart';
 import 'package:martva/src/features/tickets/domain/ticket.dto.dart';
 import 'package:martva/src/features/tickets/presentation/shared/molecules/ticket_image_molecule.dart';
-import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class TicketCardOrganism extends StatelessWidget {
   final TicketDto ticket;
@@ -54,7 +54,7 @@ class TicketCardOrganism extends StatelessWidget {
                 AnimatedSwitcher(
                   switchInCurve: Curves.easeInOut,
                   switchOutCurve: Curves.easeInOut,
-                  duration: DurationTokens.quick,
+                  duration: DurationTokens.short,
                   transitionBuilder: (child, animation) => SizeTransition(
                     axis: Axis.vertical,
                     sizeFactor: animation,
@@ -104,7 +104,6 @@ class TicketCardOrganism extends StatelessWidget {
                   style: material.ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(8),
                     shape: const BeveledRectangleBorder(),
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     disabledBackgroundColor: _getAnswerColor(
                       userAnswer: userAnswer.answer,
                       actualAnswer: ticket.answers[index],
@@ -116,12 +115,32 @@ class TicketCardOrganism extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
+                if (userAnswer.answer != null &&
+                    userAnswer.answer == ticket.answers[index])
+                  material.IgnorePointer(
+                    child: Icon(
+                      Icons.error_outline,
+                      color: Colors.red.withOpacity(0.05),
+                      size: 100 +
+                          ticket.answers.fold(
+                                0,
+                                (previousValue, element) =>
+                                    previousValue + element.answer.length,
+                              ) /
+                              ticket.answers.length,
+                    ),
+                  ),
                 IgnorePointer(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
                       alignment: Alignment.bottomRight,
-                      child: Text('${index + 1}'),
+                      child: Text(
+                        '${index + 1}',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -138,7 +157,7 @@ class TicketCardOrganism extends StatelessWidget {
     required AnswerDto actualAnswer,
   }) {
     if (userAnswer == null) {
-      return Colors.gray.withOpacity(0.2);
+      return Colors.grey.withOpacity(0.2);
     }
 
     if (actualAnswer.correct) {
@@ -150,7 +169,8 @@ class TicketCardOrganism extends StatelessWidget {
       // Red for wrong selected answer
       return Colors.red.withOpacity(0.4);
     }
+
     // Grey for other answers
-    return Colors.gray.withOpacity(0.2);
+    return Colors.grey.withOpacity(0.2);
   }
 }
