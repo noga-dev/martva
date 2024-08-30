@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:martva/src/core/design_system/presentation/tokens/ds_color_tokens.dart';
+import 'package:martva/src/core/theme/view/tokens/ds_color_tokens.dart';
 
 class TextStyles {
   static TextTheme lightTextTheme = TextTheme(

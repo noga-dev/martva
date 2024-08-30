@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:martva/src/features/tickets/context/spaced_repetition_service.dart';
+import 'package:martva/src/features/tickets/context/ticket.dto.dart';
 import 'package:martva/src/features/tickets/data/ticket.repo.dart';
-import 'package:martva/src/features/tickets/domain/spaced_repetition_service.dart';
-import 'package:martva/src/features/tickets/domain/ticket.dto.dart';
-import 'package:martva/src/features/tickets/presentation/ticket_details_screen/ticket_details_screen.dart';
+import 'package:martva/src/features/tickets/view/ticket_details_screen/ticket_details_screen.dart';
 
 class TicketsScreen extends HookConsumerWidget {
   const TicketsScreen({super.key});

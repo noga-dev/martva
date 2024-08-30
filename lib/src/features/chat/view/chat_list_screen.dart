@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/features/auth/data/user_profile_service.dart';
-import 'package:martva/src/features/chat/domain/chat_service.dart';
-import 'package:martva/src/features/chat/presentation/chat_room_screen.dart';
+import 'package:martva/src/features/chat/context/chat_service.dart';
+import 'package:martva/src/features/chat/view/chat_room_screen.dart';
 
 class ChatListScreen extends HookConsumerWidget {
   const ChatListScreen({super.key});

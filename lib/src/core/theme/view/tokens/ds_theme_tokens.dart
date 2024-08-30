@@ -1,7 +1,7 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:martva/src/core/design_system/presentation/tokens/ds_font_tokens.dart';
+import 'package:martva/src/core/theme/view/tokens/ds_font_tokens.dart';
 
 class DSThemeTokens {
   static ThemeData lightTheme = FlexThemeData.light(

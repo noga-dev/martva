@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:martva/gen/assets.gen.dart';
+import 'package:martva/src/features/tickets/context/ticket.dto.dart';
 import 'package:martva/src/features/tickets/data/ticket_translation.repo.dart';
-import 'package:martva/src/features/tickets/domain/ticket.dto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'ticket.repo.g.dart';

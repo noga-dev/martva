@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/router/router.dart';
 import 'package:martva/src/core/utils/extensions/list.dart';
-import 'package:martva/src/features/auth/presentation/user_profile_screen/user_profile_screen.dart';
+import 'package:martva/src/features/auth/view/user_profile_screen/user_profile_screen.dart';
 
 class MainScreen extends HookConsumerWidget {
   const MainScreen({super.key});

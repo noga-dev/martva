@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:martva/src/core/design_system/presentation/tokens/ds_duration_tokens.dart';
-import 'package:martva/src/core/design_system/presentation/tokens/ds_spacing_tokens.dart';
-import 'package:martva/src/features/tickets/domain/ticket.dto.dart';
-import 'package:martva/src/features/tickets/presentation/shared/molecules/ticket_image_molecule.dart';
+import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
+import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
+import 'package:martva/src/features/tickets/context/ticket.dto.dart';
+import 'package:martva/src/features/tickets/view/shared/molecules/ticket_image_molecule.dart';
 
 class TicketCardOrganism extends StatelessWidget {
   final TicketDto ticket;

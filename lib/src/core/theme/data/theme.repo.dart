@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:martva/src/core/design_system/models/theme.dto.dart';
-import 'package:martva/src/core/design_system/presentation/tokens/ds_theme_tokens.dart';
+import 'package:martva/src/core/theme/context/theme.dto.dart';
+import 'package:martva/src/core/theme/view/tokens/ds_theme_tokens.dart';
 import 'package:martva/src/core/utils/messaging/talker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

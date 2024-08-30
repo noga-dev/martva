@@ -1,6 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:martva/src/core/design_system/presentation/tokens/ds_duration_tokens.dart';
+import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
 
 class Toaster {
   static void _toast(
