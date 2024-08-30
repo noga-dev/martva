@@ -5,8 +5,8 @@ import 'package:martva/src/core/router/router.dart';
 import 'package:martva/src/core/utils/extensions/list.dart';
 import 'package:martva/src/features/auth/view/user_profile_screen/user_profile_screen.dart';
 
-class MainScreen extends HookConsumerWidget {
-  const MainScreen({super.key});
+class HomeScreen extends HookConsumerWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,20 +29,20 @@ class MainScreen extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             OutlinedButton(
-              onPressed: () => const TicketsRoute().push(context),
-              child: const Text('Study session'),
+              onPressed: () => const ReviewsRoute().push(context),
+              child: const Text('Reviews'),
             ),
             OutlinedButton(
               onPressed: () => const TicketsRoute().push(context),
-              child: const Text('All Tickets'),
+              child: const Text('Library'),
             ),
             OutlinedButton(
               onPressed: () => const ExamRoute().push(context),
-              child: const Text('Take Exam'),
+              child: const Text('Exam'),
             ),
             OutlinedButton(
               onPressed: () => const ChatRoute().push(context),
-              child: const Text('Chat Rooms'),
+              child: const Text('Chat'),
             ),
             if (kDebugMode)
               OutlinedButton(

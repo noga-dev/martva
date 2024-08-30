@@ -7,8 +7,8 @@ part of 'answer.dto.dart';
 // **************************************************************************
 
 AnswerDto _$AnswerDtoFromJson(Map<String, dynamic> json) => AnswerDto(
-      answer: json['answer'] as String,
-      correct: json['correct'] as bool,
+      answer: json['answer'] as String? ?? '',
+      correct: json['correct'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$AnswerDtoToJson(AnswerDto instance) => <String, dynamic>{

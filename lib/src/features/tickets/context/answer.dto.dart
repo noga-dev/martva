@@ -7,8 +7,8 @@ part 'answer.dto.g.dart';
 @Freezed(fromJson: false)
 class AnswerDto with _$AnswerDto {
   const factory AnswerDto({
-    required String answer,
-    @Default(false) bool correct,
+    @Default('') @JsonKey(defaultValue: '') String answer,
+    @Default(false) @JsonKey(defaultValue: false) bool correct,
   }) = _AnswerDto;
 
   factory AnswerDto.fromJson(Map<String, dynamic> json) =>

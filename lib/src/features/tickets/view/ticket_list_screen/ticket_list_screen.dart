@@ -31,10 +31,13 @@ class TicketsScreen extends HookConsumerWidget {
   }
 }
 
-class TicketListItem extends ConsumerWidget {
-  final TicketDto ticket;
+class TicketListItem extends HookConsumerWidget {
+  const TicketListItem({
+    super.key,
+    required this.ticket,
+  });
 
-  const TicketListItem({super.key, required this.ticket});
+  final TicketDto ticket;
 
   @override
   Widget build(BuildContext context, ref) {

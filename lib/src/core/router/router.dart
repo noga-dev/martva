@@ -10,7 +10,8 @@ import 'package:martva/src/features/auth/view/user_profile_screen/user_profile_s
 import 'package:martva/src/features/chat/context/chat_service.dart';
 import 'package:martva/src/features/chat/view/chat_list_screen.dart';
 import 'package:martva/src/features/chat/view/chat_room_screen.dart';
-import 'package:martva/src/features/home/view/main_screen.dart';
+import 'package:martva/src/features/home/view/home_screen.dart';
+import 'package:martva/src/features/review/view/screens/reviews.screen.dart';
 import 'package:martva/src/features/settings/view/settings_screen.dart';
 import 'package:martva/src/features/tickets/view/exam_screen/exam_screen.dart';
 import 'package:martva/src/features/tickets/view/ticket_list_screen/ticket_list_screen.dart';
@@ -55,7 +56,7 @@ class MainRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const MainScreen();
+    return const HomeScreen();
   }
 }
 
@@ -86,6 +87,16 @@ class TicketsRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const TicketsScreen();
+  }
+}
+
+@TypedGoRoute<ReviewsRoute>(path: '/reviews')
+class ReviewsRoute extends GoRouteData {
+  const ReviewsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ReviewsScreen();
   }
 }
 

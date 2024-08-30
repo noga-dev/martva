@@ -16,7 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AnswerDto {
+  @JsonKey(defaultValue: '')
   String get answer => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: false)
   bool get correct => throw _privateConstructorUsedError;
 
   /// Serializes this AnswerDto to a JSON map.
@@ -34,7 +36,9 @@ abstract class $AnswerDtoCopyWith<$Res> {
   factory $AnswerDtoCopyWith(AnswerDto value, $Res Function(AnswerDto) then) =
       _$AnswerDtoCopyWithImpl<$Res, AnswerDto>;
   @useResult
-  $Res call({String answer, bool correct});
+  $Res call(
+      {@JsonKey(defaultValue: '') String answer,
+      @JsonKey(defaultValue: false) bool correct});
 }
 
 /// @nodoc
@@ -76,7 +80,9 @@ abstract class _$$AnswerDtoImplCopyWith<$Res>
       __$$AnswerDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String answer, bool correct});
+  $Res call(
+      {@JsonKey(defaultValue: '') String answer,
+      @JsonKey(defaultValue: false) bool correct});
 }
 
 /// @nodoc
@@ -111,12 +117,15 @@ class __$$AnswerDtoImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable(createFactory: false)
 class _$AnswerDtoImpl implements _AnswerDto {
-  const _$AnswerDtoImpl({required this.answer, this.correct = false});
+  const _$AnswerDtoImpl(
+      {@JsonKey(defaultValue: '') this.answer = '',
+      @JsonKey(defaultValue: false) this.correct = false});
 
   @override
+  @JsonKey(defaultValue: '')
   final String answer;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: false)
   final bool correct;
 
   @override
@@ -154,12 +163,15 @@ class _$AnswerDtoImpl implements _AnswerDto {
 }
 
 abstract class _AnswerDto implements AnswerDto {
-  const factory _AnswerDto({required final String answer, final bool correct}) =
-      _$AnswerDtoImpl;
+  const factory _AnswerDto(
+      {@JsonKey(defaultValue: '') final String answer,
+      @JsonKey(defaultValue: false) final bool correct}) = _$AnswerDtoImpl;
 
   @override
+  @JsonKey(defaultValue: '')
   String get answer;
   @override
+  @JsonKey(defaultValue: false)
   bool get correct;
 
   /// Create a copy of AnswerDto

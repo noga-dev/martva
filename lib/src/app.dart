@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/router/router.dart';
@@ -33,6 +34,13 @@ class App extends ConsumerWidget {
         dragDevices: PointerDeviceKind.values.toSet(),
       ),
       routerConfig: router,
+      shortcuts: {
+        ...WidgetsApp.defaultShortcuts,
+        const SingleActivator(LogicalKeyboardKey.escape): VoidCallbackIntent(
+          () => Navigator.of(router.routerDelegate.navigatorKey.currentContext!)
+              .maybePop(),
+        ),
+      },
       builder: (context, child) {
         child = botToastBuilder(context, child);
         return child;

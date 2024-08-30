@@ -11,6 +11,7 @@ List<RouteBase> get $appRoutes => [
       $loginRoute,
       $signupRoute,
       $ticketsRoute,
+      $reviewsRoute,
       $examRoute,
       $settingsRoute,
       $chatRoute,
@@ -94,6 +95,28 @@ extension $TicketsRouteExtension on TicketsRoute {
 
   String get location => GoRouteData.$location(
         '/tickets',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $reviewsRoute => GoRouteData.$route(
+      path: '/reviews',
+      factory: $ReviewsRouteExtension._fromState,
+    );
+
+extension $ReviewsRouteExtension on ReviewsRoute {
+  static ReviewsRoute _fromState(GoRouterState state) => const ReviewsRoute();
+
+  String get location => GoRouteData.$location(
+        '/reviews',
       );
 
   void go(BuildContext context) => context.go(location);
