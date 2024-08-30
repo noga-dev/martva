@@ -20,15 +20,18 @@ class App extends ConsumerWidget {
     final botToastBuilder = BotToastInit();
     final theme = ref.watch(themeRepoProvider);
 
+    if (theme.isLoading) {
+      return const CircularProgressIndicator();
+    }
+
     return MaterialApp.router(
-      title: 'Martva - Driving License App',
+      title: 'Martva - Georgian Driving License Assistant App',
       debugShowCheckedModeBanner: false,
-      // theme: AppTheme.lightTheme,
-      // darkTheme: AppTheme.darkTheme,
+      theme: theme.value?.data,
+      // darkTheme: theme.value?.data.darkTheme,
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: PointerDeviceKind.values.toSet(),
       ),
-      theme: theme.data,
       routerConfig: router,
       builder: (context, child) {
         child = botToastBuilder(context, child);

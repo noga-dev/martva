@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:martva/src/core/design_system/models/theme.dto.dart';
@@ -10,7 +11,9 @@ part 'theme.repo.g.dart';
 @riverpod
 class ThemeRepo extends _$ThemeRepo {
   @override
-  ThemeDto build() {
+  Future<ThemeDto> build() async {
+    await ref.watch(_fetchFontsProvider.future);
+
     final theme = ThemeDto(
       data: DSThemeTokens.darkTheme,
       mode: ThemeMode.dark,
@@ -20,32 +23,48 @@ class ThemeRepo extends _$ThemeRepo {
   }
 
   void toggleBrightness() {
-    talker.debug(state.data.brightness);
-    if (state.mode == ThemeMode.dark) {
-      state = state.copyWith(
-        data: DSThemeTokens.lightTheme,
-        mode: ThemeMode.light,
+    talker.debug(state.value!.data.brightness);
+    if (state.value!.mode == ThemeMode.dark) {
+      state = AsyncData(
+        state.value!.copyWith(
+          data: DSThemeTokens.lightTheme,
+          mode: ThemeMode.light,
+        ),
       );
     } else {
-      state = state.copyWith(
-        data: DSThemeTokens.darkTheme,
-        mode: ThemeMode.dark,
+      state = AsyncData(
+        state.value!.copyWith(
+          data: DSThemeTokens.darkTheme,
+          mode: ThemeMode.dark,
+        ),
       );
     }
   }
 
   void apply(ThemeMode mode) {
-    state = state.copyWith(
-      mode: mode,
-      data: mode == ThemeMode.dark
-          ? DSThemeTokens.darkTheme
-          : DSThemeTokens.lightTheme,
+    state = AsyncData(
+      state.value!.copyWith(
+        mode: mode,
+        data: mode == ThemeMode.dark
+            ? DSThemeTokens.darkTheme
+            : DSThemeTokens.lightTheme,
+      ),
     );
   }
 }
 
 @riverpod
-Future<void> fetchFonts() async {
-  final theme = await GoogleFonts.pendingFonts([]);
-  return;
+Future<void> _fetchFonts(_FetchFontsRef ref) async {
+  try {
+    await GoogleFonts.pendingFonts([
+      GoogleFonts.poppins(),
+    ]);
+  } on Exception catch (e) {
+    if (kDebugMode) {
+      talker.error(e);
+      rethrow;
+    }
+  }
+
+  return Future.value();
 }

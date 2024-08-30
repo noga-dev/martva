@@ -11,6 +11,7 @@ import 'package:martva/src/features/chat/domain/chat_service.dart';
 import 'package:martva/src/features/chat/presentation/chat_list_screen.dart';
 import 'package:martva/src/features/chat/presentation/chat_room_screen.dart';
 import 'package:martva/src/features/home/presentation/main_screen.dart';
+import 'package:martva/src/features/settings/presentation/settings_screen.dart';
 import 'package:martva/src/features/tickets/presentation/exam_screen/exam_screen.dart';
 import 'package:martva/src/features/tickets/presentation/ticket_list_screen/ticket_list_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -95,6 +96,16 @@ class ExamRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const ExamScreen();
+  }
+}
+
+@TypedGoRoute<SettingsRoute>(path: '/settings')
+class SettingsRoute extends GoRouteData {
+  const SettingsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const SettingsScreen();
   }
 }
 

@@ -19,36 +19,53 @@ class Toaster {
 
   static void info(
     String message, {
-    Alignment align = const Alignment(0, -0.88),
+    Alignment align = const Alignment(0, -0.75),
+    Duration duration = DurationTokens.long,
   }) {
     _toast(
       message,
       align: align,
       color: Colors.blue,
+      duration: duration,
     );
   }
 
-  static void success(String message) {
+  static void success(
+    String message, {
+    Alignment align = const Alignment(0, -0.86),
+    Duration duration = DurationTokens.normal,
+  }) {
     _toast(
       message,
       align: const Alignment(0, -0.86),
       color: Colors.green,
+      duration: duration,
     );
   }
 
-  static void warn(String message) {
+  static void warn(
+    String message, {
+    Alignment align = const Alignment(0, -0.86),
+    Duration duration = DurationTokens.longer,
+  }) {
     _toast(
       message,
       align: const Alignment(0, -0.86),
       color: Colors.orange,
+      duration: duration,
     );
   }
 
-  static void error(String message) {
+  static void error(
+    String message, {
+    Alignment align = const Alignment(0, -0.86),
+    Duration duration = DurationTokens.longest,
+  }) {
     _toast(
       message,
       align: const Alignment(0, -0.86),
       color: Colors.red,
+      duration: duration,
     );
   }
 }

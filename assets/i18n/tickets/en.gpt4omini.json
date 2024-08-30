@@ -25366,17 +25366,17 @@
         "explanation": "Gear pumps are used in volumetric hydraulic drives.",
         "answers": [
             {
-                "answer": "winged"
+                "answer": "Vane"
             },
             {
-                "answer": "toothpaste",
+                "answer": "Cogwheel (Gear)",
                 "correct": true
             },
             {
-                "answer": "Hit"
+                "answer": "Piston"
             },
             {
-                "answer": "plated"
+                "answer": "plate"
             }
         ]
     },

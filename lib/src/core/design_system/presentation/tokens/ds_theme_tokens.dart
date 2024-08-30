@@ -1,10 +1,11 @@
-import 'package:flex_seed_scheme/flex_seed_scheme.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:martva/src/core/design_system/presentation/tokens/ds_font_tokens.dart';
 
 class DSThemeTokens {
-  static ThemeData lightTheme = ThemeData.light().copyWith(
-    fontFamily: GoogleFonts.notoSans().fontFamily,
+  static ThemeData lightTheme = FlexThemeData.light(
+    fontFamily: DSFontTokens.mainFontFamily,
     // We use the nicer Material-3 Typography in both M2 and M3 mode.
     typography: Typography.material2021(platform: defaultTargetPlatform),
     scheme: FlexScheme.mango,
@@ -30,7 +31,8 @@ class DSThemeTokens {
     // fontFamily: GoogleFonts.notoSans().fontFamily,
   );
 
-  static ThemeData darkTheme = ThemeData.dark().copyWith(
+  static ThemeData darkTheme = FlexThemeData.dark(
+    fontFamily: DSFontTokens.mainFontFamily,
     scheme: FlexScheme.mango,
     // colorScheme: _colorScheme,
     surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
