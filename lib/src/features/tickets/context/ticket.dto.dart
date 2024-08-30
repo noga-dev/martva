@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:martva/src/features/tickets/context/answer.dto.dart';
 
 part 'ticket.dto.freezed.dart';
 part 'ticket.dto.g.dart';
@@ -25,15 +26,4 @@ class TicketDto with _$TicketDto {
 
 String _parseId(dynamic data) {
   return data.toString();
-}
-
-@freezed
-class AnswerDto with _$AnswerDto {
-  const factory AnswerDto({
-    required String answer,
-    @Default(false) bool correct,
-  }) = _AnswerDto;
-
-  factory AnswerDto.fromJson(Map<String, dynamic> json) =>
-      _$AnswerDtoFromJson(json);
 }

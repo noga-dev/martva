@@ -33,15 +33,3 @@ Map<String, dynamic> _$$TicketDtoImplToJson(_$TicketDtoImpl instance) =>
       'image': instance.image,
       'answers': instance.answers,
     };
-
-_$AnswerDtoImpl _$$AnswerDtoImplFromJson(Map<String, dynamic> json) =>
-    _$AnswerDtoImpl(
-      answer: json['answer'] as String,
-      correct: json['correct'] as bool? ?? false,
-    );
-
-Map<String, dynamic> _$$AnswerDtoImplToJson(_$AnswerDtoImpl instance) =>
-    <String, dynamic>{
-      'answer': instance.answer,
-      'correct': instance.correct,
-    };

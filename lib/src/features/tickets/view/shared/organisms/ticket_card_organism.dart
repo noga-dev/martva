@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
+import 'package:martva/src/features/tickets/context/answer.dto.dart';
 import 'package:martva/src/features/tickets/context/ticket.dto.dart';
 import 'package:martva/src/features/tickets/view/shared/molecules/ticket_image_molecule.dart';
 

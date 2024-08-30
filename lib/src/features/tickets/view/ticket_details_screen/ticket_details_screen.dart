@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/features/tickets/context/spaced_repetition_service.dart';
-import 'package:martva/src/features/tickets/context/ticket.dto.dart';
+import 'package:martva/src/features/review/context/spaced_repetition_service.dart';
+import 'package:martva/src/features/tickets/context/answer.dto.dart';
 import 'package:martva/src/features/tickets/data/progress_service.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
 
