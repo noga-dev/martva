@@ -26,8 +26,9 @@ class TicketCardOrganism extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Column(
+      padding: DSSpacingTokens.xxxl.horizontal,
+      child: ListView(
+        shrinkWrap: true,
         children: [
           // DSSpacingTokens.s.scaledVerticalSpace(10),
           if (ticket.image.isNotEmpty) ...[
@@ -87,90 +88,87 @@ class TicketCardOrganism extends StatelessWidget {
             ),
           ),
           DSSpacingTokens.m.verticalSpace,
-          Expanded(
-            child: GridView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: MediaQuery.of(context).size.width >= 800
-                    ? ticket.answers.length == 3
-                        ? 3
-                        : 2
-                    : 2,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-                mainAxisExtent: 160 +
-                    ticket.answers.fold(
-                          0,
-                          (previousValue, element) =>
-                              previousValue + element.answer.length,
-                        ) /
-                        ticket.answers.length,
-              ),
-              children: List.generate(
-                ticket.answers.length,
-                (index) => Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    IgnorePointer(
-                      ignoring: userAnswer.answer != null,
-                      child: FilledButton(
-                        onPressed: () =>
-                            onAnswerSelected(ticket, ticket.answers[index]),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(0),
-                          backgroundColor: _getAnswerColor(
-                            userAnswer: userAnswer.answer,
-                            actualAnswer: ticket.answers[index],
-                          ),
-                          foregroundColor: null,
+          GridView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: MediaQuery.of(context).size.width >= 800
+                  ? ticket.answers.length == 3
+                      ? 3
+                      : 2
+                  : 2,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              mainAxisExtent: 160 +
+                  ticket.answers.fold(
+                        0,
+                        (previousValue, element) =>
+                            previousValue + element.answer.length,
+                      ) /
+                      ticket.answers.length,
+            ),
+            children: List.generate(
+              ticket.answers.length,
+              (index) => Stack(
+                fit: StackFit.expand,
+                children: [
+                  IgnorePointer(
+                    ignoring: userAnswer.answer != null,
+                    child: FilledButton(
+                      onPressed: () =>
+                          onAnswerSelected(ticket, ticket.answers[index]),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(0),
+                        backgroundColor: _getAnswerColor(
+                          userAnswer: userAnswer.answer,
+                          actualAnswer: ticket.answers[index],
                         ),
-                        child: Text(
-                          toBeginningOfSentenceCase(
-                              ticket.answers[index].answer),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w800,
-                          ),
+                        foregroundColor: null,
+                      ),
+                      child: Text(
+                        toBeginningOfSentenceCase(ticket.answers[index].answer),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),
-                    // if (userAnswer.answer != null &&
-                    //     userAnswer.answer == ticket.answers[index] &&
-                    //     !(userAnswer.answer?.correct ?? false))
-                    //   IgnorePointer(
-                    //     child: Icon(
-                    //       Icons.error_outline,
-                    //       color: Colors.red.withOpacity(0.05),
-                    //       size: 160 +
-                    //           ticket.answers.fold(
-                    //                 0,
-                    //                 (previousValue, element) =>
-                    //                     previousValue + element.answer.length,
-                    //               ) /
-                    //               ticket.answers.length,
-                    //     ),
-                    //   ),
-                    // IgnorePointer(
-                    //   child: Padding(
-                    //     padding:
-                    //         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    //     child: Align(
-                    //       alignment: getQuestionNumberPosition(index),
-                    //       child: Opacity(
-                    //         opacity: 0.2,
-                    //         child: Text(
-                    //           '${index + 1}',
-                    //           style: const TextStyle(
-                    //             fontSize: 24,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
+                  ),
+                  // if (userAnswer.answer != null &&
+                  //     userAnswer.answer == ticket.answers[index] &&
+                  //     !(userAnswer.answer?.correct ?? false))
+                  //   IgnorePointer(
+                  //     child: Icon(
+                  //       Icons.error_outline,
+                  //       color: Colors.red.withOpacity(0.05),
+                  //       size: 160 +
+                  //           ticket.answers.fold(
+                  //                 0,
+                  //                 (previousValue, element) =>
+                  //                     previousValue + element.answer.length,
+                  //               ) /
+                  //               ticket.answers.length,
+                  //     ),
+                  //   ),
+                  // IgnorePointer(
+                  //   child: Padding(
+                  //     padding:
+                  //         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  //     child: Align(
+                  //       alignment: getQuestionNumberPosition(index),
+                  //       child: Opacity(
+                  //         opacity: 0.2,
+                  //         child: Text(
+                  //           '${index + 1}',
+                  //           style: const TextStyle(
+                  //             fontSize: 24,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
               ),
             ),
           ),

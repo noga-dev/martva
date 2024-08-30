@@ -198,11 +198,11 @@ class ExamContentState extends State<ExamContent> {
                   physics: const AlwaysScrollableScrollPhysics(),
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
                     SliverAppBar.large(
+                      elevation: 0,
                       forceElevated: innerBoxIsScrolled,
                       automaticallyImplyLeading: false,
                       collapsedHeight: DSSizeTokens.s.scaleBy(3),
                       expandedHeight: DSSizeTokens.s.scaleBy(3),
-                      elevation: 0,
                       surfaceTintColor: Colors.transparent,
                       backgroundColor: Colors.transparent,
                       foregroundColor: Colors.transparent,
@@ -229,7 +229,7 @@ class ExamContentState extends State<ExamContent> {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: DSSpacingTokens.s.all,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -303,9 +303,9 @@ class ExamContentState extends State<ExamContent> {
                           }),
                         ),
                       ),
-                      // SliverPadding(
-                      //   padding: DSSpacingTokens.xxxl.vertical * 2,
-                      // ),
+                      SliverPadding(
+                        padding: DSSpacingTokens.m.vertical * 4,
+                      ),
                     ],
                   ),
                 ),
@@ -441,10 +441,12 @@ class _QuestionIndexDotIndicatorsWidget extends StatelessWidget {
     return GridView(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 10,
+        mainAxisSpacing: DSSpacingTokens.s.value,
+        crossAxisSpacing: DSSpacingTokens.s.value,
       ),
-      padding: DSSpacingTokens.s.all,
+      padding: DSSpacingTokens.xxxl.all,
       children: List.generate(examTickets.length, (index) {
         Color dotColor = Colors.grey.withOpacity(0.5);
 
@@ -454,44 +456,41 @@ class _QuestionIndexDotIndicatorsWidget extends StatelessWidget {
               : Colors.red.withOpacity(0.5);
         }
 
-        return Padding(
-          padding: DSSpacingTokens.xxs.all / 2,
-          child: Stack(
-            children: [
-              AnimatedContainer(
-                curve: Curves.easeOut,
-                duration: DurationTokens.shortest,
-                padding: EdgeInsets.all(currentQuestionIndex == index ? 4 : 8),
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(4),
-                  color: dotColor,
-                  border: Border.all(
-                    color: index == currentQuestionIndex
-                        ? Colors.blueAccent
-                        : Colors.transparent,
-                    width: 4,
-                  ),
+        return Stack(
+          children: [
+            AnimatedContainer(
+              curve: Curves.easeOut,
+              duration: DurationTokens.shortest,
+              padding: EdgeInsets.all(currentQuestionIndex == index ? 4 : 8),
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(4),
+                color: dotColor,
+                border: Border.all(
+                  color: index == currentQuestionIndex
+                      ? Colors.blueAccent
+                      : Colors.transparent,
+                  width: 4,
                 ),
               ),
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () => onTap(index),
-                  onLongPress: () =>
-                      Toaster.info('Current question #${currentTicket.id}'),
-                  child: Center(
-                    child: Text(
-                      '$index',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+            ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => onTap(index),
+                onLongPress: () =>
+                    Toaster.info('Current question #${currentTicket.id}'),
+                child: Center(
+                  child: Text(
+                    '$index',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       }),
     );

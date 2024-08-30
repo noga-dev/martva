@@ -4,6 +4,8 @@ import 'package:martva/src/features/tickets/context/answer.dto.dart';
 part 'ticket.dto.freezed.dart';
 part 'ticket.dto.g.dart';
 
+typedef TicketId = String;
+
 @JsonSerializable()
 @Freezed(fromJson: false)
 class TicketDto with _$TicketDto {
@@ -13,7 +15,7 @@ class TicketDto with _$TicketDto {
       defaultValue: '',
       fromJson: _parseId,
     )
-    String id,
+    TicketId id,
     @Default('') @JsonKey(defaultValue: '') String question,
     @Default('') @JsonKey(defaultValue: '') String explanation,
     @Default('') @JsonKey(defaultValue: '') String image,
