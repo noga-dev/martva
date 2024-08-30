@@ -1,4 +1,4 @@
-import 'package:martva/src/features/review/context/review.dto.dart';
+import 'package:martva/src/features/review/dto/review.dto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -6,8 +6,6 @@ part 'reviews.repo.g.dart';
 
 abstract class ReviewsRepo {
   Future<List<ReviewDto>> fetchReviews();
-
-  Stream<List<ReviewDto>> watchReviews();
 
   Future<void> setReview(ReviewDto review);
 }
@@ -18,19 +16,17 @@ class ReviewsRepoImpl implements ReviewsRepo {
   @override
   Future<List<ReviewDto>> fetchReviews() async {
     final request = Supabase.instance.client.rest.from('reviews').select();
+
     final response = await request;
-    final reviews = response.map((json) => ReviewDto.fromJson(json)).toList();
-    return reviews;
+
+    final parsed = response.map((json) => ReviewDto.fromJson(json)).toList();
+
+    return parsed;
   }
 
   @override
-  Future<void> setReview(ReviewDto review) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<List<ReviewDto>> watchReviews() {
-    throw UnimplementedError();
+  Future<void> setReview(ReviewDto review) async {
+    await Supabase.instance.client.from('reviews').upsert(review.toJson());
   }
 }
 

@@ -24,8 +24,10 @@ mixin _$ReviewDto {
   String get nextReviewAt => throw _privateConstructorUsedError; //
   @JsonKey(defaultValue: 0, name: 'interval')
   int get interval => throw _privateConstructorUsedError; //
-  @JsonKey(defaultValue: 0, name: 'stage')
-  int get stage => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: 0, name: 'repetitions')
+  int get repetitions => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: 0.0, name: 'ease_factor')
+  double get easeFactor => throw _privateConstructorUsedError;
 
   /// Serializes this ReviewDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,7 +49,8 @@ abstract class $ReviewDtoCopyWith<$Res> {
       @JsonKey(defaultValue: '', name: 'ticket_id') String ticketId,
       @JsonKey(defaultValue: '', name: 'next_review_at') String nextReviewAt,
       @JsonKey(defaultValue: 0, name: 'interval') int interval,
-      @JsonKey(defaultValue: 0, name: 'stage') int stage});
+      @JsonKey(defaultValue: 0, name: 'repetitions') int repetitions,
+      @JsonKey(defaultValue: 0.0, name: 'ease_factor') double easeFactor});
 }
 
 /// @nodoc
@@ -69,7 +72,8 @@ class _$ReviewDtoCopyWithImpl<$Res, $Val extends ReviewDto>
     Object? ticketId = null,
     Object? nextReviewAt = null,
     Object? interval = null,
-    Object? stage = null,
+    Object? repetitions = null,
+    Object? easeFactor = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -88,10 +92,14 @@ class _$ReviewDtoCopyWithImpl<$Res, $Val extends ReviewDto>
           ? _value.interval
           : interval // ignore: cast_nullable_to_non_nullable
               as int,
-      stage: null == stage
-          ? _value.stage
-          : stage // ignore: cast_nullable_to_non_nullable
+      repetitions: null == repetitions
+          ? _value.repetitions
+          : repetitions // ignore: cast_nullable_to_non_nullable
               as int,
+      easeFactor: null == easeFactor
+          ? _value.easeFactor
+          : easeFactor // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -109,7 +117,8 @@ abstract class _$$ReviewDtoImplCopyWith<$Res>
       @JsonKey(defaultValue: '', name: 'ticket_id') String ticketId,
       @JsonKey(defaultValue: '', name: 'next_review_at') String nextReviewAt,
       @JsonKey(defaultValue: 0, name: 'interval') int interval,
-      @JsonKey(defaultValue: 0, name: 'stage') int stage});
+      @JsonKey(defaultValue: 0, name: 'repetitions') int repetitions,
+      @JsonKey(defaultValue: 0.0, name: 'ease_factor') double easeFactor});
 }
 
 /// @nodoc
@@ -129,7 +138,8 @@ class __$$ReviewDtoImplCopyWithImpl<$Res>
     Object? ticketId = null,
     Object? nextReviewAt = null,
     Object? interval = null,
-    Object? stage = null,
+    Object? repetitions = null,
+    Object? easeFactor = null,
   }) {
     return _then(_$ReviewDtoImpl(
       id: null == id
@@ -148,10 +158,14 @@ class __$$ReviewDtoImplCopyWithImpl<$Res>
           ? _value.interval
           : interval // ignore: cast_nullable_to_non_nullable
               as int,
-      stage: null == stage
-          ? _value.stage
-          : stage // ignore: cast_nullable_to_non_nullable
+      repetitions: null == repetitions
+          ? _value.repetitions
+          : repetitions // ignore: cast_nullable_to_non_nullable
               as int,
+      easeFactor: null == easeFactor
+          ? _value.easeFactor
+          : easeFactor // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -164,7 +178,8 @@ class _$ReviewDtoImpl implements _ReviewDto {
       @JsonKey(defaultValue: '', name: 'ticket_id') this.ticketId = '',
       @JsonKey(defaultValue: '', name: 'next_review_at') this.nextReviewAt = '',
       @JsonKey(defaultValue: 0, name: 'interval') this.interval = 0,
-      @JsonKey(defaultValue: 0, name: 'stage') this.stage = 0});
+      @JsonKey(defaultValue: 0, name: 'repetitions') this.repetitions = 0,
+      @JsonKey(defaultValue: 0.0, name: 'ease_factor') this.easeFactor = 0.0});
 
   @override
   @JsonKey(defaultValue: '', name: 'id')
@@ -183,12 +198,15 @@ class _$ReviewDtoImpl implements _ReviewDto {
   final int interval;
 //
   @override
-  @JsonKey(defaultValue: 0, name: 'stage')
-  final int stage;
+  @JsonKey(defaultValue: 0, name: 'repetitions')
+  final int repetitions;
+  @override
+  @JsonKey(defaultValue: 0.0, name: 'ease_factor')
+  final double easeFactor;
 
   @override
   String toString() {
-    return 'ReviewDto(id: $id, ticketId: $ticketId, nextReviewAt: $nextReviewAt, interval: $interval, stage: $stage)';
+    return 'ReviewDto(id: $id, ticketId: $ticketId, nextReviewAt: $nextReviewAt, interval: $interval, repetitions: $repetitions, easeFactor: $easeFactor)';
   }
 
   @override
@@ -203,13 +221,16 @@ class _$ReviewDtoImpl implements _ReviewDto {
                 other.nextReviewAt == nextReviewAt) &&
             (identical(other.interval, interval) ||
                 other.interval == interval) &&
-            (identical(other.stage, stage) || other.stage == stage));
+            (identical(other.repetitions, repetitions) ||
+                other.repetitions == repetitions) &&
+            (identical(other.easeFactor, easeFactor) ||
+                other.easeFactor == easeFactor));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, ticketId, nextReviewAt, interval, stage);
+  int get hashCode => Object.hash(runtimeType, id, ticketId, nextReviewAt,
+      interval, repetitions, easeFactor);
 
   /// Create a copy of ReviewDto
   /// with the given fields replaced by the non-null parameter values.
@@ -229,13 +250,14 @@ class _$ReviewDtoImpl implements _ReviewDto {
 
 abstract class _ReviewDto implements ReviewDto {
   const factory _ReviewDto(
-          {@JsonKey(defaultValue: '', name: 'id') final String id,
-          @JsonKey(defaultValue: '', name: 'ticket_id') final String ticketId,
-          @JsonKey(defaultValue: '', name: 'next_review_at')
-          final String nextReviewAt,
-          @JsonKey(defaultValue: 0, name: 'interval') final int interval,
-          @JsonKey(defaultValue: 0, name: 'stage') final int stage}) =
-      _$ReviewDtoImpl;
+      {@JsonKey(defaultValue: '', name: 'id') final String id,
+      @JsonKey(defaultValue: '', name: 'ticket_id') final String ticketId,
+      @JsonKey(defaultValue: '', name: 'next_review_at')
+      final String nextReviewAt,
+      @JsonKey(defaultValue: 0, name: 'interval') final int interval,
+      @JsonKey(defaultValue: 0, name: 'repetitions') final int repetitions,
+      @JsonKey(defaultValue: 0.0, name: 'ease_factor')
+      final double easeFactor}) = _$ReviewDtoImpl;
 
   @override
   @JsonKey(defaultValue: '', name: 'id')
@@ -250,8 +272,11 @@ abstract class _ReviewDto implements ReviewDto {
   @JsonKey(defaultValue: 0, name: 'interval')
   int get interval; //
   @override
-  @JsonKey(defaultValue: 0, name: 'stage')
-  int get stage;
+  @JsonKey(defaultValue: 0, name: 'repetitions')
+  int get repetitions;
+  @override
+  @JsonKey(defaultValue: 0.0, name: 'ease_factor')
+  double get easeFactor;
 
   /// Create a copy of ReviewDto
   /// with the given fields replaced by the non-null parameter values.

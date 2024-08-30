@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_color_tokens.dart';
-import 'package:martva/src/features/tickets/context/ticket.dto.dart';
-import 'package:martva/src/features/tickets/data/image_size.repo.dart';
+import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
+import 'package:martva/src/features/tickets/repo/image_size.repo.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

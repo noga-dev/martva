@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/router/router.dart';
-import 'package:martva/src/core/theme/data/theme.repo.dart';
+import 'package:martva/src/core/theme/repo/theme.repo.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

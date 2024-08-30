@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:martva/src/features/tickets/context/ticket.dto.dart';
+import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 
 part 'review.dto.freezed.dart';
 part 'review.dto.g.dart';
@@ -42,9 +42,15 @@ class ReviewDto with _$ReviewDto {
     @Default(0)
     @JsonKey(
       defaultValue: 0,
-      name: 'stage',
+      name: 'repetitions',
     )
-    int stage,
+    int repetitions,
+    @Default(0.0)
+    @JsonKey(
+      defaultValue: 0.0,
+      name: 'ease_factor',
+    )
+    double easeFactor,
   }) = _ReviewDto;
 
   factory ReviewDto.fromJson(Map<String, dynamic> json) =>

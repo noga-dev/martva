@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/features/review/context/spaced_repetition_service.dart';
-import 'package:martva/src/features/tickets/context/answer.dto.dart';
-import 'package:martva/src/features/tickets/data/progress_service.dart';
+import 'package:martva/src/features/tickets/dto/answer.dto.dart';
+import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
 
 class TicketDetailScreen extends HookConsumerWidget {
-  final SpacedRepetitionItem item;
-
   const TicketDetailScreen({
     super.key,
-    required this.item,
+    required this.ticketId,
   });
+
+  final String ticketId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final progressService = ref.watch(progressServiceProvider.notifier);
+    final tickets = ref.watch(ticketRepoProvider).valueOrNull ?? [];
+    final ticket = tickets.firstWhere((element) => element.id == ticketId);
     final answer = useState<AnswerDto?>(null);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ticket ${item.ticket.id}'),
+        title: Text('Ticket ${ticket.id}'),
       ),
       body: TicketCardOrganism(
-        ticket: item.ticket,
+        ticket: ticket,
         onAnswerSelected: (ticket, answered) {
           answer.value = answered;
         },
@@ -32,7 +32,7 @@ class TicketDetailScreen extends HookConsumerWidget {
           answer: answer.value,
           index: 0,
           showExplanation: !(answer.value?.correct ?? true),
-          ticket: item.ticket,
+          ticket: ticket,
         ),
       ),
       // SingleChildScrollView(

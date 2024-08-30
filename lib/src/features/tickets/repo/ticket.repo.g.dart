@@ -6,7 +6,7 @@ part of 'ticket.repo.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ticketRepoHash() => r'933fd67dbc47ecd7d049dd919b41db198c5ade9b';
+String _$ticketRepoHash() => r'9961ffcd05d632605a4675e85c1098324a38e2b4';
 
 /// See also [TicketRepo].
 @ProviderFor(TicketRepo)

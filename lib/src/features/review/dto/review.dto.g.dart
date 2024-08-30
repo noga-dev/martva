@@ -11,7 +11,8 @@ ReviewDto _$ReviewDtoFromJson(Map<String, dynamic> json) => ReviewDto(
       ticketId: json['ticket_id'] as String? ?? '',
       nextReviewAt: json['next_review_at'] as String? ?? '',
       interval: (json['interval'] as num?)?.toInt() ?? 0,
-      stage: (json['stage'] as num?)?.toInt() ?? 0,
+      repetitions: (json['repetitions'] as num?)?.toInt() ?? 0,
+      easeFactor: (json['ease_factor'] as num?)?.toDouble() ?? 0.0,
     );
 
 Map<String, dynamic> _$ReviewDtoToJson(ReviewDto instance) => <String, dynamic>{
@@ -19,7 +20,8 @@ Map<String, dynamic> _$ReviewDtoToJson(ReviewDto instance) => <String, dynamic>{
       'ticket_id': instance.ticketId,
       'next_review_at': instance.nextReviewAt,
       'interval': instance.interval,
-      'stage': instance.stage,
+      'repetitions': instance.repetitions,
+      'ease_factor': instance.easeFactor,
     };
 
 Map<String, dynamic> _$$ReviewDtoImplToJson(_$ReviewDtoImpl instance) =>
@@ -28,5 +30,6 @@ Map<String, dynamic> _$$ReviewDtoImplToJson(_$ReviewDtoImpl instance) =>
       'ticket_id': instance.ticketId,
       'next_review_at': instance.nextReviewAt,
       'interval': instance.interval,
-      'stage': instance.stage,
+      'repetitions': instance.repetitions,
+      'ease_factor': instance.easeFactor,
     };

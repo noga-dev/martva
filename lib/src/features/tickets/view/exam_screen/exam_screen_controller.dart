@@ -1,5 +1,5 @@
-import 'package:martva/src/features/tickets/context/ticket.dto.dart';
-import 'package:martva/src/features/tickets/data/ticket.repo.dart';
+import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
+import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'exam_screen_controller.g.dart';

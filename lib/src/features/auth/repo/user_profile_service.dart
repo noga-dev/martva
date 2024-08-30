@@ -1,5 +1,5 @@
-import 'package:martva/src/features/auth/context/profile.dto.dart';
-import 'package:martva/src/features/auth/data/auth_service.dart';
+import 'package:martva/src/features/auth/dto/profile.dto.dart';
+import 'package:martva/src/features/auth/repo/auth_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

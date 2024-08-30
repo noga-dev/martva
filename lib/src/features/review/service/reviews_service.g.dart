@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'srs.service.dart';
+part of 'reviews_service.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sRSServiceProviderHash() =>
-    r'73646b258ac2f99f5d149c5d96042b3e311695fe';
+String _$reviewsServiceHash() => r'56f3aaea4fd312bf0b3867be8927e664de145e80';
 
-/// See also [sRSServiceProvider].
-@ProviderFor(sRSServiceProvider)
-final sRSServiceProviderProvider = AutoDisposeProvider<SRSService>.internal(
-  sRSServiceProvider,
-  name: r'sRSServiceProviderProvider',
+/// See also [ReviewsService].
+@ProviderFor(ReviewsService)
+final reviewsServiceProvider =
+    AutoDisposeAsyncNotifierProvider<ReviewsService, List<ReviewDto>>.internal(
+  ReviewsService.new,
+  name: r'reviewsServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$sRSServiceProviderHash,
+      : _$reviewsServiceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef SRSServiceProviderRef = AutoDisposeProviderRef<SRSService>;
+typedef _$ReviewsService = AutoDisposeAsyncNotifier<List<ReviewDto>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

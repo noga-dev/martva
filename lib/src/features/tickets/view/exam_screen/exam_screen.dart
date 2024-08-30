@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/core/theme/data/theme.repo.dart';
+import 'package:martva/src/core/theme/repo/theme.repo.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_size_tokens.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/messaging/toaster.dart';
-import 'package:martva/src/features/tickets/context/answer.dto.dart';
-import 'package:martva/src/features/tickets/context/ticket.dto.dart';
-import 'package:martva/src/features/tickets/data/ticket_translation.repo.dart';
+import 'package:martva/src/features/tickets/dto/answer.dto.dart';
+import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
+import 'package:martva/src/features/tickets/repo/ticket_translation.repo.dart';
 import 'package:martva/src/features/tickets/view/exam_screen/exam_screen_controller.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
 

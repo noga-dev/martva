@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/src/features/review/context/spaced_repetition_service.dart';
-import 'package:martva/src/features/tickets/context/ticket.dto.dart';
-import 'package:martva/src/features/tickets/data/ticket.repo.dart';
+import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
+import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/ticket_details_screen/ticket_details_screen.dart';
 
 class TicketsScreen extends HookConsumerWidget {
@@ -41,14 +40,13 @@ class TicketListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final dueItem =
-        ref.watch(spacedRepetitionServiceProvider.notifier).getDueItem(ticket);
-
     return ListTile(
       leading: Text(ticket.id),
       title: Text(ticket.question),
-      trailing: Text(
-          'Next review:\n${dueItem.nextReviewDate.toString().split(' ')[0]}'),
+      trailing: const Text(
+        // 'Next review:\n${dueItem.nextReviewDate.toString().split(' ')[0]}',
+        'sdasd',
+      ),
       subtitle: const Wrap(
         children: [
           _Tag.one(),
@@ -59,7 +57,7 @@ class TicketListItem extends HookConsumerWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => TicketDetailScreen(item: dueItem),
+            builder: (context) => TicketDetailScreen(ticketId: ticket.id),
           ),
         );
       },

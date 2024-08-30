@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:martva/src/features/tickets/context/answer.dto.dart';
+import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 
 part 'ticket.dto.freezed.dart';
 part 'ticket.dto.g.dart';

@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:martva/gen/assets.gen.dart';
-import 'package:martva/src/features/tickets/context/ticket.dto.dart';
-import 'package:martva/src/features/tickets/data/ticket_translation.repo.dart';
+import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
+import 'package:martva/src/features/tickets/repo/ticket_translation.repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'ticket.repo.g.dart';
@@ -28,5 +28,9 @@ class TicketRepo extends _$TicketRepo {
     final List<dynamic> jsonList = json.decode(jsonString);
 
     return jsonList.map((json) => TicketDto.fromJson(json)).toList();
+  }
+
+  TicketDto getTicket(TicketId ticketId) {
+    return state.requireValue.firstWhere((ticket) => ticket.id == ticketId);
   }
 }
