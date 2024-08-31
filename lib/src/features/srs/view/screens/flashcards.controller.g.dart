@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'reviews_service.dart';
+part of 'flashcards.controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$reviewsServiceHash() => r'56f3aaea4fd312bf0b3867be8927e664de145e80';
+String _$flashcardsControllerHash() =>
+    r'68359ac0f7c85eb66f561e17c077defb27c1fdb6';
 
-/// See also [ReviewsService].
-@ProviderFor(ReviewsService)
-final reviewsServiceProvider =
-    AutoDisposeAsyncNotifierProvider<ReviewsService, List<ReviewDto>>.internal(
-  ReviewsService.new,
-  name: r'reviewsServiceProvider',
+/// See also [FlashcardsController].
+@ProviderFor(FlashcardsController)
+final flashcardsControllerProvider = AutoDisposeAsyncNotifierProvider<
+    FlashcardsController, List<FlashcardDto>>.internal(
+  FlashcardsController.new,
+  name: r'flashcardsControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$reviewsServiceHash,
+      : _$flashcardsControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ReviewsService = AutoDisposeAsyncNotifier<List<ReviewDto>>;
+typedef _$FlashcardsController = AutoDisposeAsyncNotifier<List<FlashcardDto>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

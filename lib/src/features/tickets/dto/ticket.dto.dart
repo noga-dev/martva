@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:martva/src/core/utils/aliases/string.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 
 part 'ticket.dto.freezed.dart';
@@ -15,7 +16,7 @@ class TicketDto with _$TicketDto {
       defaultValue: '',
       fromJson: _parseId,
     )
-    TicketId id,
+    UUID id,
     @Default('') @JsonKey(defaultValue: '') String question,
     @Default('') @JsonKey(defaultValue: '') String explanation,
     @Default('') @JsonKey(defaultValue: '') String image,
