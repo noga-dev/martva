@@ -34,6 +34,14 @@ void main() async {
           printStateFullData: false,
           printFailFullData: true,
           printProviderFailed: true,
+          printProviderUpdated: false,
+          // providerFilter: (provider) {
+          //   if (provider.name?.contains('examScreenControllerProvider') ??
+          //       false) {
+          //    return false;
+          // }
+          //   return true;
+          // },
         ),
         talker: talker,
       ),

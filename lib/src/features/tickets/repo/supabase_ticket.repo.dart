@@ -34,7 +34,7 @@ class SupabaseTicketRepo implements TicketRepo {
         ''')
           .eq('ticket_details.translation', actualTranslation)
           .eq('ticket_answers.translation', actualTranslation)
-          .limit(2)
+          .limit(20)
           .order('ordinal_id', ascending: true);
 
       if (response.isEmpty) {
