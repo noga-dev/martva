@@ -7,12 +7,12 @@ part of 'exam.controller.dart';
 // **************************************************************************
 
 String _$examScreenControllerHash() =>
-    r'7139b5af1cfb33b57b8da1484dd2e9fc19243157';
+    r'2f4d899dc6d78c06be01221887e218437671f563';
 
 /// See also [ExamScreenController].
 @ProviderFor(ExamScreenController)
-final examScreenControllerProvider =
-    AutoDisposeNotifierProvider<ExamScreenController, ExamState>.internal(
+final examScreenControllerProvider = AutoDisposeNotifierProvider<
+    ExamScreenController, AsyncValue<ExamState>>.internal(
   ExamScreenController.new,
   name: r'examScreenControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final examScreenControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$ExamScreenController = AutoDisposeNotifier<ExamState>;
+typedef _$ExamScreenController = AutoDisposeNotifier<AsyncValue<ExamState>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

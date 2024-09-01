@@ -139,18 +139,21 @@ class __$$ExamStateImplCopyWithImpl<$Res>
 
 class _$ExamStateImpl implements _ExamState {
   const _$ExamStateImpl(
-      {required this.tickets,
-      required this.currentQuestionIndex,
-      required final List<UserAnswer> userAnswers,
-      required this.timeLeft})
+      {this.tickets = const AsyncValue.loading(),
+      this.currentQuestionIndex = 0,
+      final List<UserAnswer> userAnswers = const [],
+      this.timeLeft = const Duration(minutes: 30)})
       : _userAnswers = userAnswers;
 
   @override
+  @JsonKey()
   final AsyncValue<List<TicketDto>> tickets;
   @override
+  @JsonKey()
   final int currentQuestionIndex;
   final List<UserAnswer> _userAnswers;
   @override
+  @JsonKey()
   List<UserAnswer> get userAnswers {
     if (_userAnswers is EqualUnmodifiableListView) return _userAnswers;
     // ignore: implicit_dynamic_type
@@ -158,6 +161,7 @@ class _$ExamStateImpl implements _ExamState {
   }
 
   @override
+  @JsonKey()
   final Duration timeLeft;
 
   @override
@@ -194,10 +198,10 @@ class _$ExamStateImpl implements _ExamState {
 
 abstract class _ExamState implements ExamState {
   const factory _ExamState(
-      {required final AsyncValue<List<TicketDto>> tickets,
-      required final int currentQuestionIndex,
-      required final List<UserAnswer> userAnswers,
-      required final Duration timeLeft}) = _$ExamStateImpl;
+      {final AsyncValue<List<TicketDto>> tickets,
+      final int currentQuestionIndex,
+      final List<UserAnswer> userAnswers,
+      final Duration timeLeft}) = _$ExamStateImpl;
 
   @override
   AsyncValue<List<TicketDto>> get tickets;
@@ -219,7 +223,7 @@ abstract class _ExamState implements ExamState {
 /// @nodoc
 mixin _$UserAnswer {
   TicketDto get ticket => throw _privateConstructorUsedError;
-  int? get selectedAnswerIndex => throw _privateConstructorUsedError;
+  int get selectedAnswerIndex => throw _privateConstructorUsedError;
   AnswerDto? get selectedAnswer => throw _privateConstructorUsedError;
   bool get showExplanation => throw _privateConstructorUsedError;
 
@@ -238,7 +242,7 @@ abstract class $UserAnswerCopyWith<$Res> {
   @useResult
   $Res call(
       {TicketDto ticket,
-      int? selectedAnswerIndex,
+      int selectedAnswerIndex,
       AnswerDto? selectedAnswer,
       bool showExplanation});
 
@@ -262,7 +266,7 @@ class _$UserAnswerCopyWithImpl<$Res, $Val extends UserAnswer>
   @override
   $Res call({
     Object? ticket = null,
-    Object? selectedAnswerIndex = freezed,
+    Object? selectedAnswerIndex = null,
     Object? selectedAnswer = freezed,
     Object? showExplanation = null,
   }) {
@@ -271,10 +275,10 @@ class _$UserAnswerCopyWithImpl<$Res, $Val extends UserAnswer>
           ? _value.ticket
           : ticket // ignore: cast_nullable_to_non_nullable
               as TicketDto,
-      selectedAnswerIndex: freezed == selectedAnswerIndex
+      selectedAnswerIndex: null == selectedAnswerIndex
           ? _value.selectedAnswerIndex
           : selectedAnswerIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       selectedAnswer: freezed == selectedAnswer
           ? _value.selectedAnswer
           : selectedAnswer // ignore: cast_nullable_to_non_nullable
@@ -321,7 +325,7 @@ abstract class _$$UserAnswerImplCopyWith<$Res>
   @useResult
   $Res call(
       {TicketDto ticket,
-      int? selectedAnswerIndex,
+      int selectedAnswerIndex,
       AnswerDto? selectedAnswer,
       bool showExplanation});
 
@@ -345,7 +349,7 @@ class __$$UserAnswerImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? ticket = null,
-    Object? selectedAnswerIndex = freezed,
+    Object? selectedAnswerIndex = null,
     Object? selectedAnswer = freezed,
     Object? showExplanation = null,
   }) {
@@ -354,10 +358,10 @@ class __$$UserAnswerImplCopyWithImpl<$Res>
           ? _value.ticket
           : ticket // ignore: cast_nullable_to_non_nullable
               as TicketDto,
-      selectedAnswerIndex: freezed == selectedAnswerIndex
+      selectedAnswerIndex: null == selectedAnswerIndex
           ? _value.selectedAnswerIndex
           : selectedAnswerIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       selectedAnswer: freezed == selectedAnswer
           ? _value.selectedAnswer
           : selectedAnswer // ignore: cast_nullable_to_non_nullable
@@ -374,16 +378,19 @@ class __$$UserAnswerImplCopyWithImpl<$Res>
 
 class _$UserAnswerImpl implements _UserAnswer {
   const _$UserAnswerImpl(
-      {required this.ticket,
-      this.selectedAnswerIndex,
-      this.selectedAnswer,
+      {this.ticket = const TicketDto(),
+      this.selectedAnswerIndex = 0,
+      this.selectedAnswer = null,
       this.showExplanation = false});
 
   @override
+  @JsonKey()
   final TicketDto ticket;
   @override
-  final int? selectedAnswerIndex;
+  @JsonKey()
+  final int selectedAnswerIndex;
   @override
+  @JsonKey()
   final AnswerDto? selectedAnswer;
   @override
   @JsonKey()
@@ -423,15 +430,15 @@ class _$UserAnswerImpl implements _UserAnswer {
 
 abstract class _UserAnswer implements UserAnswer {
   const factory _UserAnswer(
-      {required final TicketDto ticket,
-      final int? selectedAnswerIndex,
+      {final TicketDto ticket,
+      final int selectedAnswerIndex,
       final AnswerDto? selectedAnswer,
       final bool showExplanation}) = _$UserAnswerImpl;
 
   @override
   TicketDto get ticket;
   @override
-  int? get selectedAnswerIndex;
+  int get selectedAnswerIndex;
   @override
   AnswerDto? get selectedAnswer;
   @override

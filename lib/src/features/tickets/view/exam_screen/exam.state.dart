@@ -8,19 +8,19 @@ part 'exam.state.freezed.dart';
 @freezed
 class ExamState with _$ExamState {
   const factory ExamState({
-    required AsyncValue<List<TicketDto>> tickets,
-    required int currentQuestionIndex,
-    required List<UserAnswer> userAnswers,
-    required Duration timeLeft,
+    @Default(AsyncValue.loading()) AsyncValue<List<TicketDto>> tickets,
+    @Default(0) int currentQuestionIndex,
+    @Default([]) List<UserAnswer> userAnswers,
+    @Default(Duration(minutes: 30)) Duration timeLeft,
   }) = _ExamState;
 }
 
 @freezed
 class UserAnswer with _$UserAnswer {
   const factory UserAnswer({
-    required TicketDto ticket,
-    int? selectedAnswerIndex,
-    AnswerDto? selectedAnswer,
+    @Default(TicketDto()) TicketDto ticket,
+    @Default(0) int selectedAnswerIndex,
+    @Default(null) AnswerDto? selectedAnswer,
     @Default(false) bool showExplanation,
   }) = _UserAnswer;
 }
