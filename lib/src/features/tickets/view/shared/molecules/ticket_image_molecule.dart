@@ -18,7 +18,7 @@ class TicketImageMolecule extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final largeImages = ref.watch(imageSizeRepoProvider).valueOrNull ?? [];
+    final largeImages = ref.watch(imageSizeRepoProvider);
 
     final aspectRatio = largeImages.contains(ticket.ordinalId) ? 2.14 : 4.26;
 

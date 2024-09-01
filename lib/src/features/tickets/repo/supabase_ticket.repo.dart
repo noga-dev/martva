@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:martva/src/core/utils/messaging/talker.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
@@ -37,7 +38,7 @@ class SupabaseTicketRepo implements TicketRepo {
           .order('ordinal_id', ascending: true);
 
       if (response.isEmpty) {
-        print('No tickets found for translation: $actualTranslation');
+        talker.verbose('No tickets found for translation: $actualTranslation');
         return [];
       }
 
@@ -57,11 +58,11 @@ class SupabaseTicketRepo implements TicketRepo {
         );
       }).toList();
 
-      print(response.first);
+      talker.verbose(response.first);
 
       return parsed;
     } catch (e) {
-      print('Error fetching tickets: $e');
+      talker.error('Error fetching tickets: $e');
       return [];
     }
   }
