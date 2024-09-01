@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:martva/src/core/theme/view/templates/async_value.widget.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/ticket_details_screen/ticket_details_screen.dart';
@@ -9,22 +10,19 @@ class TicketsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ticketsAsyncValue = ref.watch(ticketRepoProvider);
+    final ticketsAsyncValue = ref.watch(getTicketsProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tickets to Review'),
       ),
-      body: ticketsAsyncValue.when(
-        data: (tickets) {
-          return ListView.builder(
-            itemCount: tickets.length,
-            itemBuilder: (context, index) =>
-                TicketListItem(ticket: tickets[index]),
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+      body: AsyncValueWidget(
+        value: ticketsAsyncValue,
+        data: (tickets) => ListView.builder(
+          itemCount: tickets.length,
+          itemBuilder: (context, index) =>
+              TicketListItem(ticket: tickets[index]),
+        ),
       ),
     );
   }
@@ -41,7 +39,7 @@ class TicketListItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return ListTile(
-      leading: Text(ticket.id),
+      leading: Text(ticket.ordinalId.toString()),
       title: Text(ticket.question),
       trailing: const Text(
         // 'Next review:\n${dueItem.nextReviewDate.toString().split(' ')[0]}',

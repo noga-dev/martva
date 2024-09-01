@@ -46,7 +46,7 @@ class HomeScreen extends HookConsumerWidget {
             ),
             if (kDebugMode)
               OutlinedButton(
-                onPressed: () => const TalkerRoute().push(context),
+                onPressed: () => const DevDebugTalkerRoute().push(context),
                 child: const Text('Talker'),
               ),
           ]

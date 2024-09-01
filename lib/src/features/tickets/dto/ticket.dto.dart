@@ -11,12 +11,8 @@ typedef TicketId = String;
 @Freezed(fromJson: false)
 class TicketDto with _$TicketDto {
   const factory TicketDto({
-    @Default('')
-    @JsonKey(
-      defaultValue: '',
-      fromJson: _parseId,
-    )
-    UUID id,
+    @Default('') @JsonKey(defaultValue: '') UUID id,
+    @Default(0) @JsonKey(defaultValue: 0, name: 'ordinal_id') int ordinalId,
     @Default('') @JsonKey(defaultValue: '') String question,
     @Default('') @JsonKey(defaultValue: '') String explanation,
     @Default('') @JsonKey(defaultValue: '') String image,
@@ -25,8 +21,4 @@ class TicketDto with _$TicketDto {
 
   factory TicketDto.fromJson(Map<String, dynamic> json) =>
       _$TicketDtoFromJson(json);
-}
-
-String _parseId(dynamic data) {
-  return data.toString();
 }

@@ -8,7 +8,7 @@ part 'exam_screen_controller.g.dart';
 class ExamScreenController extends _$ExamScreenController {
   @override
   FutureOr<List<TicketDto>> build() async {
-    final tickets = await ref.watch(ticketRepoProvider.future);
+    final tickets = await ref.watch(getTicketsProvider.future);
 
     final shuffled = tickets..shuffle();
 

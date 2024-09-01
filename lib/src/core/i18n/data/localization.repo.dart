@@ -3,7 +3,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'localization.repo.g.dart';
 
-@riverpod
+@Riverpod(
+  keepAlive: true,
+  dependencies: [],
+)
 class LocalizationRepo extends _$LocalizationRepo {
   @override
   Locale build() {

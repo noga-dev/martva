@@ -6,15 +6,15 @@ import 'package:martva/src/features/srs/view/screens/flashcards.controller.dart'
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 
-class ReviewsScreen extends ConsumerWidget {
-  const ReviewsScreen({
+class FlashcardsScreen extends ConsumerWidget {
+  const FlashcardsScreen({
     super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final flashcardsState = ref.watch(flashcardsControllerProvider);
-    final ticketsState = ref.watch(ticketRepoProvider);
+    final ticketsState = ref.watch(getTicketsProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Flashcards')),

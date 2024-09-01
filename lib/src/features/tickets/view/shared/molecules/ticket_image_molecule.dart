@@ -20,7 +20,7 @@ class TicketImageMolecule extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final largeImages = ref.watch(imageSizeRepoProvider).valueOrNull ?? [];
 
-    final aspectRatio = largeImages.contains(ticket.id) ? 2.14 : 4.26;
+    final aspectRatio = largeImages.contains(ticket.ordinalId) ? 2.14 : 4.26;
 
     return ClipRect(
       clipper: const _BorderPixelClipper(2),

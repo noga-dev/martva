@@ -16,7 +16,8 @@ List<RouteBase> get $appRoutes => [
       $settingsRoute,
       $chatRoute,
       $userProfileRoute,
-      $talkerRoute,
+      $devDebugTalkerRoute,
+      $devDebugDbSeederRoute,
     ];
 
 RouteBase get $mainRoute => GoRouteData.$route(
@@ -255,16 +256,40 @@ extension $UserProfileRouteExtension on UserProfileRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $talkerRoute => GoRouteData.$route(
-      path: '/debug-talker',
-      factory: $TalkerRouteExtension._fromState,
+RouteBase get $devDebugTalkerRoute => GoRouteData.$route(
+      path: '/dev/debug-talker',
+      factory: $DevDebugTalkerRouteExtension._fromState,
     );
 
-extension $TalkerRouteExtension on TalkerRoute {
-  static TalkerRoute _fromState(GoRouterState state) => const TalkerRoute();
+extension $DevDebugTalkerRouteExtension on DevDebugTalkerRoute {
+  static DevDebugTalkerRoute _fromState(GoRouterState state) =>
+      const DevDebugTalkerRoute();
 
   String get location => GoRouteData.$location(
-        '/debug-talker',
+        '/dev/debug-talker',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $devDebugDbSeederRoute => GoRouteData.$route(
+      path: '/dev/db-seeder',
+      factory: $DevDebugDbSeederRouteExtension._fromState,
+    );
+
+extension $DevDebugDbSeederRouteExtension on DevDebugDbSeederRoute {
+  static DevDebugDbSeederRoute _fromState(GoRouterState state) =>
+      const DevDebugDbSeederRoute();
+
+  String get location => GoRouteData.$location(
+        '/dev/db-seeder',
       );
 
   void go(BuildContext context) => context.go(location);

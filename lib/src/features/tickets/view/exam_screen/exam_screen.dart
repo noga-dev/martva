@@ -10,7 +10,6 @@ import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/messaging/toaster.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
-import 'package:martva/src/features/tickets/repo/ticket_translation.repo.dart';
 import 'package:martva/src/features/tickets/view/exam_screen/exam_screen_controller.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
 
@@ -502,9 +501,9 @@ class _SettingsBottomSheet extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final ticketTrans = ref.watch(ticketTranslationRepoProvider);
-    final ticketTransNotifier =
-        ref.read(ticketTranslationRepoProvider.notifier);
+    // final ticketTrans = ref.watch(ticketTranslationRepoProvider);
+    // final ticketTransNotifier =
+    //     ref.read(ticketTranslationRepoProvider.notifier);
     final theme = ref.watch(themeRepoProvider);
     final themeNotifier = ref.watch(themeRepoProvider.notifier);
     final animationController = useAnimationController();
@@ -519,23 +518,23 @@ class _SettingsBottomSheet extends HookConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListTile(
-                title: const Text('Ticket language'),
-                trailing: DropdownButton<TicketTranslation>(
-                  onChanged: (value) => ticketTransNotifier.update(value!),
-                  hint: Text(ticketTrans.name),
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  elevation: 0,
-                  items: TicketTranslation.values
-                      .map(
-                        (e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(e.name),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
+              // ListTile(
+              //   title: const Text('Ticket language'),
+              //   trailing: DropdownButton<TicketTranslation>(
+              //     onChanged: (value) => ticketTransNotifier.update(value!),
+              //     hint: Text(ticketTrans.name),
+              //     padding: const EdgeInsets.symmetric(horizontal: 8),
+              //     elevation: 0,
+              //     items: TicketTranslation.values
+              //         .map(
+              //           (e) => DropdownMenuItem(
+              //             value: e,
+              //             child: Text(e.name),
+              //           ),
+              //         )
+              //         .toList(),
+              //   ),
+              // ),
               CheckboxListTile(
                 value: false,
                 onChanged: (value) {},

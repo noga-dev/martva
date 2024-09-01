@@ -1,36 +1,52 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import 'package:martva/gen/assets.gen.dart';
+import 'package:flutter/material.dart';
+import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
-import 'package:martva/src/features/tickets/repo/ticket_translation.repo.dart';
+import 'package:martva/src/features/tickets/repo/supabase_ticket.repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'ticket.repo.g.dart';
 
+enum TicketTranslation {
+  original,
+  gpt4oMini;
+
+  String get name {
+    return switch (this) {
+      TicketTranslation.original => 'teoria.on.ge',
+      TicketTranslation.gpt4oMini => 'gpt-4o-mini',
+    };
+  }
+}
+
+abstract class TicketRepo {
+  Future<List<TicketDto>> select({
+    required Locale language,
+    required TicketTranslation translation,
+  });
+}
+
+@Riverpod(keepAlive: true)
+TicketRepo ticketRepo(TicketRepoRef ref) {
+  return const SupabaseTicketRepo();
+}
+
+@Riverpod(
+  keepAlive: true,
+  dependencies: [],
+)
+TicketTranslation getTicketTranslation(GetTicketTranslationRef ref) {
+  return TicketTranslation.original;
+}
+
 @riverpod
-class TicketRepo extends _$TicketRepo {
-  @override
-  Future<List<TicketDto>> build() async {
-    final ticketTranslation = ref.watch(ticketTranslationRepoProvider);
+Future<List<TicketDto>> getTickets(GetTicketsRef ref) async {
+  final localizationRepo = ref.watch(localizationRepoProvider);
+  final translation = ref.watch(getTicketTranslationProvider);
 
-    final String jsonString =
-        await rootBundle.loadString(switch (ticketTranslation) {
-      TicketTranslation.ruGpt4oMini => Assets.i18n.tickets.ruGpt4omini,
-      TicketTranslation.enGpt4oMini => Assets.i18n.tickets.enGpt4omini,
-      TicketTranslation.geOriginal => Assets.i18n.tickets.geTeoriaonge,
-      TicketTranslation.ruOriginal => Assets.i18n.tickets.ruTeoriaonge,
-      TicketTranslation.enOriginal => Assets.i18n.tickets.enTeoriaonge,
-      // ignore: unreachable_switch_case
-      _ => Assets.i18n.tickets.enGpt4omini,
-    });
+  final ticketRepo = ref.watch(ticketRepoProvider);
 
-    final List<dynamic> jsonList = json.decode(jsonString);
-
-    return jsonList.map((json) => TicketDto.fromJson(json)).toList();
-  }
-
-  TicketDto getTicket(TicketId ticketId) {
-    return state.requireValue.firstWhere((ticket) => ticket.id == ticketId);
-  }
+  return ticketRepo.select(
+    language: localizationRepo,
+    translation: translation,
+  );
 }

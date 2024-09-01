@@ -37,8 +37,28 @@ class App extends ConsumerWidget {
       shortcuts: {
         ...WidgetsApp.defaultShortcuts,
         const SingleActivator(LogicalKeyboardKey.escape): VoidCallbackIntent(
-          () => Navigator.of(router.routerDelegate.navigatorKey.currentContext!)
-              .maybePop(),
+          () {
+            final hasFocus = Focus.maybeOf(
+                        router.routerDelegate.navigatorKey.currentContext!)
+                    ?.hasPrimaryFocus ??
+                false;
+
+            if (hasFocus) {
+              Focus.maybeOf(router.routerDelegate.navigatorKey.currentContext!)
+                  ?.unfocus();
+            } else {
+              Navigator.of(router.routerDelegate.navigatorKey.currentContext!)
+                  .maybePop();
+            }
+          },
+        ),
+        LogicalKeySet(
+          LogicalKeyboardKey(LogicalKeyboardKey.keyD.keyId),
+          LogicalKeyboardKey(LogicalKeyboardKey.keyS.keyId),
+          LogicalKeyboardKey(LogicalKeyboardKey.control.keyId),
+        ): VoidCallbackIntent(
+          () => const DevDebugDbSeederRoute()
+              .push(router.routerDelegate.navigatorKey.currentContext!),
         ),
       },
       builder: (context, child) {

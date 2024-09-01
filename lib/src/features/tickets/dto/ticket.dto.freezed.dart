@@ -16,8 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$TicketDto {
-  @JsonKey(defaultValue: '', fromJson: _parseId)
+  @JsonKey(defaultValue: '')
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: 0, name: 'ordinal_id')
+  int get ordinalId => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: '')
   String get question => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: '')
@@ -43,7 +45,8 @@ abstract class $TicketDtoCopyWith<$Res> {
       _$TicketDtoCopyWithImpl<$Res, TicketDto>;
   @useResult
   $Res call(
-      {@JsonKey(defaultValue: '', fromJson: _parseId) String id,
+      {@JsonKey(defaultValue: '') String id,
+      @JsonKey(defaultValue: 0, name: 'ordinal_id') int ordinalId,
       @JsonKey(defaultValue: '') String question,
       @JsonKey(defaultValue: '') String explanation,
       @JsonKey(defaultValue: '') String image,
@@ -66,6 +69,7 @@ class _$TicketDtoCopyWithImpl<$Res, $Val extends TicketDto>
   @override
   $Res call({
     Object? id = null,
+    Object? ordinalId = null,
     Object? question = null,
     Object? explanation = null,
     Object? image = null,
@@ -76,6 +80,10 @@ class _$TicketDtoCopyWithImpl<$Res, $Val extends TicketDto>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      ordinalId: null == ordinalId
+          ? _value.ordinalId
+          : ordinalId // ignore: cast_nullable_to_non_nullable
+              as int,
       question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
@@ -105,7 +113,8 @@ abstract class _$$TicketDtoImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(defaultValue: '', fromJson: _parseId) String id,
+      {@JsonKey(defaultValue: '') String id,
+      @JsonKey(defaultValue: 0, name: 'ordinal_id') int ordinalId,
       @JsonKey(defaultValue: '') String question,
       @JsonKey(defaultValue: '') String explanation,
       @JsonKey(defaultValue: '') String image,
@@ -126,6 +135,7 @@ class __$$TicketDtoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? ordinalId = null,
     Object? question = null,
     Object? explanation = null,
     Object? image = null,
@@ -136,6 +146,10 @@ class __$$TicketDtoImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      ordinalId: null == ordinalId
+          ? _value.ordinalId
+          : ordinalId // ignore: cast_nullable_to_non_nullable
+              as int,
       question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
@@ -160,7 +174,8 @@ class __$$TicketDtoImplCopyWithImpl<$Res>
 @JsonSerializable(createFactory: false)
 class _$TicketDtoImpl implements _TicketDto {
   const _$TicketDtoImpl(
-      {@JsonKey(defaultValue: '', fromJson: _parseId) this.id = '',
+      {@JsonKey(defaultValue: '') this.id = '',
+      @JsonKey(defaultValue: 0, name: 'ordinal_id') this.ordinalId = 0,
       @JsonKey(defaultValue: '') this.question = '',
       @JsonKey(defaultValue: '') this.explanation = '',
       @JsonKey(defaultValue: '') this.image = '',
@@ -168,8 +183,11 @@ class _$TicketDtoImpl implements _TicketDto {
       : _answers = answers;
 
   @override
-  @JsonKey(defaultValue: '', fromJson: _parseId)
+  @JsonKey(defaultValue: '')
   final String id;
+  @override
+  @JsonKey(defaultValue: 0, name: 'ordinal_id')
+  final int ordinalId;
   @override
   @JsonKey(defaultValue: '')
   final String question;
@@ -190,7 +208,7 @@ class _$TicketDtoImpl implements _TicketDto {
 
   @override
   String toString() {
-    return 'TicketDto(id: $id, question: $question, explanation: $explanation, image: $image, answers: $answers)';
+    return 'TicketDto(id: $id, ordinalId: $ordinalId, question: $question, explanation: $explanation, image: $image, answers: $answers)';
   }
 
   @override
@@ -199,6 +217,8 @@ class _$TicketDtoImpl implements _TicketDto {
         (other.runtimeType == runtimeType &&
             other is _$TicketDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.ordinalId, ordinalId) ||
+                other.ordinalId == ordinalId) &&
             (identical(other.question, question) ||
                 other.question == question) &&
             (identical(other.explanation, explanation) ||
@@ -209,8 +229,8 @@ class _$TicketDtoImpl implements _TicketDto {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, question, explanation, image,
-      const DeepCollectionEquality().hash(_answers));
+  int get hashCode => Object.hash(runtimeType, id, ordinalId, question,
+      explanation, image, const DeepCollectionEquality().hash(_answers));
 
   /// Create a copy of TicketDto
   /// with the given fields replaced by the non-null parameter values.
@@ -230,7 +250,8 @@ class _$TicketDtoImpl implements _TicketDto {
 
 abstract class _TicketDto implements TicketDto {
   const factory _TicketDto(
-          {@JsonKey(defaultValue: '', fromJson: _parseId) final String id,
+          {@JsonKey(defaultValue: '') final String id,
+          @JsonKey(defaultValue: 0, name: 'ordinal_id') final int ordinalId,
           @JsonKey(defaultValue: '') final String question,
           @JsonKey(defaultValue: '') final String explanation,
           @JsonKey(defaultValue: '') final String image,
@@ -238,8 +259,11 @@ abstract class _TicketDto implements TicketDto {
       _$TicketDtoImpl;
 
   @override
-  @JsonKey(defaultValue: '', fromJson: _parseId)
+  @JsonKey(defaultValue: '')
   String get id;
+  @override
+  @JsonKey(defaultValue: 0, name: 'ordinal_id')
+  int get ordinalId;
   @override
   @JsonKey(defaultValue: '')
   String get question;

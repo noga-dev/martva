@@ -10,11 +10,12 @@ import 'package:martva/src/features/auth/view/user_profile_screen/user_profile_s
 import 'package:martva/src/features/chat/dto/chat_service.dart';
 import 'package:martva/src/features/chat/view/chat_list_screen.dart';
 import 'package:martva/src/features/chat/view/chat_room_screen.dart';
+import 'package:martva/src/features/dev/view/db_seeder.screen.dart';
 import 'package:martva/src/features/home/view/home_screen.dart';
 import 'package:martva/src/features/settings/view/settings_screen.dart';
 import 'package:martva/src/features/srs/view/screens/flashcards.screen.dart';
 import 'package:martva/src/features/tickets/view/exam_screen/exam_screen.dart';
-import 'package:martva/src/features/tickets/view/ticket_list_screen/ticket_list_screen.dart';
+import 'package:martva/src/features/tickets/view/ticket_list_screen/ticket_list.screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -96,7 +97,7 @@ class ReviewsRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const ReviewsScreen();
+    return const FlashcardsScreen();
   }
 }
 
@@ -168,12 +169,22 @@ class UserProfileRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<TalkerRoute>(path: '/debug-talker')
-class TalkerRoute extends GoRouteData {
-  const TalkerRoute();
+@TypedGoRoute<DevDebugTalkerRoute>(path: '/dev/debug-talker')
+class DevDebugTalkerRoute extends GoRouteData {
+  const DevDebugTalkerRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return TalkerScreen(talker: talker);
+  }
+}
+
+@TypedGoRoute<DevDebugDbSeederRoute>(path: '/dev/db-seeder')
+class DevDebugDbSeederRoute extends GoRouteData {
+  const DevDebugDbSeederRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const DbSeederScreen();
   }
 }

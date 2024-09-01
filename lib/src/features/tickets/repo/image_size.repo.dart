@@ -7,10 +7,10 @@ part 'image_size.repo.g.dart';
 @riverpod
 class ImageSizeRepo extends _$ImageSizeRepo {
   @override
-  Future<List<String>> build() async {
+  Future<List<int>> build() async {
     final String jsonString = await rootBundle.loadString(Assets.images.large);
 
-    final list = jsonString.split(',');
+    final list = jsonString.split(',').map<int>((e) => int.parse(e)).toList();
 
     return list;
   }

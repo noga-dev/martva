@@ -7,7 +7,8 @@ part of 'ticket.dto.dart';
 // **************************************************************************
 
 TicketDto _$TicketDtoFromJson(Map<String, dynamic> json) => TicketDto(
-      id: json['id'] == null ? '' : _parseId(json['id']),
+      id: json['id'] as String? ?? '',
+      ordinalId: (json['ordinal_id'] as num?)?.toInt() ?? 0,
       question: json['question'] as String? ?? '',
       explanation: json['explanation'] as String? ?? '',
       image: json['image'] as String? ?? '',
@@ -19,6 +20,7 @@ TicketDto _$TicketDtoFromJson(Map<String, dynamic> json) => TicketDto(
 
 Map<String, dynamic> _$TicketDtoToJson(TicketDto instance) => <String, dynamic>{
       'id': instance.id,
+      'ordinal_id': instance.ordinalId,
       'question': instance.question,
       'explanation': instance.explanation,
       'image': instance.image,
@@ -28,6 +30,7 @@ Map<String, dynamic> _$TicketDtoToJson(TicketDto instance) => <String, dynamic>{
 Map<String, dynamic> _$$TicketDtoImplToJson(_$TicketDtoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'ordinal_id': instance.ordinalId,
       'question': instance.question,
       'explanation': instance.explanation,
       'image': instance.image,

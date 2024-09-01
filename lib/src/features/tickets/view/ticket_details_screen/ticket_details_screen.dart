@@ -15,13 +15,13 @@ class TicketDetailScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tickets = ref.watch(ticketRepoProvider).valueOrNull ?? [];
+    final tickets = ref.watch(getTicketsProvider).valueOrNull ?? [];
     final ticket = tickets.firstWhere((element) => element.id == ticketId);
     final answer = useState<AnswerDto?>(null);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ticket ${ticket.id}'),
+        title: Text('Ticket #${ticket.ordinalId}'),
       ),
       body: TicketCardOrganism(
         ticket: ticket,
