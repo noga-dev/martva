@@ -14,7 +14,7 @@ class SupabaseTicketRepo implements TicketRepo {
     required TicketTranslation translation,
   }) async {
     final String actualTranslation =
-        "${language.languageCode}_${translation.name}";
+        "${language.languageCode}_${translation.dbName}";
 
     try {
       final response = await Supabase.instance.client

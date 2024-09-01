@@ -10,10 +10,17 @@ enum TicketTranslation {
   original,
   gpt4oMini;
 
+  String get dbName {
+    return switch (this) {
+      TicketTranslation.original => 'teoria.on.ge',
+      TicketTranslation.gpt4oMini => 'GPT-4o-mini',
+    };
+  }
+
   String get name {
     return switch (this) {
       TicketTranslation.original => 'teoria.on.ge',
-      TicketTranslation.gpt4oMini => 'gpt-4o-mini',
+      TicketTranslation.gpt4oMini => 'Martva',
     };
   }
 }
@@ -34,14 +41,21 @@ TicketRepo ticketRepo(TicketRepoRef ref) {
   keepAlive: true,
   dependencies: [],
 )
-TicketTranslation getTicketTranslation(GetTicketTranslationRef ref) {
-  return TicketTranslation.original;
+class TicketTranslationNotifer extends _$TicketTranslationNotifer {
+  @override
+  TicketTranslation build() {
+    return TicketTranslation.original;
+  }
+
+  void update(TicketTranslation translation) {
+    state = translation;
+  }
 }
 
 @riverpod
 Future<List<TicketDto>> getTickets(GetTicketsRef ref) async {
   final localizationRepo = ref.watch(localizationRepoProvider);
-  final translation = ref.watch(getTicketTranslationProvider);
+  final translation = ref.watch(ticketTranslationNotiferProvider);
 
   final ticketRepo = ref.watch(ticketRepoProvider);
 

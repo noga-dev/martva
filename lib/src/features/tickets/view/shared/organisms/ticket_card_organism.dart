@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
+import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/shared/molecules/ticket_image_molecule.dart';
 
-class TicketCardOrganism extends StatelessWidget {
+class TicketCardOrganism extends ConsumerWidget {
   final TicketDto ticket;
   final ({
     TicketDto ticket,
@@ -24,7 +26,9 @@ class TicketCardOrganism extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final translation = ref.watch(ticketTranslationNotiferProvider);
+
     return Padding(
       padding: DSSpacingTokens.xxxl.horizontal,
       child: ListView(
@@ -72,7 +76,11 @@ class TicketCardOrganism extends StatelessWidget {
                               child: Padding(
                                 padding: DSSpacingTokens.l.all,
                                 child: Text(
-                                  ticket.explanation,
+                                  ticket.explanation.isEmpty
+                                      ? 'No explanation text from ${translation.name}'
+                                          '\n'
+                                          'Switch to another text source'
+                                      : ticket.explanation,
                                   textAlign: TextAlign.justify,
                                   style: const TextStyle(
                                     height: 1.6,
