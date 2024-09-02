@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ExamState {
   AsyncValue<List<TicketDto>> get tickets => throw _privateConstructorUsedError;
   int get currentQuestionIndex => throw _privateConstructorUsedError;
-  List<UserAnswer> get userAnswers => throw _privateConstructorUsedError;
+  List<QuestionResponse> get userAnswers => throw _privateConstructorUsedError;
   Duration get timeLeft => throw _privateConstructorUsedError;
 
   /// Create a copy of ExamState
@@ -36,7 +36,7 @@ abstract class $ExamStateCopyWith<$Res> {
   $Res call(
       {AsyncValue<List<TicketDto>> tickets,
       int currentQuestionIndex,
-      List<UserAnswer> userAnswers,
+      List<QuestionResponse> userAnswers,
       Duration timeLeft});
 }
 
@@ -72,7 +72,7 @@ class _$ExamStateCopyWithImpl<$Res, $Val extends ExamState>
       userAnswers: null == userAnswers
           ? _value.userAnswers
           : userAnswers // ignore: cast_nullable_to_non_nullable
-              as List<UserAnswer>,
+              as List<QuestionResponse>,
       timeLeft: null == timeLeft
           ? _value.timeLeft
           : timeLeft // ignore: cast_nullable_to_non_nullable
@@ -92,7 +92,7 @@ abstract class _$$ExamStateImplCopyWith<$Res>
   $Res call(
       {AsyncValue<List<TicketDto>> tickets,
       int currentQuestionIndex,
-      List<UserAnswer> userAnswers,
+      List<QuestionResponse> userAnswers,
       Duration timeLeft});
 }
 
@@ -126,7 +126,7 @@ class __$$ExamStateImplCopyWithImpl<$Res>
       userAnswers: null == userAnswers
           ? _value._userAnswers
           : userAnswers // ignore: cast_nullable_to_non_nullable
-              as List<UserAnswer>,
+              as List<QuestionResponse>,
       timeLeft: null == timeLeft
           ? _value.timeLeft
           : timeLeft // ignore: cast_nullable_to_non_nullable
@@ -141,7 +141,7 @@ class _$ExamStateImpl implements _ExamState {
   const _$ExamStateImpl(
       {this.tickets = const AsyncValue.loading(),
       this.currentQuestionIndex = 0,
-      final List<UserAnswer> userAnswers = const [],
+      final List<QuestionResponse> userAnswers = const [],
       this.timeLeft = const Duration(minutes: 30)})
       : _userAnswers = userAnswers;
 
@@ -151,10 +151,10 @@ class _$ExamStateImpl implements _ExamState {
   @override
   @JsonKey()
   final int currentQuestionIndex;
-  final List<UserAnswer> _userAnswers;
+  final List<QuestionResponse> _userAnswers;
   @override
   @JsonKey()
-  List<UserAnswer> get userAnswers {
+  List<QuestionResponse> get userAnswers {
     if (_userAnswers is EqualUnmodifiableListView) return _userAnswers;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_userAnswers);
@@ -200,7 +200,7 @@ abstract class _ExamState implements ExamState {
   const factory _ExamState(
       {final AsyncValue<List<TicketDto>> tickets,
       final int currentQuestionIndex,
-      final List<UserAnswer> userAnswers,
+      final List<QuestionResponse> userAnswers,
       final Duration timeLeft}) = _$ExamStateImpl;
 
   @override
@@ -208,7 +208,7 @@ abstract class _ExamState implements ExamState {
   @override
   int get currentQuestionIndex;
   @override
-  List<UserAnswer> get userAnswers;
+  List<QuestionResponse> get userAnswers;
   @override
   Duration get timeLeft;
 
@@ -221,24 +221,24 @@ abstract class _ExamState implements ExamState {
 }
 
 /// @nodoc
-mixin _$UserAnswer {
+mixin _$QuestionResponse {
   TicketDto get ticket => throw _privateConstructorUsedError;
   int get selectedAnswerIndex => throw _privateConstructorUsedError;
   AnswerDto? get selectedAnswer => throw _privateConstructorUsedError;
   bool get showExplanation => throw _privateConstructorUsedError;
 
-  /// Create a copy of UserAnswer
+  /// Create a copy of QuestionResponse
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $UserAnswerCopyWith<UserAnswer> get copyWith =>
+  $QuestionResponseCopyWith<QuestionResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserAnswerCopyWith<$Res> {
-  factory $UserAnswerCopyWith(
-          UserAnswer value, $Res Function(UserAnswer) then) =
-      _$UserAnswerCopyWithImpl<$Res, UserAnswer>;
+abstract class $QuestionResponseCopyWith<$Res> {
+  factory $QuestionResponseCopyWith(
+          QuestionResponse value, $Res Function(QuestionResponse) then) =
+      _$QuestionResponseCopyWithImpl<$Res, QuestionResponse>;
   @useResult
   $Res call(
       {TicketDto ticket,
@@ -251,16 +251,16 @@ abstract class $UserAnswerCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserAnswerCopyWithImpl<$Res, $Val extends UserAnswer>
-    implements $UserAnswerCopyWith<$Res> {
-  _$UserAnswerCopyWithImpl(this._value, this._then);
+class _$QuestionResponseCopyWithImpl<$Res, $Val extends QuestionResponse>
+    implements $QuestionResponseCopyWith<$Res> {
+  _$QuestionResponseCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of UserAnswer
+  /// Create a copy of QuestionResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -290,7 +290,7 @@ class _$UserAnswerCopyWithImpl<$Res, $Val extends UserAnswer>
     ) as $Val);
   }
 
-  /// Create a copy of UserAnswer
+  /// Create a copy of QuestionResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -300,7 +300,7 @@ class _$UserAnswerCopyWithImpl<$Res, $Val extends UserAnswer>
     });
   }
 
-  /// Create a copy of UserAnswer
+  /// Create a copy of QuestionResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -316,11 +316,11 @@ class _$UserAnswerCopyWithImpl<$Res, $Val extends UserAnswer>
 }
 
 /// @nodoc
-abstract class _$$UserAnswerImplCopyWith<$Res>
-    implements $UserAnswerCopyWith<$Res> {
-  factory _$$UserAnswerImplCopyWith(
-          _$UserAnswerImpl value, $Res Function(_$UserAnswerImpl) then) =
-      __$$UserAnswerImplCopyWithImpl<$Res>;
+abstract class _$$QuestionResponseImplCopyWith<$Res>
+    implements $QuestionResponseCopyWith<$Res> {
+  factory _$$QuestionResponseImplCopyWith(_$QuestionResponseImpl value,
+          $Res Function(_$QuestionResponseImpl) then) =
+      __$$QuestionResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -336,14 +336,14 @@ abstract class _$$UserAnswerImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$UserAnswerImplCopyWithImpl<$Res>
-    extends _$UserAnswerCopyWithImpl<$Res, _$UserAnswerImpl>
-    implements _$$UserAnswerImplCopyWith<$Res> {
-  __$$UserAnswerImplCopyWithImpl(
-      _$UserAnswerImpl _value, $Res Function(_$UserAnswerImpl) _then)
+class __$$QuestionResponseImplCopyWithImpl<$Res>
+    extends _$QuestionResponseCopyWithImpl<$Res, _$QuestionResponseImpl>
+    implements _$$QuestionResponseImplCopyWith<$Res> {
+  __$$QuestionResponseImplCopyWithImpl(_$QuestionResponseImpl _value,
+      $Res Function(_$QuestionResponseImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of UserAnswer
+  /// Create a copy of QuestionResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -353,7 +353,7 @@ class __$$UserAnswerImplCopyWithImpl<$Res>
     Object? selectedAnswer = freezed,
     Object? showExplanation = null,
   }) {
-    return _then(_$UserAnswerImpl(
+    return _then(_$QuestionResponseImpl(
       ticket: null == ticket
           ? _value.ticket
           : ticket // ignore: cast_nullable_to_non_nullable
@@ -376,8 +376,8 @@ class __$$UserAnswerImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UserAnswerImpl implements _UserAnswer {
-  const _$UserAnswerImpl(
+class _$QuestionResponseImpl implements _QuestionResponse {
+  const _$QuestionResponseImpl(
       {this.ticket = const TicketDto(),
       this.selectedAnswerIndex = 0,
       this.selectedAnswer = null,
@@ -398,14 +398,14 @@ class _$UserAnswerImpl implements _UserAnswer {
 
   @override
   String toString() {
-    return 'UserAnswer(ticket: $ticket, selectedAnswerIndex: $selectedAnswerIndex, selectedAnswer: $selectedAnswer, showExplanation: $showExplanation)';
+    return 'QuestionResponse(ticket: $ticket, selectedAnswerIndex: $selectedAnswerIndex, selectedAnswer: $selectedAnswer, showExplanation: $showExplanation)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UserAnswerImpl &&
+            other is _$QuestionResponseImpl &&
             (identical(other.ticket, ticket) || other.ticket == ticket) &&
             (identical(other.selectedAnswerIndex, selectedAnswerIndex) ||
                 other.selectedAnswerIndex == selectedAnswerIndex) &&
@@ -419,21 +419,22 @@ class _$UserAnswerImpl implements _UserAnswer {
   int get hashCode => Object.hash(runtimeType, ticket, selectedAnswerIndex,
       selectedAnswer, showExplanation);
 
-  /// Create a copy of UserAnswer
+  /// Create a copy of QuestionResponse
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$UserAnswerImplCopyWith<_$UserAnswerImpl> get copyWith =>
-      __$$UserAnswerImplCopyWithImpl<_$UserAnswerImpl>(this, _$identity);
+  _$$QuestionResponseImplCopyWith<_$QuestionResponseImpl> get copyWith =>
+      __$$QuestionResponseImplCopyWithImpl<_$QuestionResponseImpl>(
+          this, _$identity);
 }
 
-abstract class _UserAnswer implements UserAnswer {
-  const factory _UserAnswer(
+abstract class _QuestionResponse implements QuestionResponse {
+  const factory _QuestionResponse(
       {final TicketDto ticket,
       final int selectedAnswerIndex,
       final AnswerDto? selectedAnswer,
-      final bool showExplanation}) = _$UserAnswerImpl;
+      final bool showExplanation}) = _$QuestionResponseImpl;
 
   @override
   TicketDto get ticket;
@@ -444,10 +445,10 @@ abstract class _UserAnswer implements UserAnswer {
   @override
   bool get showExplanation;
 
-  /// Create a copy of UserAnswer
+  /// Create a copy of QuestionResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UserAnswerImplCopyWith<_$UserAnswerImpl> get copyWith =>
+  _$$QuestionResponseImplCopyWith<_$QuestionResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

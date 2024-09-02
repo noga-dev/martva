@@ -10,7 +10,7 @@ import 'package:martva/src/core/utils/messaging/toaster.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
-import 'package:martva/src/features/tickets/view/exam_screen/exam.controller.dart';
+import 'package:martva/src/features/tickets/view/screens/exam/exam.controller.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
 
 class ExamScreen extends HookConsumerWidget {

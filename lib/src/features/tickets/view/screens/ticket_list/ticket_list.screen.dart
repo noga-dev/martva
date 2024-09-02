@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/theme/view/templates/async_value.widget.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
-import 'package:martva/src/features/tickets/view/ticket_details_screen/ticket_details_screen.dart';
+import 'package:martva/src/features/tickets/view/screens/ticket_details/ticket_details.dart';
 
 class TicketsScreen extends HookConsumerWidget {
   const TicketsScreen({super.key});

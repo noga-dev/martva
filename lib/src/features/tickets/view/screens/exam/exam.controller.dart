@@ -5,7 +5,7 @@ import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
-import 'package:martva/src/features/tickets/view/exam_screen/exam.state.dart';
+import 'package:martva/src/features/tickets/view/screens/exam/exam.state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'exam.controller.g.dart';
@@ -71,7 +71,7 @@ class ExamScreenController extends _$ExamScreenController {
         tickets: AsyncValue.data(tickets),
         currentQuestionIndex: 0,
         userAnswers:
-            tickets.map((ticket) => UserAnswer(ticket: ticket)).toList(),
+            tickets.map((ticket) => QuestionResponse(ticket: ticket)).toList(),
         timeLeft: examDuration,
       );
       state = AsyncValue.data(examState);
@@ -91,6 +91,9 @@ class ExamScreenController extends _$ExamScreenController {
         language: language,
         translation: translation,
       );
+
+      // refactor - ticket list in both exam state and user answers should be merged
+
       final updatedUserAnswers = state.requireValue.userAnswers.map((answer) {
         final updatedTicket = updatedTickets.firstWhere((t) {
           return t.id == answer.ticket.id;
@@ -112,7 +115,8 @@ class ExamScreenController extends _$ExamScreenController {
       final index =
           examState.userAnswers.indexWhere((ua) => ua.ticket.id == ticket.id);
       if (index != -1 && examState.userAnswers[index].selectedAnswer == null) {
-        final newUserAnswers = List<UserAnswer>.from(examState.userAnswers);
+        final newUserAnswers =
+            List<QuestionResponse>.from(examState.userAnswers);
         newUserAnswers[index] = newUserAnswers[index].copyWith(
           selectedAnswerIndex: ticket.answers.indexOf(answer),
           selectedAnswer: answer,
@@ -125,7 +129,7 @@ class ExamScreenController extends _$ExamScreenController {
 
   void toggleExplanation(int index) {
     final newUserAnswers =
-        List<UserAnswer>.from(state.requireValue.userAnswers);
+        List<QuestionResponse>.from(state.requireValue.userAnswers);
     newUserAnswers[index] = newUserAnswers[index].copyWith(
       showExplanation: !newUserAnswers[index].showExplanation,
     );

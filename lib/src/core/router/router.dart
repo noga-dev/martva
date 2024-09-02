@@ -14,8 +14,8 @@ import 'package:martva/src/features/dev/view/db_seeder.screen.dart';
 import 'package:martva/src/features/home/view/home_screen.dart';
 import 'package:martva/src/features/settings/view/settings_screen.dart';
 import 'package:martva/src/features/srs/view/screens/flashcards.screen.dart';
-import 'package:martva/src/features/tickets/view/exam_screen/exam.screen.dart';
-import 'package:martva/src/features/tickets/view/ticket_list_screen/ticket_list.screen.dart';
+import 'package:martva/src/features/tickets/view/screens/exam/exam.screen.dart';
+import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
