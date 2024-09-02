@@ -7,7 +7,7 @@ part of 'exam.controller.dart';
 // **************************************************************************
 
 String _$examScreenControllerHash() =>
-    r'9bc151ee5f759671edbdaadc8a73d77fb2358a3b';
+    r'3d65c07442a5b1e68da2f87dd2bce8a9bd1a0a1c';
 
 /// See also [ExamScreenController].
 @ProviderFor(ExamScreenController)

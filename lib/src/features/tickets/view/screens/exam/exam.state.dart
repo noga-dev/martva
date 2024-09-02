@@ -18,9 +18,8 @@ class ExamState with _$ExamState {
 @freezed
 class QuestionResponse with _$QuestionResponse {
   const factory QuestionResponse({
-    @Default(TicketDto()) TicketDto ticket,
-    @Default(0) int selectedAnswerIndex,
-    @Default(null) AnswerDto? selectedAnswer,
+    required TicketDto ticket,
+    AnswerDto? selectedAnswer,
     @Default(false) bool showExplanation,
   }) = _QuestionResponse;
 }

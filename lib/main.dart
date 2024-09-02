@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/app.dart';
-import 'package:martva/src/core/utils/messaging/talker.dart';
+import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:talker_riverpod_logger/talker_riverpod_logger.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,25 +26,7 @@ void main() async {
   );
 
   final container = ProviderContainer(
-    observers: [
-      TalkerRiverpodObserver(
-        settings: const TalkerRiverpodLoggerSettings(
-          enabled: kDebugMode,
-          printStateFullData: false,
-          printFailFullData: true,
-          printProviderFailed: true,
-          printProviderUpdated: false,
-          // providerFilter: (provider) {
-          //   if (provider.name?.contains('examScreenControllerProvider') ??
-          //       false) {
-          //    return false;
-          // }
-          //   return true;
-          // },
-        ),
-        talker: talker,
-      ),
-    ],
+    observers: [],
     overrides: const [],
   );
 
@@ -61,11 +42,21 @@ void registerErrorHandlers() {
   // * Show some error UI if any uncaught exception happens
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
-    talker.error(details.exception, details.stack);
+    logger.e(
+      '[[[flutter error]]]',
+      time: DateTime.now(),
+      error: details.exceptionAsString(),
+      stackTrace: details.stack,
+    );
   };
   // * Handle errors from the underlying platform/OS
   PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    talker.error(error, stack);
+    logger.e(
+      '[[[platform error]]]',
+      time: DateTime.now(),
+      stackTrace: stack,
+      error: error.toString(),
+    );
     return true;
   };
   // * Show some error UI when any widget in the app fails to build

@@ -2,7 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:martva/src/core/utils/messaging/talker.dart';
+import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/features/auth/repo/auth_service.dart';
 import 'package:martva/src/features/auth/view/login_screen/login_screen.dart';
 import 'package:martva/src/features/auth/view/signup_screen/signup_screen.dart';
@@ -17,7 +17,6 @@ import 'package:martva/src/features/srs/view/screens/flashcards.screen.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.screen.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:talker_flutter/talker_flutter.dart';
 
 part 'router.g.dart';
 
@@ -30,7 +29,6 @@ GoRouter router(RouterRef ref) {
     initialLocation: '/',
     observers: [
       BotToastNavigatorObserver(),
-      TalkerRouteObserver(talker),
     ],
     redirect: (context, state) {
       final isLoggedIn = authState != null;
@@ -169,15 +167,15 @@ class UserProfileRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<DevDebugTalkerRoute>(path: '/dev/debug-talker')
-class DevDebugTalkerRoute extends GoRouteData {
-  const DevDebugTalkerRoute();
+// @TypedGoRoute<DevDebugLoggerRoute>(path: '/dev/logger')
+// class DevDebugLoggerRoute extends GoRouteData {
+//   const DevDebugLoggerRoute();
 
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return TalkerScreen(talker: talker);
-  }
-}
+//   @override
+//   Widget build(BuildContext context, GoRouterState state) {
+//     return logger.;
+//   }
+// }
 
 @TypedGoRoute<DevDebugDbSeederRoute>(path: '/dev/db-seeder')
 class DevDebugDbSeederRoute extends GoRouteData {
@@ -186,5 +184,24 @@ class DevDebugDbSeederRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const DbSeederScreen();
+  }
+}
+
+@TypedGoRoute<DevDebugLoggerRoute>(path: '/dev/logger')
+class DevDebugLoggerRoute extends GoRouteData {
+  const DevDebugLoggerRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return Scaffold(
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () => logger.d('Hello'),
+            child: const Text('Log'),
+          ),
+        ],
+      ),
+    );
   }
 }

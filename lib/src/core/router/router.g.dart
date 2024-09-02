@@ -16,8 +16,8 @@ List<RouteBase> get $appRoutes => [
       $settingsRoute,
       $chatRoute,
       $userProfileRoute,
-      $devDebugTalkerRoute,
       $devDebugDbSeederRoute,
+      $devDebugLoggerRoute,
     ];
 
 RouteBase get $mainRoute => GoRouteData.$route(
@@ -256,29 +256,6 @@ extension $UserProfileRouteExtension on UserProfileRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $devDebugTalkerRoute => GoRouteData.$route(
-      path: '/dev/debug-talker',
-      factory: $DevDebugTalkerRouteExtension._fromState,
-    );
-
-extension $DevDebugTalkerRouteExtension on DevDebugTalkerRoute {
-  static DevDebugTalkerRoute _fromState(GoRouterState state) =>
-      const DevDebugTalkerRoute();
-
-  String get location => GoRouteData.$location(
-        '/dev/debug-talker',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
 RouteBase get $devDebugDbSeederRoute => GoRouteData.$route(
       path: '/dev/db-seeder',
       factory: $DevDebugDbSeederRouteExtension._fromState,
@@ -302,11 +279,34 @@ extension $DevDebugDbSeederRouteExtension on DevDebugDbSeederRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $devDebugLoggerRoute => GoRouteData.$route(
+      path: '/dev/logger',
+      factory: $DevDebugLoggerRouteExtension._fromState,
+    );
+
+extension $DevDebugLoggerRouteExtension on DevDebugLoggerRoute {
+  static DevDebugLoggerRoute _fromState(GoRouterState state) =>
+      const DevDebugLoggerRoute();
+
+  String get location => GoRouteData.$location(
+        '/dev/logger',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'dca021c14ae3b19cf5acde009f3d19a6b1461f63';
+String _$routerHash() => r'8c57c38971b78a358053f7af4fc7c46f30f71d96';
 
 /// See also [router].
 @ProviderFor(router)

@@ -223,7 +223,6 @@ abstract class _ExamState implements ExamState {
 /// @nodoc
 mixin _$QuestionResponse {
   TicketDto get ticket => throw _privateConstructorUsedError;
-  int get selectedAnswerIndex => throw _privateConstructorUsedError;
   AnswerDto? get selectedAnswer => throw _privateConstructorUsedError;
   bool get showExplanation => throw _privateConstructorUsedError;
 
@@ -241,10 +240,7 @@ abstract class $QuestionResponseCopyWith<$Res> {
       _$QuestionResponseCopyWithImpl<$Res, QuestionResponse>;
   @useResult
   $Res call(
-      {TicketDto ticket,
-      int selectedAnswerIndex,
-      AnswerDto? selectedAnswer,
-      bool showExplanation});
+      {TicketDto ticket, AnswerDto? selectedAnswer, bool showExplanation});
 
   $TicketDtoCopyWith<$Res> get ticket;
   $AnswerDtoCopyWith<$Res>? get selectedAnswer;
@@ -266,7 +262,6 @@ class _$QuestionResponseCopyWithImpl<$Res, $Val extends QuestionResponse>
   @override
   $Res call({
     Object? ticket = null,
-    Object? selectedAnswerIndex = null,
     Object? selectedAnswer = freezed,
     Object? showExplanation = null,
   }) {
@@ -275,10 +270,6 @@ class _$QuestionResponseCopyWithImpl<$Res, $Val extends QuestionResponse>
           ? _value.ticket
           : ticket // ignore: cast_nullable_to_non_nullable
               as TicketDto,
-      selectedAnswerIndex: null == selectedAnswerIndex
-          ? _value.selectedAnswerIndex
-          : selectedAnswerIndex // ignore: cast_nullable_to_non_nullable
-              as int,
       selectedAnswer: freezed == selectedAnswer
           ? _value.selectedAnswer
           : selectedAnswer // ignore: cast_nullable_to_non_nullable
@@ -324,10 +315,7 @@ abstract class _$$QuestionResponseImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {TicketDto ticket,
-      int selectedAnswerIndex,
-      AnswerDto? selectedAnswer,
-      bool showExplanation});
+      {TicketDto ticket, AnswerDto? selectedAnswer, bool showExplanation});
 
   @override
   $TicketDtoCopyWith<$Res> get ticket;
@@ -349,7 +337,6 @@ class __$$QuestionResponseImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? ticket = null,
-    Object? selectedAnswerIndex = null,
     Object? selectedAnswer = freezed,
     Object? showExplanation = null,
   }) {
@@ -358,10 +345,6 @@ class __$$QuestionResponseImplCopyWithImpl<$Res>
           ? _value.ticket
           : ticket // ignore: cast_nullable_to_non_nullable
               as TicketDto,
-      selectedAnswerIndex: null == selectedAnswerIndex
-          ? _value.selectedAnswerIndex
-          : selectedAnswerIndex // ignore: cast_nullable_to_non_nullable
-              as int,
       selectedAnswer: freezed == selectedAnswer
           ? _value.selectedAnswer
           : selectedAnswer // ignore: cast_nullable_to_non_nullable
@@ -378,19 +361,13 @@ class __$$QuestionResponseImplCopyWithImpl<$Res>
 
 class _$QuestionResponseImpl implements _QuestionResponse {
   const _$QuestionResponseImpl(
-      {this.ticket = const TicketDto(),
-      this.selectedAnswerIndex = 0,
-      this.selectedAnswer = null,
+      {required this.ticket,
+      this.selectedAnswer,
       this.showExplanation = false});
 
   @override
-  @JsonKey()
   final TicketDto ticket;
   @override
-  @JsonKey()
-  final int selectedAnswerIndex;
-  @override
-  @JsonKey()
   final AnswerDto? selectedAnswer;
   @override
   @JsonKey()
@@ -398,7 +375,7 @@ class _$QuestionResponseImpl implements _QuestionResponse {
 
   @override
   String toString() {
-    return 'QuestionResponse(ticket: $ticket, selectedAnswerIndex: $selectedAnswerIndex, selectedAnswer: $selectedAnswer, showExplanation: $showExplanation)';
+    return 'QuestionResponse(ticket: $ticket, selectedAnswer: $selectedAnswer, showExplanation: $showExplanation)';
   }
 
   @override
@@ -407,8 +384,6 @@ class _$QuestionResponseImpl implements _QuestionResponse {
         (other.runtimeType == runtimeType &&
             other is _$QuestionResponseImpl &&
             (identical(other.ticket, ticket) || other.ticket == ticket) &&
-            (identical(other.selectedAnswerIndex, selectedAnswerIndex) ||
-                other.selectedAnswerIndex == selectedAnswerIndex) &&
             (identical(other.selectedAnswer, selectedAnswer) ||
                 other.selectedAnswer == selectedAnswer) &&
             (identical(other.showExplanation, showExplanation) ||
@@ -416,8 +391,8 @@ class _$QuestionResponseImpl implements _QuestionResponse {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, ticket, selectedAnswerIndex,
-      selectedAnswer, showExplanation);
+  int get hashCode =>
+      Object.hash(runtimeType, ticket, selectedAnswer, showExplanation);
 
   /// Create a copy of QuestionResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -431,15 +406,12 @@ class _$QuestionResponseImpl implements _QuestionResponse {
 
 abstract class _QuestionResponse implements QuestionResponse {
   const factory _QuestionResponse(
-      {final TicketDto ticket,
-      final int selectedAnswerIndex,
+      {required final TicketDto ticket,
       final AnswerDto? selectedAnswer,
       final bool showExplanation}) = _$QuestionResponseImpl;
 
   @override
   TicketDto get ticket;
-  @override
-  int get selectedAnswerIndex;
   @override
   AnswerDto? get selectedAnswer;
   @override

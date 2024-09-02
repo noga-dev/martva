@@ -6,7 +6,7 @@ part of 'theme.repo.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchFontsHash() => r'f9101067d295698ddbe5d9ee48d0c2ceb8d9af60';
+String _$fetchFontsHash() => r'0f1ceee1c1ec14a43a9eaae9e5ddce7d0b5830ac';
 
 /// See also [_fetchFonts].
 @ProviderFor(_fetchFonts)
@@ -20,7 +20,7 @@ final _fetchFontsProvider = AutoDisposeFutureProvider<void>.internal(
 );
 
 typedef _FetchFontsRef = AutoDisposeFutureProviderRef<void>;
-String _$themeRepoHash() => r'f575677216dc35589f1b74587e9db36182f181a4';
+String _$themeRepoHash() => r'ab90f3c69424e4a4e0faef48963a388a7edb9bcf';
 
 /// See also [ThemeRepo].
 @ProviderFor(ThemeRepo)

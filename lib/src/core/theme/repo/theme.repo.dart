@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:martva/src/core/theme/dto/theme.dto.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_theme_tokens.dart';
-import 'package:martva/src/core/utils/messaging/talker.dart';
+import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme.repo.g.dart';
@@ -23,7 +23,7 @@ class ThemeRepo extends _$ThemeRepo {
   }
 
   void toggleBrightness() {
-    talker.debug(state.value!.data.brightness);
+    logger.d(state.value!.data.brightness);
     if (state.value!.mode == ThemeMode.dark) {
       state = AsyncData(
         state.value!.copyWith(
@@ -61,7 +61,12 @@ Future<void> _fetchFonts(_FetchFontsRef ref) async {
     ]);
   } on Exception catch (e) {
     if (kDebugMode) {
-      talker.error(e);
+      logger.e(
+        e,
+        time: DateTime.now(),
+        error: e,
+        stackTrace: StackTrace.current,
+      );
       rethrow;
     }
   }

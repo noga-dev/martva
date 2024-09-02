@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/gen/assets.gen.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/extensions/list.dart';
-import 'package:martva/src/core/utils/messaging/talker.dart';
+import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DbSeederScreen extends ConsumerWidget {
@@ -32,7 +32,7 @@ class DbSeederScreen extends ConsumerWidget {
               await processData(
                   Supabase.instance.client, 'ge_teoria.on.ge', list);
 
-              talker.debug('Data seeding completed.');
+              logger.d('Data seeding completed.');
             },
             child: const Text('Seed ge_teoria.on.ge'),
           ),
@@ -46,7 +46,7 @@ class DbSeederScreen extends ConsumerWidget {
               await processData(
                   Supabase.instance.client, 'en_teoria.on.ge', list);
 
-              talker.debug('Data seeding completed.');
+              logger.d('Data seeding completed.');
             },
             child: const Text('Seed en_teoria.on.ge'),
           ),
@@ -60,7 +60,7 @@ class DbSeederScreen extends ConsumerWidget {
               await processData(
                   Supabase.instance.client, 'ru_teoria.on.ge', list);
 
-              talker.debug('Data seeding completed.');
+              logger.d('Data seeding completed.');
             },
             child: const Text('Seed ru_teoria.on.ge'),
           ),
@@ -77,7 +77,7 @@ class DbSeederScreen extends ConsumerWidget {
                 list,
               );
 
-              talker.debug('Data seeding completed.');
+              logger.d('Data seeding completed.');
             },
             child: const Text('Seed en_GPT-4o-mini'),
           ),
@@ -91,7 +91,7 @@ class DbSeederScreen extends ConsumerWidget {
               await processData(
                   Supabase.instance.client, 'ru_GPT-4o-mini', list);
 
-              talker.debug('Data seeding completed.');
+              logger.d('Data seeding completed.');
             },
             child: const Text('Seed ru_GPT-4o-mini'),
           ),
@@ -132,10 +132,14 @@ Future<void> processData(
         item['answers'],
       );
 
-      talker.verbose('Processed ticket ${item['id']} for language $language');
+      logger.t('Processed ticket ${item['id']} for language $language');
     } catch (e) {
-      talker.verbose(
-          'Error processing ticket ${item['id']} for language $language: $e');
+      logger.e(
+        'Error processing ticket ${item['id']} for language $language: $e',
+        time: DateTime.now(),
+        error: e,
+        stackTrace: StackTrace.current,
+      );
     }
 
     // if (item['id'] == 1) {
@@ -187,7 +191,7 @@ Future<void> upsertTicketTranslation(
   if (existingTranslation != null &&
       existingTranslation['question'] == question &&
       existingTranslation['explanation'] == explanation) {
-    talker.verbose(
+    logger.t(
         'Translation already exists for ticket $ticketId and translation $translation');
     return;
   }
@@ -231,7 +235,7 @@ Future<void> upsertTicketAnswers(
     if (existingAnswer.isNotEmpty &&
         existingAnswer.first['answer'] == newAnswer['answer'] &&
         existingAnswer.first['is_correct'] == newAnswer['is_correct']) {
-      talker.verbose(
+      logger.t(
           'Answer $i already exists for ticket $ticketId and translation $translation');
       continue;
     }
