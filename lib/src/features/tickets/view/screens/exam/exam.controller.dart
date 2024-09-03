@@ -1,10 +1,11 @@
+// exam.controller.dart
+
 import 'dart:async';
-import 'dart:io' as io;
 
 import 'package:flutter/material.dart';
 import 'package:martva/src/core/i18n/data/localization.repo.dart';
+import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
-import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,118 +13,139 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'exam.controller.g.dart';
 
 @riverpod
-class ExamScreenController extends _$ExamScreenController {
+class ExamController extends _$ExamController {
   Timer? _timer;
-  static const examDuration = Duration(minutes: 30);
 
   @override
-  AsyncValue<ExamState> build() {
-    ref.onDispose(() => _timer?.cancel());
-    return _initializeExam();
-  }
-
-  AsyncValue<ExamState> _initializeExam() {
-    final translation = ref.watch(ticketTranslationNotiferProvider);
-    final language = ref.watch(localizationRepoProvider);
+  ExamState build() {
     final ticketRepo = ref.watch(ticketRepoProvider);
+    final ticketTranslation = ref.watch(ticketTranslationNotiferProvider);
+    final language = ref.watch(localizationRepoProvider);
 
-    if (stateOrNull?.isLoading ?? true) {
-      _loadExam(ticketRepo, translation, language);
-    } else {
-      _updateTicketsTranslation(ticketRepo, translation, language);
-    }
+    ref.onDispose(() {
+      if (_timer != null) {
+        _timer?.cancel();
+      }
+    });
 
-    return stateOrNull ?? const AsyncValue.loading();
+    _startTimer();
+
+    _loadQuestions(
+      ticketRepo: ticketRepo,
+      translation: ticketTranslation,
+      language: language,
+    );
+
+    return stateOrNull ?? const ExamState();
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      stateOrNull?.whenData((examState) {
-        if (examState.timeLeft > Duration.zero) {
-          state = AsyncValue.data(examState.copyWith(
-              timeLeft: examState.timeLeft - const Duration(seconds: 1)));
-        } else {
-          _timer?.cancel();
-          // Handle exam time up
-        }
-      });
-    });
-  }
+    if (_timer != null) return;
 
-  Future<void> _loadExam(TicketRepo ticketRepo, TicketTranslation translation,
-      Locale language) async {
-    try {
-      final tickets =
-          await ticketRepo.select(language: language, translation: translation);
-      final examState = ExamState(
-        tickets: AsyncValue.data(tickets),
-        userAnswers:
-            tickets.map((ticket) => QuestionResponse(ticket: ticket)).toList(),
-        timeLeft: examDuration,
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      state = state.copyWith(
+        timeLeft: state.timeLeft - const Duration(seconds: 1),
       );
-      state = AsyncValue.data(examState);
-      _startTimer();
-    } catch (e, stack) {
-      state = AsyncValue.error(e, stack);
-    }
-  }
-
-  Future<void> _updateTicketsTranslation(TicketRepo ticketRepo,
-      TicketTranslation translation, Locale language) async {
-    try {
-      final updatedTickets =
-          await ticketRepo.select(language: language, translation: translation);
-      io.stdout.write(StackTrace.current);
-      stateOrNull?.whenData((examState) {
-        final updatedUserAnswers = examState.userAnswers.map((answer) {
-          final updatedTicket =
-              updatedTickets.firstWhere((t) => t.id == answer.ticket.id);
-          return answer.copyWith(ticket: updatedTicket);
-        }).toList();
-        state = AsyncValue.data(examState.copyWith(
-          tickets: AsyncValue.data(updatedTickets),
-          userAnswers: updatedUserAnswers,
-        ));
-      });
-    } catch (e, stack) {
-      stateOrNull?.whenData((examState) {
-        state = AsyncValue.data(
-            examState.copyWith(tickets: AsyncValue.error(e, stack)));
-      });
-    }
-  }
-
-  void answerQuestion(TicketDto ticket, AnswerDto answer) {
-    stateOrNull?.whenData((examState) {
-      final index =
-          examState.userAnswers.indexWhere((ua) => ua.ticket.id == ticket.id);
-      if (index != -1 && examState.userAnswers[index].selectedAnswer == null) {
-        final newUserAnswers =
-            List<QuestionResponse>.from(examState.userAnswers);
-        newUserAnswers[index] =
-            newUserAnswers[index].copyWith(selectedAnswer: answer);
-        state =
-            AsyncValue.data(examState.copyWith(userAnswers: newUserAnswers));
+      if (state.timeLeft.inSeconds <= 0) {
+        _timer?.cancel();
+        // Handle exam completion
       }
     });
   }
 
-  void toggleExplanation(int index) {
-    stateOrNull?.whenData((examState) {
-      final newUserAnswers = List<QuestionResponse>.from(examState.userAnswers);
-      newUserAnswers[index] = newUserAnswers[index].copyWith(
-        showExplanation: !newUserAnswers[index].showExplanation,
+  Future<void> _loadQuestions({
+    required TicketRepo ticketRepo,
+    required TicketTranslation translation,
+    required Locale language,
+  }) async {
+    final tickets = await ticketRepo.select(
+      language: language,
+      translation: translation,
+    );
+
+    logger.d(
+      '${tickets.map((e) => e.id).toList()}'
+      '\n'
+      '${state.solutions.map((e) => e.ticket.id).toList()}',
+    );
+
+    if (stateOrNull == null || state.solutions.isEmpty) {
+      state = ExamState(
+        solutions: tickets.map(
+          (ticket) {
+            return QuestionState(
+              ticket: ticket,
+            );
+          },
+        ).toList(),
       );
-      state = AsyncValue.data(examState.copyWith(userAnswers: newUserAnswers));
-    });
+    } else {
+      state = state.copyWith(
+        solutions: tickets.map(
+          (ticket) {
+            final newAnswer = state.solutions
+                    .firstWhere(
+                      (question) => question.ticket.id == ticket.id,
+                      orElse: () => QuestionState(
+                        ticket: ticket,
+                        selectedAnswer: null,
+                        showExplanation: false,
+                      ),
+                    )
+                    .selectedAnswer ??
+                const AnswerDto();
+
+            return QuestionState(
+              ticket: ticket,
+              selectedAnswer: AnswerDto(
+                answer: ticket.answers
+                    .firstWhere((e) => e.ordinal == newAnswer.ordinal)
+                    .answer,
+                ordinal: newAnswer.ordinal,
+                correct: newAnswer.correct,
+              ),
+              showExplanation: state.solutions
+                  .firstWhere((question) => question.ticket.id == ticket.id)
+                  .showExplanation,
+            );
+          },
+        ).toList(),
+      );
+    }
   }
 
-  void goToQuestion(int index) {
-    stateOrNull?.whenData((examState) {
-      if (index >= 0 && index < examState.userAnswers.length) {
-        state =
-            AsyncValue.data(examState.copyWith(currentQuestionIndex: index));
-      }
-    });
+  void selectAnswer(int questionIndex, AnswerDto answer) {
+    final updatedAnswers = [...state.solutions];
+    updatedAnswers[questionIndex] = updatedAnswers[questionIndex].copyWith(
+      selectedAnswer: answer,
+    );
+
+    state = state.copyWith(solutions: updatedAnswers);
+  }
+
+  void setQuestionIndex(int index) {
+    state = state.copyWith(currentQuestionIndex: index);
+  }
+
+  void nextQuestion() {
+    if (state.currentQuestionIndex < state.solutions.length - 1) {
+      state =
+          state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1);
+    }
+  }
+
+  void previousQuestion() {
+    if (state.currentQuestionIndex > 0) {
+      state =
+          state.copyWith(currentQuestionIndex: state.currentQuestionIndex - 1);
+    }
+  }
+
+  void toggleExplanation(int questionIndex) {
+    final updatedAnswers = [...state.solutions];
+    updatedAnswers[questionIndex] = updatedAnswers[questionIndex].copyWith(
+      showExplanation: !updatedAnswers[questionIndex].showExplanation,
+    );
+    state = state.copyWith(solutions: updatedAnswers);
   }
 }

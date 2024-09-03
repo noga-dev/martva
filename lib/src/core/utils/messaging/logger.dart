@@ -27,6 +27,7 @@ class _StdOutput extends LogOutput {
     // for (final line in event.lines) {
     //   log('├$line');
     // }
+    log('├${event.origin.message}');
     log('↖️⬆️↗️');
   }
 }

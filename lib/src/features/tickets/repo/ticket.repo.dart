@@ -30,6 +30,12 @@ abstract class TicketRepo {
     required Locale language,
     required TicketTranslation translation,
   });
+
+  Future<List<TicketDto>> getTicketsById({
+    required List<String> ids,
+    required Locale language,
+    required TicketTranslation translation,
+  });
 }
 
 @Riverpod(keepAlive: true)

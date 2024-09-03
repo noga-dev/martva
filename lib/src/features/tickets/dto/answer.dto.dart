@@ -8,6 +8,7 @@ part 'answer.dto.g.dart';
 class AnswerDto with _$AnswerDto {
   const factory AnswerDto({
     @Default('') @JsonKey(defaultValue: '') String answer,
+    @Default(-1) @JsonKey(defaultValue: -1) int ordinal,
     @Default(false) @JsonKey(defaultValue: false) bool correct,
   }) = _AnswerDto;
 

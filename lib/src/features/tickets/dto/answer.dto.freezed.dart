@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AnswerDto {
   @JsonKey(defaultValue: '')
   String get answer => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: -1)
+  int get ordinal => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool get correct => throw _privateConstructorUsedError;
 
@@ -38,6 +40,7 @@ abstract class $AnswerDtoCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(defaultValue: '') String answer,
+      @JsonKey(defaultValue: -1) int ordinal,
       @JsonKey(defaultValue: false) bool correct});
 }
 
@@ -57,6 +60,7 @@ class _$AnswerDtoCopyWithImpl<$Res, $Val extends AnswerDto>
   @override
   $Res call({
     Object? answer = null,
+    Object? ordinal = null,
     Object? correct = null,
   }) {
     return _then(_value.copyWith(
@@ -64,6 +68,10 @@ class _$AnswerDtoCopyWithImpl<$Res, $Val extends AnswerDto>
           ? _value.answer
           : answer // ignore: cast_nullable_to_non_nullable
               as String,
+      ordinal: null == ordinal
+          ? _value.ordinal
+          : ordinal // ignore: cast_nullable_to_non_nullable
+              as int,
       correct: null == correct
           ? _value.correct
           : correct // ignore: cast_nullable_to_non_nullable
@@ -82,6 +90,7 @@ abstract class _$$AnswerDtoImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(defaultValue: '') String answer,
+      @JsonKey(defaultValue: -1) int ordinal,
       @JsonKey(defaultValue: false) bool correct});
 }
 
@@ -99,6 +108,7 @@ class __$$AnswerDtoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? answer = null,
+    Object? ordinal = null,
     Object? correct = null,
   }) {
     return _then(_$AnswerDtoImpl(
@@ -106,6 +116,10 @@ class __$$AnswerDtoImplCopyWithImpl<$Res>
           ? _value.answer
           : answer // ignore: cast_nullable_to_non_nullable
               as String,
+      ordinal: null == ordinal
+          ? _value.ordinal
+          : ordinal // ignore: cast_nullable_to_non_nullable
+              as int,
       correct: null == correct
           ? _value.correct
           : correct // ignore: cast_nullable_to_non_nullable
@@ -119,18 +133,22 @@ class __$$AnswerDtoImplCopyWithImpl<$Res>
 class _$AnswerDtoImpl implements _AnswerDto {
   const _$AnswerDtoImpl(
       {@JsonKey(defaultValue: '') this.answer = '',
+      @JsonKey(defaultValue: -1) this.ordinal = -1,
       @JsonKey(defaultValue: false) this.correct = false});
 
   @override
   @JsonKey(defaultValue: '')
   final String answer;
   @override
+  @JsonKey(defaultValue: -1)
+  final int ordinal;
+  @override
   @JsonKey(defaultValue: false)
   final bool correct;
 
   @override
   String toString() {
-    return 'AnswerDto(answer: $answer, correct: $correct)';
+    return 'AnswerDto(answer: $answer, ordinal: $ordinal, correct: $correct)';
   }
 
   @override
@@ -139,12 +157,13 @@ class _$AnswerDtoImpl implements _AnswerDto {
         (other.runtimeType == runtimeType &&
             other is _$AnswerDtoImpl &&
             (identical(other.answer, answer) || other.answer == answer) &&
+            (identical(other.ordinal, ordinal) || other.ordinal == ordinal) &&
             (identical(other.correct, correct) || other.correct == correct));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, answer, correct);
+  int get hashCode => Object.hash(runtimeType, answer, ordinal, correct);
 
   /// Create a copy of AnswerDto
   /// with the given fields replaced by the non-null parameter values.
@@ -165,11 +184,15 @@ class _$AnswerDtoImpl implements _AnswerDto {
 abstract class _AnswerDto implements AnswerDto {
   const factory _AnswerDto(
       {@JsonKey(defaultValue: '') final String answer,
+      @JsonKey(defaultValue: -1) final int ordinal,
       @JsonKey(defaultValue: false) final bool correct}) = _$AnswerDtoImpl;
 
   @override
   @JsonKey(defaultValue: '')
   String get answer;
+  @override
+  @JsonKey(defaultValue: -1)
+  int get ordinal;
   @override
   @JsonKey(defaultValue: false)
   bool get correct;

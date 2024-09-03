@@ -16,10 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ExamState {
-  AsyncValue<List<TicketDto>> get tickets => throw _privateConstructorUsedError;
   int get currentQuestionIndex => throw _privateConstructorUsedError;
-  List<QuestionResponse> get userAnswers => throw _privateConstructorUsedError;
   Duration get timeLeft => throw _privateConstructorUsedError;
+  List<QuestionState> get solutions => throw _privateConstructorUsedError;
 
   /// Create a copy of ExamState
   /// with the given fields replaced by the non-null parameter values.
@@ -34,10 +33,9 @@ abstract class $ExamStateCopyWith<$Res> {
       _$ExamStateCopyWithImpl<$Res, ExamState>;
   @useResult
   $Res call(
-      {AsyncValue<List<TicketDto>> tickets,
-      int currentQuestionIndex,
-      List<QuestionResponse> userAnswers,
-      Duration timeLeft});
+      {int currentQuestionIndex,
+      Duration timeLeft,
+      List<QuestionState> solutions});
 }
 
 /// @nodoc
@@ -55,28 +53,23 @@ class _$ExamStateCopyWithImpl<$Res, $Val extends ExamState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tickets = null,
     Object? currentQuestionIndex = null,
-    Object? userAnswers = null,
     Object? timeLeft = null,
+    Object? solutions = null,
   }) {
     return _then(_value.copyWith(
-      tickets: null == tickets
-          ? _value.tickets
-          : tickets // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<List<TicketDto>>,
       currentQuestionIndex: null == currentQuestionIndex
           ? _value.currentQuestionIndex
           : currentQuestionIndex // ignore: cast_nullable_to_non_nullable
               as int,
-      userAnswers: null == userAnswers
-          ? _value.userAnswers
-          : userAnswers // ignore: cast_nullable_to_non_nullable
-              as List<QuestionResponse>,
       timeLeft: null == timeLeft
           ? _value.timeLeft
           : timeLeft // ignore: cast_nullable_to_non_nullable
               as Duration,
+      solutions: null == solutions
+          ? _value.solutions
+          : solutions // ignore: cast_nullable_to_non_nullable
+              as List<QuestionState>,
     ) as $Val);
   }
 }
@@ -90,10 +83,9 @@ abstract class _$$ExamStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {AsyncValue<List<TicketDto>> tickets,
-      int currentQuestionIndex,
-      List<QuestionResponse> userAnswers,
-      Duration timeLeft});
+      {int currentQuestionIndex,
+      Duration timeLeft,
+      List<QuestionState> solutions});
 }
 
 /// @nodoc
@@ -109,28 +101,23 @@ class __$$ExamStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tickets = null,
     Object? currentQuestionIndex = null,
-    Object? userAnswers = null,
     Object? timeLeft = null,
+    Object? solutions = null,
   }) {
     return _then(_$ExamStateImpl(
-      tickets: null == tickets
-          ? _value.tickets
-          : tickets // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<List<TicketDto>>,
       currentQuestionIndex: null == currentQuestionIndex
           ? _value.currentQuestionIndex
           : currentQuestionIndex // ignore: cast_nullable_to_non_nullable
               as int,
-      userAnswers: null == userAnswers
-          ? _value._userAnswers
-          : userAnswers // ignore: cast_nullable_to_non_nullable
-              as List<QuestionResponse>,
       timeLeft: null == timeLeft
           ? _value.timeLeft
           : timeLeft // ignore: cast_nullable_to_non_nullable
               as Duration,
+      solutions: null == solutions
+          ? _value._solutions
+          : solutions // ignore: cast_nullable_to_non_nullable
+              as List<QuestionState>,
     ));
   }
 }
@@ -139,34 +126,29 @@ class __$$ExamStateImplCopyWithImpl<$Res>
 
 class _$ExamStateImpl implements _ExamState {
   const _$ExamStateImpl(
-      {this.tickets = const AsyncValue.loading(),
-      this.currentQuestionIndex = 0,
-      final List<QuestionResponse> userAnswers = const [],
-      this.timeLeft = const Duration(minutes: 30)})
-      : _userAnswers = userAnswers;
+      {this.currentQuestionIndex = 0,
+      this.timeLeft = const Duration(minutes: 30),
+      final List<QuestionState> solutions = const []})
+      : _solutions = solutions;
 
-  @override
-  @JsonKey()
-  final AsyncValue<List<TicketDto>> tickets;
   @override
   @JsonKey()
   final int currentQuestionIndex;
-  final List<QuestionResponse> _userAnswers;
-  @override
-  @JsonKey()
-  List<QuestionResponse> get userAnswers {
-    if (_userAnswers is EqualUnmodifiableListView) return _userAnswers;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_userAnswers);
-  }
-
   @override
   @JsonKey()
   final Duration timeLeft;
+  final List<QuestionState> _solutions;
+  @override
+  @JsonKey()
+  List<QuestionState> get solutions {
+    if (_solutions is EqualUnmodifiableListView) return _solutions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_solutions);
+  }
 
   @override
   String toString() {
-    return 'ExamState(tickets: $tickets, currentQuestionIndex: $currentQuestionIndex, userAnswers: $userAnswers, timeLeft: $timeLeft)';
+    return 'ExamState(currentQuestionIndex: $currentQuestionIndex, timeLeft: $timeLeft, solutions: $solutions)';
   }
 
   @override
@@ -174,18 +156,17 @@ class _$ExamStateImpl implements _ExamState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ExamStateImpl &&
-            (identical(other.tickets, tickets) || other.tickets == tickets) &&
             (identical(other.currentQuestionIndex, currentQuestionIndex) ||
                 other.currentQuestionIndex == currentQuestionIndex) &&
-            const DeepCollectionEquality()
-                .equals(other._userAnswers, _userAnswers) &&
             (identical(other.timeLeft, timeLeft) ||
-                other.timeLeft == timeLeft));
+                other.timeLeft == timeLeft) &&
+            const DeepCollectionEquality()
+                .equals(other._solutions, _solutions));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, tickets, currentQuestionIndex,
-      const DeepCollectionEquality().hash(_userAnswers), timeLeft);
+  int get hashCode => Object.hash(runtimeType, currentQuestionIndex, timeLeft,
+      const DeepCollectionEquality().hash(_solutions));
 
   /// Create a copy of ExamState
   /// with the given fields replaced by the non-null parameter values.
@@ -198,19 +179,16 @@ class _$ExamStateImpl implements _ExamState {
 
 abstract class _ExamState implements ExamState {
   const factory _ExamState(
-      {final AsyncValue<List<TicketDto>> tickets,
-      final int currentQuestionIndex,
-      final List<QuestionResponse> userAnswers,
-      final Duration timeLeft}) = _$ExamStateImpl;
+      {final int currentQuestionIndex,
+      final Duration timeLeft,
+      final List<QuestionState> solutions}) = _$ExamStateImpl;
 
-  @override
-  AsyncValue<List<TicketDto>> get tickets;
   @override
   int get currentQuestionIndex;
   @override
-  List<QuestionResponse> get userAnswers;
-  @override
   Duration get timeLeft;
+  @override
+  List<QuestionState> get solutions;
 
   /// Create a copy of ExamState
   /// with the given fields replaced by the non-null parameter values.
@@ -221,23 +199,23 @@ abstract class _ExamState implements ExamState {
 }
 
 /// @nodoc
-mixin _$QuestionResponse {
+mixin _$QuestionState {
   TicketDto get ticket => throw _privateConstructorUsedError;
   AnswerDto? get selectedAnswer => throw _privateConstructorUsedError;
   bool get showExplanation => throw _privateConstructorUsedError;
 
-  /// Create a copy of QuestionResponse
+  /// Create a copy of QuestionState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $QuestionResponseCopyWith<QuestionResponse> get copyWith =>
+  $QuestionStateCopyWith<QuestionState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $QuestionResponseCopyWith<$Res> {
-  factory $QuestionResponseCopyWith(
-          QuestionResponse value, $Res Function(QuestionResponse) then) =
-      _$QuestionResponseCopyWithImpl<$Res, QuestionResponse>;
+abstract class $QuestionStateCopyWith<$Res> {
+  factory $QuestionStateCopyWith(
+          QuestionState value, $Res Function(QuestionState) then) =
+      _$QuestionStateCopyWithImpl<$Res, QuestionState>;
   @useResult
   $Res call(
       {TicketDto ticket, AnswerDto? selectedAnswer, bool showExplanation});
@@ -247,16 +225,16 @@ abstract class $QuestionResponseCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$QuestionResponseCopyWithImpl<$Res, $Val extends QuestionResponse>
-    implements $QuestionResponseCopyWith<$Res> {
-  _$QuestionResponseCopyWithImpl(this._value, this._then);
+class _$QuestionStateCopyWithImpl<$Res, $Val extends QuestionState>
+    implements $QuestionStateCopyWith<$Res> {
+  _$QuestionStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of QuestionResponse
+  /// Create a copy of QuestionState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -281,7 +259,7 @@ class _$QuestionResponseCopyWithImpl<$Res, $Val extends QuestionResponse>
     ) as $Val);
   }
 
-  /// Create a copy of QuestionResponse
+  /// Create a copy of QuestionState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -291,7 +269,7 @@ class _$QuestionResponseCopyWithImpl<$Res, $Val extends QuestionResponse>
     });
   }
 
-  /// Create a copy of QuestionResponse
+  /// Create a copy of QuestionState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -307,11 +285,11 @@ class _$QuestionResponseCopyWithImpl<$Res, $Val extends QuestionResponse>
 }
 
 /// @nodoc
-abstract class _$$QuestionResponseImplCopyWith<$Res>
-    implements $QuestionResponseCopyWith<$Res> {
-  factory _$$QuestionResponseImplCopyWith(_$QuestionResponseImpl value,
-          $Res Function(_$QuestionResponseImpl) then) =
-      __$$QuestionResponseImplCopyWithImpl<$Res>;
+abstract class _$$QuestionStateImplCopyWith<$Res>
+    implements $QuestionStateCopyWith<$Res> {
+  factory _$$QuestionStateImplCopyWith(
+          _$QuestionStateImpl value, $Res Function(_$QuestionStateImpl) then) =
+      __$$QuestionStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -324,14 +302,14 @@ abstract class _$$QuestionResponseImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$QuestionResponseImplCopyWithImpl<$Res>
-    extends _$QuestionResponseCopyWithImpl<$Res, _$QuestionResponseImpl>
-    implements _$$QuestionResponseImplCopyWith<$Res> {
-  __$$QuestionResponseImplCopyWithImpl(_$QuestionResponseImpl _value,
-      $Res Function(_$QuestionResponseImpl) _then)
+class __$$QuestionStateImplCopyWithImpl<$Res>
+    extends _$QuestionStateCopyWithImpl<$Res, _$QuestionStateImpl>
+    implements _$$QuestionStateImplCopyWith<$Res> {
+  __$$QuestionStateImplCopyWithImpl(
+      _$QuestionStateImpl _value, $Res Function(_$QuestionStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of QuestionResponse
+  /// Create a copy of QuestionState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -340,7 +318,7 @@ class __$$QuestionResponseImplCopyWithImpl<$Res>
     Object? selectedAnswer = freezed,
     Object? showExplanation = null,
   }) {
-    return _then(_$QuestionResponseImpl(
+    return _then(_$QuestionStateImpl(
       ticket: null == ticket
           ? _value.ticket
           : ticket // ignore: cast_nullable_to_non_nullable
@@ -359,8 +337,8 @@ class __$$QuestionResponseImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$QuestionResponseImpl implements _QuestionResponse {
-  const _$QuestionResponseImpl(
+class _$QuestionStateImpl implements _QuestionState {
+  const _$QuestionStateImpl(
       {required this.ticket,
       this.selectedAnswer,
       this.showExplanation = false});
@@ -375,14 +353,14 @@ class _$QuestionResponseImpl implements _QuestionResponse {
 
   @override
   String toString() {
-    return 'QuestionResponse(ticket: $ticket, selectedAnswer: $selectedAnswer, showExplanation: $showExplanation)';
+    return 'QuestionState(ticket: $ticket, selectedAnswer: $selectedAnswer, showExplanation: $showExplanation)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$QuestionResponseImpl &&
+            other is _$QuestionStateImpl &&
             (identical(other.ticket, ticket) || other.ticket == ticket) &&
             (identical(other.selectedAnswer, selectedAnswer) ||
                 other.selectedAnswer == selectedAnswer) &&
@@ -394,21 +372,20 @@ class _$QuestionResponseImpl implements _QuestionResponse {
   int get hashCode =>
       Object.hash(runtimeType, ticket, selectedAnswer, showExplanation);
 
-  /// Create a copy of QuestionResponse
+  /// Create a copy of QuestionState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$QuestionResponseImplCopyWith<_$QuestionResponseImpl> get copyWith =>
-      __$$QuestionResponseImplCopyWithImpl<_$QuestionResponseImpl>(
-          this, _$identity);
+  _$$QuestionStateImplCopyWith<_$QuestionStateImpl> get copyWith =>
+      __$$QuestionStateImplCopyWithImpl<_$QuestionStateImpl>(this, _$identity);
 }
 
-abstract class _QuestionResponse implements QuestionResponse {
-  const factory _QuestionResponse(
+abstract class _QuestionState implements QuestionState {
+  const factory _QuestionState(
       {required final TicketDto ticket,
       final AnswerDto? selectedAnswer,
-      final bool showExplanation}) = _$QuestionResponseImpl;
+      final bool showExplanation}) = _$QuestionStateImpl;
 
   @override
   TicketDto get ticket;
@@ -417,10 +394,10 @@ abstract class _QuestionResponse implements QuestionResponse {
   @override
   bool get showExplanation;
 
-  /// Create a copy of QuestionResponse
+  /// Create a copy of QuestionState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$QuestionResponseImplCopyWith<_$QuestionResponseImpl> get copyWith =>
+  _$$QuestionStateImplCopyWith<_$QuestionStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
