@@ -17,10 +17,16 @@ final logger = Logger(
 class _StdOutput extends LogOutput {
   @override
   void output(OutputEvent event) {
-    log(event.lines.first);
-    io.stdout.write(StackTrace.current);
-    for (var element in event.lines.skip(1)) {
-      log(element);
+    log('↙️⬇️↘️');
+    if (event.origin.stackTrace != null) {
+      io.stdout.write(event.origin.stackTrace);
     }
+    if (event.origin.error != null) {
+      log('├${event.origin.error}');
+    }
+    // for (final line in event.lines) {
+    //   log('├$line');
+    // }
+    log('↖️⬆️↗️');
   }
 }

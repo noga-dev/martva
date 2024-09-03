@@ -197,7 +197,11 @@ class DevDebugLoggerRoute extends GoRouteData {
       body: Column(
         children: [
           ElevatedButton(
-            onPressed: () => logger.d('Hello'),
+            onPressed: () => logger.d(
+              'Hello',
+              error: Exception('ErrorXXX'),
+              stackTrace: StackTrace.current,
+            ),
             child: const Text('Log'),
           ),
         ],
