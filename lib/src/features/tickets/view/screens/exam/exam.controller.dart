@@ -15,8 +15,8 @@ class ExamController extends _$ExamController {
   Timer? _timer;
 
   @override
-  ExamState build() {
-    final ticketsFuture = ref.watch(getExamTicketsProvider.future);
+  Future<ExamState> build() async {
+    final tickets = await ref.watch(getExamTicketsProvider.future);
 
     ref.onDispose(() {
       if (_timer != null) {
@@ -24,21 +24,21 @@ class ExamController extends _$ExamController {
       }
     });
 
-    _loadQuestions(ticketsFuture: ticketsFuture);
+    _loadQuestions(tickets: tickets);
 
     _startTimer();
 
-    return stateOrNull ?? const ExamState();
+    return state.valueOrNull ?? const ExamState();
   }
 
   void _startTimer() {
     if (_timer != null) return;
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      state = state.copyWith(
-        timeLeft: state.timeLeft - const Duration(seconds: 1),
-      );
-      if (state.timeLeft.inSeconds <= 0) {
+      state = AsyncValue.data(state.value!.copyWith(
+        timeLeft: state.value!.timeLeft - const Duration(seconds: 1),
+      ));
+      if (state.value!.timeLeft.inSeconds <= 0) {
         _timer?.cancel();
         // Handle exam completion
       }
@@ -46,12 +46,10 @@ class ExamController extends _$ExamController {
   }
 
   Future<void> _loadQuestions({
-    required Future<List<TicketDto>> ticketsFuture,
+    required List<TicketDto> tickets,
   }) async {
-    final tickets = await ticketsFuture;
-
-    if (stateOrNull == null || state.solutions.isEmpty) {
-      state = ExamState(
+    if (state.valueOrNull == null || state.value!.solutions.isEmpty) {
+      state = AsyncValue.data(ExamState(
         solutions: tickets.map(
           (ticket) {
             return QuestionState(
@@ -59,53 +57,55 @@ class ExamController extends _$ExamController {
             );
           },
         ).toList(),
-      );
+      ));
     } else {
-      state = state.copyWith(
-        solutions: tickets.map(
-          (ticket) {
-            final newAnswer = state.solutions
-                    .firstWhere(
-                      (question) => question.ticket.id == ticket.id,
-                      orElse: () => QuestionState(
-                        ticket: ticket,
-                        selectedAnswer: null,
-                        showExplanation: false,
-                      ),
-                    )
-                    .selectedAnswer ??
-                const AnswerDto();
+      state = AsyncValue.data(
+        state.value!.copyWith(
+          solutions: tickets.map(
+            (ticket) {
+              final newAnswer = state.value!.solutions
+                      .firstWhere(
+                        (question) => question.ticket.id == ticket.id,
+                        orElse: () => QuestionState(
+                          ticket: ticket,
+                          selectedAnswer: null,
+                          showExplanation: false,
+                        ),
+                      )
+                      .selectedAnswer ??
+                  const AnswerDto();
 
-            return QuestionState(
-              ticket: ticket,
-              selectedAnswer: AnswerDto(
-                answer: ticket.answers
-                    .firstWhere((e) => e.ordinal == newAnswer.ordinal)
-                    .answer,
-                ordinal: newAnswer.ordinal,
-                correct: newAnswer.correct,
-              ),
-              showExplanation: state.solutions
-                  .firstWhere((question) => question.ticket.id == ticket.id)
-                  .showExplanation,
-            );
-          },
-        ).toList(),
+              return QuestionState(
+                ticket: ticket,
+                selectedAnswer: AnswerDto(
+                  answer: ticket.answers
+                      .firstWhere((e) => e.ordinal == newAnswer.ordinal)
+                      .answer,
+                  ordinal: newAnswer.ordinal,
+                  correct: newAnswer.correct,
+                ),
+                showExplanation: state.value!.solutions
+                    .firstWhere((question) => question.ticket.id == ticket.id)
+                    .showExplanation,
+              );
+            },
+          ).toList(),
+        ),
       );
     }
   }
 
   void selectAnswer(int questionIndex, AnswerDto answer) {
-    final updatedAnswers = [...state.solutions];
+    final updatedAnswers = [...state.value!.solutions];
 
     updatedAnswers[questionIndex] = updatedAnswers[questionIndex].copyWith(
       selectedAnswer: answer,
       showExplanation: !answer.correct,
     );
 
-    state = state.copyWith(
+    state = AsyncValue.data(state.value!.copyWith(
       solutions: updatedAnswers,
-    );
+    ));
 
     if (answer.correct) {
       // Delay next question to allow for animation
@@ -116,28 +116,34 @@ class ExamController extends _$ExamController {
   }
 
   void setQuestionIndex(int index) {
-    state = state.copyWith(currentQuestionIndex: index);
+    state = AsyncValue.data(state.value!.copyWith(
+      currentQuestionIndex: index,
+    ));
   }
 
   void nextQuestion() {
-    if (state.currentQuestionIndex < state.solutions.length - 1) {
-      state =
-          state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1);
+    if (state.value!.currentQuestionIndex < state.value!.solutions.length - 1) {
+      state = AsyncValue.data(state.value!.copyWith(
+        currentQuestionIndex: state.value!.currentQuestionIndex + 1,
+      ));
     }
   }
 
   void previousQuestion() {
-    if (state.currentQuestionIndex > 0) {
-      state =
-          state.copyWith(currentQuestionIndex: state.currentQuestionIndex - 1);
+    if (state.value!.currentQuestionIndex > 0) {
+      state = AsyncValue.data(state.value!.copyWith(
+        currentQuestionIndex: state.value!.currentQuestionIndex - 1,
+      ));
     }
   }
 
   void toggleExplanation(int questionIndex) {
-    final updatedAnswers = [...state.solutions];
+    final updatedAnswers = [...state.value!.solutions];
     updatedAnswers[questionIndex] = updatedAnswers[questionIndex].copyWith(
       showExplanation: !updatedAnswers[questionIndex].showExplanation,
     );
-    state = state.copyWith(solutions: updatedAnswers);
+    state = AsyncValue.data(state.value!.copyWith(
+      solutions: updatedAnswers,
+    ));
   }
 }

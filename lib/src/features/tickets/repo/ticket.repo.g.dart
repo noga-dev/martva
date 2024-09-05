@@ -37,7 +37,7 @@ final getRandomTicketIdsProvider =
 );
 
 typedef GetRandomTicketIdsRef = AutoDisposeFutureProviderRef<List<String>>;
-String _$getExamTicketsHash() => r'e858eece4bc746be2b3348fcca90cc332dfe62ce';
+String _$getExamTicketsHash() => r'677c3b4e55feac0b01a78439883909ba13c85d87';
 
 /// See also [getExamTickets].
 @ProviderFor(getExamTickets)
@@ -48,8 +48,16 @@ final getExamTicketsProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$getExamTicketsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[
+    localizationRepoProvider,
+    ticketTranslationNotiferProvider
+  ],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    localizationRepoProvider,
+    ...?localizationRepoProvider.allTransitiveDependencies,
+    ticketTranslationNotiferProvider,
+    ...?ticketTranslationNotiferProvider.allTransitiveDependencies
+  },
 );
 
 typedef GetExamTicketsRef = AutoDisposeFutureProviderRef<List<TicketDto>>;

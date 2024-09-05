@@ -66,6 +66,7 @@ dependencies:
 
   # dev
   logger: ^2.4.0
+  # faker: ^2.2.0
   # mason_logger: ^0.3.0
   # talker: ^4.4.1
   # talker_flutter: ^4.4.1

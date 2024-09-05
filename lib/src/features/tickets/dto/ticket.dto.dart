@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:martva/src/core/utils/aliases/string.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 part 'ticket.dto.freezed.dart';
 part 'ticket.dto.g.dart';
@@ -19,4 +22,18 @@ class TicketDto with _$TicketDto {
 
   factory TicketDto.fromJson(Map<String, dynamic> json) =>
       _$TicketDtoFromJson(json);
+
+  static TicketDto skeleton() => TicketDto(
+        id: BoneMock.words(4),
+        ordinalId: Random().nextInt(2000),
+        question: BoneMock.words(1 + Random().nextInt(20)),
+        explanation: BoneMock.words(1 + Random().nextInt(20)),
+        image: '',
+        answers: [
+          AnswerDto.skeleton(),
+          AnswerDto.skeleton(),
+          AnswerDto.skeleton(),
+          AnswerDto.skeleton(),
+        ],
+      );
 }

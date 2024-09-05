@@ -76,7 +76,10 @@ Future<List<String>> getRandomTicketIds(GetRandomTicketIdsRef ref) async {
   return ticketRepo.getRandomizedTicketIds();
 }
 
-@riverpod
+@Riverpod(dependencies: [
+  LocalizationRepo,
+  TicketTranslationNotifer,
+])
 Future<List<TicketDto>> getExamTickets(GetExamTicketsRef ref) async {
   final localizationRepo = ref.watch(localizationRepoProvider);
   final translation = ref.watch(ticketTranslationNotiferProvider);

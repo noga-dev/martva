@@ -9,6 +9,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // ignore: missing_provider_scope
   runApp(
     const Center(
       child: CircularProgressIndicator.adaptive(),

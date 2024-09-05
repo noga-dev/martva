@@ -127,7 +127,7 @@ class __$$ExamStateImplCopyWithImpl<$Res>
 class _$ExamStateImpl implements _ExamState {
   const _$ExamStateImpl(
       {this.currentQuestionIndex = 0,
-      this.timeLeft = const Duration(minutes: 30),
+      this.timeLeft = Constants.examTicketsTime,
       final List<QuestionState> solutions = const []})
       : _solutions = solutions;
 

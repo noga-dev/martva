@@ -1,27 +1,59 @@
 // exam_screen.dart
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:martva/src/core/theme/view/atoms/error_message.atom.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
+import 'package:martva/src/core/utils/constants.dart';
 import 'package:martva/src/core/utils/extensions/list.dart';
+import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/core/utils/messaging/toaster.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.controller.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.state.dart';
 import 'package:martva/src/features/tickets/view/shared/molecules/ticket_image_molecule.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ExamScreen extends HookConsumerWidget {
   const ExamScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final examState = ref.watch(examControllerProvider);
+    final examStateAsync = ref.watch(examControllerProvider);
+
+    return examStateAsync.when(
+      loading: () => _ExamBody(
+        examState: ExamState.skeleton(),
+        isLoading: true,
+      ),
+      error: (e, __) => Center(child: ErrorMessageAtom(e.toString())),
+      data: (examState) => _ExamBody(
+        examState: examState,
+        isLoading: false,
+      ),
+    );
+  }
+}
+
+class _ExamBody extends HookConsumerWidget {
+  const _ExamBody({
+    required this.examState,
+    required this.isLoading,
+  });
+
+  final ExamState examState;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final pageController = usePageController(
-        initialPage: examState.currentQuestionIndex,
-        keepPage: false,
-        keys: [examState.currentQuestionIndex]);
+      initialPage: examState.currentQuestionIndex,
+      keepPage: false,
+      keys: [examState.currentQuestionIndex],
+    );
 
     useEffect(() {
       void listener() {
@@ -52,58 +84,65 @@ class ExamScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            const Text('Exam'),
-            const Spacer(),
-            _TimerWidget(),
-            const Spacer(),
-            _QuestionIndexWidget(examState: examState),
-            Builder(builder: (context) {
-              return IconButton(
-                onPressed: () => showModalBottomSheet(
-                  context: context,
-                  showDragHandle: true,
-                  builder: (context) => const _SettingsBottomSheet(),
-                ),
-                icon: const Icon(Icons.settings),
-              );
-            }),
-          ],
+        title: Skeletonizer(
+          enabled: isLoading,
+          ignorePointers: isLoading,
+          enableSwitchAnimation: true,
+          child: Row(
+            children: [
+              const Text('Exam'),
+              const Spacer(),
+              _TimerWidget(),
+              const Spacer(),
+              _QuestionIndexWidget(examState: examState),
+              Builder(builder: (context) {
+                return IconButton(
+                  onPressed: () => showModalBottomSheet(
+                    context: context,
+                    showDragHandle: true,
+                    builder: (context) => const _SettingsBottomSheet(),
+                  ),
+                  icon: const Icon(Icons.settings),
+                );
+              }),
+            ],
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(3),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: examState.solutions.map((question) {
+            children: examState.solutions.map((solution) {
               return SizedBox(
                 height: 2,
                 width: MediaQuery.of(context).size.width /
                     examState.solutions.length,
                 child: ColoredBox(
-                  color: question.selectedAnswer == null
-                      ? Colors.grey
-                      : question.selectedAnswer!.correct
-                          ? Colors.green
-                          : Colors.red,
+                  color: _getAnswerColor(
+                    answer: null,
+                    solution: solution.selectedAnswer,
+                  ),
                 ),
               );
             }).toList(),
           ),
         ),
       ),
-      body: examState.solutions.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : PageView.builder(
-              controller: pageController,
-              itemCount: examState.solutions.length,
-              itemBuilder: (context, index) {
-                return _ExamContent(
-                  examState: examState,
-                  questionIndex: index,
-                );
-              },
-            ),
+      body: Skeletonizer(
+        enabled: isLoading,
+        ignorePointers: isLoading,
+        enableSwitchAnimation: true,
+        child: PageView.builder(
+          controller: pageController,
+          itemCount: examState.solutions.length,
+          itemBuilder: (context, index) {
+            return _ExamContent(
+              examState: examState,
+              questionIndex: index,
+            );
+          },
+        ),
+      ),
       bottomNavigationBar: _NavigationButtons(pageController: pageController),
     );
   }
@@ -169,20 +208,30 @@ class _QuestionIndexWidget extends ConsumerWidget {
             itemCount: examState.solutions.length,
             padding: DSSpacingTokens.s.allInsets,
             itemBuilder: (context, index) {
+              logger.d(
+                  '${examState.solutions[index].ticket.answers.firstWhereOrNull(
+                (element) => element.correct,
+              )}'
+                  '\n'
+                  '${examState.solutions[index].selectedAnswer}');
+
               return TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor: _getAnswerColor(
-                    examState.solutions[index].selectedAnswer?.correct,
-                    examState.solutions[index].ticket.answers.first,
-                    examState.solutions[index],
+                    answer: null,
+                    solution: examState.solutions[index].selectedAnswer,
                   ),
                   padding: EdgeInsets.zero,
                 ),
-                onPressed: () => ref
-                    .read(examControllerProvider.notifier)
-                    .setQuestionIndex(index),
+                onPressed: () {
+                  ref
+                      .read(examControllerProvider.notifier)
+                      .setQuestionIndex(index);
+
+                  Navigator.of(context).pop();
+                },
                 child: Text(
-                  index.toString(),
+                  (index + 1).toString(),
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               );
@@ -199,8 +248,9 @@ class _QuestionIndexWidget extends ConsumerWidget {
 class _TimerWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeLeft =
-        ref.watch(examControllerProvider.select((state) => state.timeLeft));
+    final timeLeft = ref.watch(
+            examControllerProvider.select((state) => state.value?.timeLeft)) ??
+        Constants.examTicketsTime;
 
     return Text(
       '${timeLeft.inMinutes}:${(timeLeft.inSeconds % 60).toString().padLeft(2, '0')}',
@@ -239,7 +289,10 @@ class _ExamContent extends HookConsumerWidget {
   final ExamState examState;
   final int questionIndex;
 
-  const _ExamContent({required this.examState, required this.questionIndex});
+  const _ExamContent({
+    required this.examState,
+    required this.questionIndex,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -258,10 +311,19 @@ class _ExamContent extends HookConsumerWidget {
             TicketImageMolecule(
               ticket: currentQuestion.ticket,
             ),
-          const SizedBox(height: 16),
+          if (currentQuestion.showExplanation) ...[
+            DSSpacingTokens.xl.verticalBox,
+            Text(
+              'Explanation:',
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+            Text(currentQuestion.ticket.explanation.isEmpty
+                ? 'No explanation from ${ticketTranslation.name}.'
+                    ' Change source in settings.'
+                : currentQuestion.ticket.explanation),
+          ],
+          DSSpacingTokens.xl.verticalBox,
           ...currentQuestion.ticket.answers.map<Widget>((answer) {
-            final isCorrect = currentQuestion.selectedAnswer?.correct;
-
             return RadioListTile.adaptive(
               value: answer.ordinal,
               groupValue: currentQuestion.selectedAnswer?.ordinal,
@@ -275,9 +337,8 @@ class _ExamContent extends HookConsumerWidget {
                   : null,
               fillColor: WidgetStateProperty.all(
                 _getAnswerColor(
-                  isCorrect,
-                  answer,
-                  currentQuestion,
+                  answer: answer,
+                  solution: currentQuestion.selectedAnswer,
                 ),
               ),
               dense: true,
@@ -287,9 +348,8 @@ class _ExamContent extends HookConsumerWidget {
                 side: BorderSide(
                   width: 1,
                   color: _getAnswerColor(
-                    isCorrect,
-                    answer,
-                    currentQuestion,
+                    answer: answer,
+                    solution: currentQuestion.selectedAnswer,
                   ),
                 ),
               ),
@@ -299,35 +359,44 @@ class _ExamContent extends HookConsumerWidget {
               ),
             );
           }).intersperse(DSSpacingTokens.xxl.verticalBox),
-          if (currentQuestion.showExplanation) ...[
-            const SizedBox(height: 16),
-            Text(
-              'Explanation:',
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-            Text(currentQuestion.ticket.explanation.isEmpty
-                ? 'No explanation from ${ticketTranslation.name}.'
-                    ' Change source in settings.'
-                : currentQuestion.ticket.explanation),
-          ],
         ],
       ),
     );
   }
 }
 
-Color _getAnswerColor(
-  bool? isCorrect,
-  AnswerDto answer,
-  QuestionState currentQuestion,
-) {
-  return isCorrect == null
-      ? Colors.grey
-      : answer.correct
-          ? Colors.green
-          : answer.ordinal == currentQuestion.selectedAnswer?.ordinal
-              ? Colors.red
-              : Colors.grey;
+Color _getAnswerColor({
+  required AnswerDto? answer,
+  required AnswerDto? solution,
+}) {
+  if (solution == null) {
+    return Colors.grey.withOpacity(0.5);
+  }
+
+  if (answer == null) {
+    if (solution.correct) {
+      return Colors.green.withOpacity(0.5);
+    }
+
+    if (!solution.correct) {
+      return Colors.red.withOpacity(0.5);
+    }
+
+    return Colors.grey.withOpacity(0.5);
+  }
+
+  // Incorrect answer selected by user
+  if (answer.ordinal == solution.ordinal && !answer.correct) {
+    return Colors.red.withOpacity(0.5);
+  }
+
+  // Correct answer (both selected and actual)
+  if (answer.correct) {
+    return Colors.green.withOpacity(0.5);
+  }
+
+  // Any other case (unselected incorrect answers)
+  return Colors.grey.withOpacity(0.5);
 }
 
 class _NavigationButtons extends HookConsumerWidget {
@@ -337,12 +406,12 @@ class _NavigationButtons extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final examState = ref.watch(examControllerProvider);
-    final examController = ref.watch(examControllerProvider.notifier);
-    final currentIndex = ref.watch(
-        examControllerProvider.select((state) => state.currentQuestionIndex));
-    final totalQuestions = ref.watch(
-        examControllerProvider.select((state) => state.solutions.length));
+    final currentIndex = ref.watch(examControllerProvider
+            .select((state) => state.value?.currentQuestionIndex)) ??
+        -1;
+    final totalQuestions = ref.watch(examControllerProvider
+            .select((state) => state.value?.solutions.length)) ??
+        -1;
 
     return BottomAppBar(
       child: Row(
@@ -357,15 +426,6 @@ class _NavigationButtons extends HookConsumerWidget {
                       )
                   : null,
               child: const Text('Previous'),
-            ),
-          ),
-          Expanded(
-            child: TextButton(
-              onPressed:
-                  examState.solutions[currentIndex].selectedAnswer == null
-                      ? null
-                      : () => examController.toggleExplanation(currentIndex),
-              child: const Text('Explain'),
             ),
           ),
           Expanded(

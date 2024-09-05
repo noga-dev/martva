@@ -22,6 +22,10 @@ class TicketImageMolecule extends ConsumerWidget {
 
     final aspectRatio = largeImages.contains(ticket.ordinalId) ? 2.14 : 4.26;
 
+    if (ticket.image.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return ClipRect(
       clipper: const _BorderPixelClipper(2),
       child: CachedNetworkImage(
