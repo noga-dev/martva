@@ -83,7 +83,11 @@ class _ExamBody extends HookConsumerWidget {
     }, [examState.currentQuestionIndex, pageController]);
 
     return Scaffold(
+      drawer: const _SettingsBottomSheet(),
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Skeletonizer(
           enabled: isLoading,
           ignorePointers: isLoading,
@@ -97,11 +101,7 @@ class _ExamBody extends HookConsumerWidget {
               _QuestionIndexWidget(examState: examState),
               Builder(builder: (context) {
                 return IconButton(
-                  onPressed: () => showModalBottomSheet(
-                    context: context,
-                    showDragHandle: true,
-                    builder: (context) => const _SettingsBottomSheet(),
-                  ),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
                   icon: const Icon(Icons.settings),
                 );
               }),
@@ -158,36 +158,44 @@ class _SettingsBottomSheet extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final animController = useAnimationController();
-
-    return BottomSheet(
-      animationController: animController,
-      backgroundColor: Colors.transparent,
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.5,
-      ),
-      onClosing: () {},
-      builder: (context) => Padding(
+    return Drawer(
+      child: Padding(
         padding: DSSpacingTokens.m.allInsets,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const _TranslationDropdownWidget(),
-            const _LanguageDropdownWidget(),
-            ListTile(
-              title: const Text('Randomize answer order'),
-              trailing: Switch(
-                value: false,
-                onChanged: (value) => Toaster.unimplemented(),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const _TranslationDropdownWidget(),
+              const _LanguageDropdownWidget(),
+              ListTile(
+                title: const Text('Randomize answer order'),
+                trailing: Switch(
+                  value: false,
+                  onChanged: (value) => Toaster.unimplemented(),
+                ),
               ),
-            ),
-          ]
-              .map((e) => Card(
-                    elevation: 0,
-                    color: Colors.transparent,
-                    child: e,
-                  ))
-              .toList(),
+              ListTile(
+                title: const Text('Auto next on correct answer'),
+                trailing: Switch(
+                  value: false,
+                  onChanged: (value) => Toaster.unimplemented(),
+                ),
+              ),
+              ListTile(
+                title: const Text('Show explanation on correct answer'),
+                trailing: Switch(
+                  value: false,
+                  onChanged: (value) => Toaster.unimplemented(),
+                ),
+              ),
+            ]
+                .map((e) => Card(
+                      elevation: 0,
+                      color: Colors.transparent,
+                      child: e,
+                    ))
+                .toList(),
+          ),
         ),
       ),
     );
@@ -203,8 +211,8 @@ class _LanguageDropdownWidget extends ConsumerWidget {
     final trans = ref.watch(ticketTranslationNotiferProvider);
 
     return ListTile(
-      titleAlignment: ListTileTitleAlignment.center,
-      leading: const Icon(Icons.language_sharp),
+      // titleAlignment: ListTileTitleAlignment.center,
+      // leading: const Icon(Icons.language_sharp),
       title: SegmentedButton<SupportedLocale>(
         style: SegmentedButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -214,16 +222,22 @@ class _LanguageDropdownWidget extends ConsumerWidget {
         selected: {lang},
         segments: SupportedLocale.values.map((SupportedLocale locale) {
           return ButtonSegment(
-            enabled: locale != SupportedLocale.ge ||
-                trans != TicketTranslation.gpt4oMini,
             value: locale,
             label: Text(locale.name),
           );
         }).toList(),
         onSelectionChanged: (Set<SupportedLocale> newValue) {
           if (newValue.isNotEmpty) {
+            if (newValue.first == SupportedLocale.ge &&
+                trans == TicketTranslation.gpt4oMini) {
+              Toaster.info(
+                  r'''Georgian is the original, so there's no Martva translation. Switching to English.''');
+              ref
+                  .read(ticketTranslationNotiferProvider.notifier)
+                  .update(TicketTranslation.original);
+            }
             ref.read(localizationRepoProvider.notifier).update(newValue.first);
-            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
           }
         },
       ),
@@ -305,8 +319,8 @@ class _TranslationDropdownWidget extends HookConsumerWidget {
     final lang = ref.watch(localizationRepoProvider);
 
     return ListTile(
-      titleAlignment: ListTileTitleAlignment.center,
-      leading: const Icon(Icons.translate),
+      // titleAlignment: ListTileTitleAlignment.center,
+      // leading: const Icon(Icons.translate),
       title: SegmentedButton(
         style: SegmentedButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -316,18 +330,24 @@ class _TranslationDropdownWidget extends HookConsumerWidget {
         showSelectedIcon: false,
         segments: TicketTranslation.values.map((TicketTranslation translation) {
           return ButtonSegment(
-            enabled: lang != SupportedLocale.ge ||
-                translation != TicketTranslation.gpt4oMini,
             value: translation,
             label: Text(translation.name),
           );
         }).toList(),
         onSelectionChanged: (Set<TicketTranslation> newValue) {
           if (newValue.isNotEmpty) {
+            if (newValue.first == TicketTranslation.gpt4oMini &&
+                lang == SupportedLocale.ge) {
+              Toaster.info(
+                  r'''There is no Georgian with Martva's translation. Switching to English.''');
+              ref
+                  .read(localizationRepoProvider.notifier)
+                  .update(SupportedLocale.en);
+            }
             ref
                 .read(ticketTranslationNotiferProvider.notifier)
                 .update(newValue.first);
-            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
           }
         },
       ),
@@ -377,11 +397,11 @@ class _TicketWidget extends HookConsumerWidget {
                           ),
                         ),
                       ),
+                      DSSpacingTokens.l.verticalBox,
                     ]
                   : [const SizedBox.shrink()],
             ),
           ),
-          DSSpacingTokens.xxl.verticalBox,
           Text(currentQuestion.ticket.question),
           DSSpacingTokens.xxl.verticalBox,
           if (currentQuestion.ticket.image.isNotEmpty) ...[

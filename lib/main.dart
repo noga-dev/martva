@@ -4,6 +4,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/app.dart';
 import 'package:martva/src/core/utils/messaging/logger.dart';
+import 'package:martva/src/core/utils/messaging/toaster.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -37,6 +38,47 @@ void main() async {
       child: const App(),
     ),
   );
+}
+
+class RiverpodObserver implements ProviderObserver {
+  @override
+  void didAddProvider(
+    ProviderBase provider,
+    Object? value,
+    ProviderContainer container,
+  ) {
+    // logger.d('Riverpod: didAddProvider: $provider');
+  }
+
+  @override
+  void didDisposeProvider(
+    ProviderBase<Object?> provider,
+    ProviderContainer container,
+  ) {}
+
+  @override
+  void didUpdateProvider(
+    ProviderBase<Object?> provider,
+    Object? previousValue,
+    Object? newValue,
+    ProviderContainer container,
+  ) {}
+
+  @override
+  void providerDidFail(
+    ProviderBase<Object?> provider,
+    Object error,
+    StackTrace stackTrace,
+    ProviderContainer container,
+  ) {
+    logger.e(
+      'ERROR: $provider',
+      error: error,
+      stackTrace: stackTrace,
+    );
+
+    Toaster.error(error.toString());
+  }
 }
 
 void registerErrorHandlers() {

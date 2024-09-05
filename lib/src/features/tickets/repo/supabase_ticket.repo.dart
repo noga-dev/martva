@@ -15,6 +15,7 @@ const _selectTickets = '''
             explanation
           ),
           ticket_answers!inner (
+            id,
             answer,
             is_correct,
             ordinal
@@ -151,6 +152,17 @@ class SupabaseTicketRepo implements TicketRepo {
 
     return examTickets;
   }
+
+  @override
+  Future<void> setUserAnswer({
+    required String ticketId,
+    required String answerId,
+  }) async {
+    await Supabase.instance.client.from('user_answers').insert({
+      'ticket_id': ticketId,
+      'answer_id': answerId,
+    });
+  }
 }
 
 TicketDto _extractTicket(json) {
@@ -162,6 +174,7 @@ TicketDto _extractTicket(json) {
     image: json['image_url'],
     answers: (json['ticket_answers'] as List)
         .map((answer) => AnswerDto(
+              id: answer['id'],
               answer: answer['answer'],
               correct: answer['is_correct'],
               ordinal: answer['ordinal'],

@@ -167,6 +167,16 @@ class UserProfileRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<StatisticsRoute>(path: '/stats')
+class StatisticsRoute extends GoRouteData {
+  const StatisticsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const Placeholder();
+  }
+}
+
 // @TypedGoRoute<DevDebugLoggerRoute>(path: '/dev/logger')
 // class DevDebugLoggerRoute extends GoRouteData {
 //   const DevDebugLoggerRoute();

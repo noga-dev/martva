@@ -46,6 +46,11 @@ abstract class TicketRepo {
     required SupportedLocale language,
     required TicketTranslation translation,
   });
+
+  Future<void> setUserAnswer({
+    required String ticketId,
+    required String answerId,
+  });
 }
 
 @Riverpod(keepAlive: true)

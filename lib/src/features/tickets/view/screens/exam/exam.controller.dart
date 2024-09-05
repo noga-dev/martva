@@ -6,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
+import 'package:martva/src/features/tickets/service/ticket.service.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -101,6 +102,11 @@ class ExamController extends _$ExamController {
         nextQuestion();
       });
     }
+
+    ref.read(ticketServiceProvider).setUserAnswer(
+          ticketId: updatedAnswers[questionIndex].ticket.id,
+          answerId: answer.id,
+        );
   }
 
   void setQuestionIndex(int index) {

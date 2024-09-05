@@ -6,7 +6,7 @@ part of 'exam.controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$examControllerHash() => r'0885195c03250281d8c1abea443e906981738d63';
+String _$examControllerHash() => r'fc271e87eb1861ae022d827d305f4ac835ee41f1';
 
 /// See also [ExamController].
 @ProviderFor(ExamController)
@@ -17,8 +17,11 @@ final examControllerProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$examControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[getExamTicketsProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    getExamTicketsProvider,
+    ...?getExamTicketsProvider.allTransitiveDependencies
+  },
 );
 
 typedef _$ExamController = AutoDisposeAsyncNotifier<ExamState>;

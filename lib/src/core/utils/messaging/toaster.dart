@@ -26,7 +26,7 @@ class Toaster {
       message,
       align: align,
       color: Colors.blue,
-      duration: duration ?? DSDurationTokens.l.duration,
+      duration: duration ?? DSDurationTokens.xxl.duration,
     );
   }
 

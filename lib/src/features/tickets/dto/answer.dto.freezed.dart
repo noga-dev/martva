@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AnswerDto {
   @JsonKey(defaultValue: '')
+  String get id => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: '')
   String get answer => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: -1)
   int get ordinal => throw _privateConstructorUsedError;
@@ -39,7 +41,8 @@ abstract class $AnswerDtoCopyWith<$Res> {
       _$AnswerDtoCopyWithImpl<$Res, AnswerDto>;
   @useResult
   $Res call(
-      {@JsonKey(defaultValue: '') String answer,
+      {@JsonKey(defaultValue: '') String id,
+      @JsonKey(defaultValue: '') String answer,
       @JsonKey(defaultValue: -1) int ordinal,
       @JsonKey(defaultValue: false) bool correct});
 }
@@ -59,11 +62,16 @@ class _$AnswerDtoCopyWithImpl<$Res, $Val extends AnswerDto>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? answer = null,
     Object? ordinal = null,
     Object? correct = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       answer: null == answer
           ? _value.answer
           : answer // ignore: cast_nullable_to_non_nullable
@@ -89,7 +97,8 @@ abstract class _$$AnswerDtoImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(defaultValue: '') String answer,
+      {@JsonKey(defaultValue: '') String id,
+      @JsonKey(defaultValue: '') String answer,
       @JsonKey(defaultValue: -1) int ordinal,
       @JsonKey(defaultValue: false) bool correct});
 }
@@ -107,11 +116,16 @@ class __$$AnswerDtoImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? answer = null,
     Object? ordinal = null,
     Object? correct = null,
   }) {
     return _then(_$AnswerDtoImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       answer: null == answer
           ? _value.answer
           : answer // ignore: cast_nullable_to_non_nullable
@@ -132,10 +146,14 @@ class __$$AnswerDtoImplCopyWithImpl<$Res>
 @JsonSerializable(createFactory: false)
 class _$AnswerDtoImpl implements _AnswerDto {
   const _$AnswerDtoImpl(
-      {@JsonKey(defaultValue: '') this.answer = '',
+      {@JsonKey(defaultValue: '') this.id = '',
+      @JsonKey(defaultValue: '') this.answer = '',
       @JsonKey(defaultValue: -1) this.ordinal = -1,
       @JsonKey(defaultValue: false) this.correct = false});
 
+  @override
+  @JsonKey(defaultValue: '')
+  final String id;
   @override
   @JsonKey(defaultValue: '')
   final String answer;
@@ -148,7 +166,7 @@ class _$AnswerDtoImpl implements _AnswerDto {
 
   @override
   String toString() {
-    return 'AnswerDto(answer: $answer, ordinal: $ordinal, correct: $correct)';
+    return 'AnswerDto(id: $id, answer: $answer, ordinal: $ordinal, correct: $correct)';
   }
 
   @override
@@ -156,6 +174,7 @@ class _$AnswerDtoImpl implements _AnswerDto {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AnswerDtoImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.answer, answer) || other.answer == answer) &&
             (identical(other.ordinal, ordinal) || other.ordinal == ordinal) &&
             (identical(other.correct, correct) || other.correct == correct));
@@ -163,7 +182,7 @@ class _$AnswerDtoImpl implements _AnswerDto {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, answer, ordinal, correct);
+  int get hashCode => Object.hash(runtimeType, id, answer, ordinal, correct);
 
   /// Create a copy of AnswerDto
   /// with the given fields replaced by the non-null parameter values.
@@ -183,10 +202,14 @@ class _$AnswerDtoImpl implements _AnswerDto {
 
 abstract class _AnswerDto implements AnswerDto {
   const factory _AnswerDto(
-      {@JsonKey(defaultValue: '') final String answer,
+      {@JsonKey(defaultValue: '') final String id,
+      @JsonKey(defaultValue: '') final String answer,
       @JsonKey(defaultValue: -1) final int ordinal,
       @JsonKey(defaultValue: false) final bool correct}) = _$AnswerDtoImpl;
 
+  @override
+  @JsonKey(defaultValue: '')
+  String get id;
   @override
   @JsonKey(defaultValue: '')
   String get answer;

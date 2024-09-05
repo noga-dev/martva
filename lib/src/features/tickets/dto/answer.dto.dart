@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:martva/src/core/utils/aliases/string.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 part 'answer.dto.freezed.dart';
@@ -10,6 +11,7 @@ part 'answer.dto.g.dart';
 @Freezed(fromJson: false)
 class AnswerDto with _$AnswerDto {
   const factory AnswerDto({
+    @Default('') @JsonKey(defaultValue: '') UUID id,
     @Default('') @JsonKey(defaultValue: '') String answer,
     @Default(-1) @JsonKey(defaultValue: -1) int ordinal,
     @Default(false) @JsonKey(defaultValue: false) bool correct,
