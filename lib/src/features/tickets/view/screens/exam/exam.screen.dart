@@ -74,7 +74,7 @@ class _ExamBody extends HookConsumerWidget {
           pageController.animateToPage(
             examState.currentQuestionIndex,
             duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
+            curve: Curves.linear,
           );
         }
       });
@@ -107,25 +107,30 @@ class _ExamBody extends HookConsumerWidget {
             ],
           ),
         ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(3),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: examState.solutions.map((solution) {
-              return SizedBox(
-                height: 2,
-                width: MediaQuery.of(context).size.width /
-                    examState.solutions.length,
-                child: ColoredBox(
-                  color: _getAnswerColor(
-                    answer: null,
-                    solution: solution.selectedAnswer,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
+        // bottom: PreferredSize(
+        //   preferredSize: const Size.fromHeight(0),
+        //   child: GridView.builder(
+        //     shrinkWrap: true,
+        //     physics: const NeverScrollableScrollPhysics(),
+        //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        //       crossAxisCount: 15,
+        //       crossAxisSpacing: 0,
+        //       mainAxisSpacing: 0,
+        //       childAspectRatio: MediaQuery.of(context).devicePixelRatio * 6,
+        //     ),
+        //     itemCount: examState.solutions.length,
+        //     itemBuilder: (context, index) {
+        //       return DecoratedBox(
+        //         decoration: BoxDecoration(
+        //           color: _getAnswerColor(
+        //             answer: null,
+        //             solution: examState.solutions[index].selectedAnswer,
+        //           ),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ),
       ),
       body: Skeletonizer(
         enabled: isLoading,
@@ -135,7 +140,7 @@ class _ExamBody extends HookConsumerWidget {
           controller: pageController,
           itemCount: examState.solutions.length,
           itemBuilder: (context, index) {
-            return _ExamContent(
+            return _TicketWidget(
               examState: examState,
               questionIndex: index,
             );
@@ -276,11 +281,11 @@ class _TranslationDropdownWidget extends HookConsumerWidget {
   }
 }
 
-class _ExamContent extends HookConsumerWidget {
+class _TicketWidget extends HookConsumerWidget {
   final ExamState examState;
   final int questionIndex;
 
-  const _ExamContent({
+  const _TicketWidget({
     required this.examState,
     required this.questionIndex,
   });
@@ -291,41 +296,50 @@ class _ExamContent extends HookConsumerWidget {
     final ticketTranslation = ref.watch(ticketTranslationNotiferProvider);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: DSSpacingTokens.xl.allInsets,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 8),
-          Text(currentQuestion.ticket.question),
-          const SizedBox(height: 16),
-          if (currentQuestion.ticket.image.isNotEmpty)
-            TicketImageMolecule(
-              ticket: currentQuestion.ticket,
-            ),
           AnimatedSize(
             duration: DSDurationTokens.xxxs.duration,
             reverseDuration: DSDurationTokens.xxxs.duration,
-            curve: Curves.easeInOut,
+            curve: Curves.linear,
             alignment: Alignment.bottomCenter,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: currentQuestion.showExplanation
                   ? [
-                      DSSpacingTokens.xl.verticalBox,
-                      const Text('Explanation:'),
-                      Text(currentQuestion.ticket.explanation.isEmpty
-                          ? 'No explanation from ${ticketTranslation.name}.'
-                              ' Change source in settings.'
-                          : currentQuestion.ticket.explanation),
+                      Card(
+                        margin: EdgeInsets.zero,
+                        child: Padding(
+                          padding: DSSpacingTokens.m.allInsets,
+                          child: Text(
+                            currentQuestion.ticket.explanation.isEmpty
+                                ? 'No explanation from ${ticketTranslation.name}.'
+                                    ' Change source in settings.'
+                                : currentQuestion.ticket.explanation,
+                            textAlign: TextAlign.justify,
+                          ),
+                        ),
+                      ),
                     ]
                   : [const SizedBox.shrink()],
             ),
           ),
-          DSSpacingTokens.xl.verticalBox,
+          DSSpacingTokens.xxl.verticalBox,
+          Text(currentQuestion.ticket.question),
+          DSSpacingTokens.xxl.verticalBox,
+          if (currentQuestion.ticket.image.isNotEmpty) ...[
+            TicketImageMolecule(
+              ticket: currentQuestion.ticket,
+            ),
+            DSSpacingTokens.xxl.verticalBox,
+          ],
           ...currentQuestion.ticket.answers.map<Widget>((answer) {
             return Card(
               elevation: 0,
+              margin: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
                   color: _getAnswerColor(
@@ -424,7 +438,7 @@ class _NavigationButtons extends HookConsumerWidget {
               onPressed: currentIndex > 0
                   ? () => pageController.previousPage(
                         duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
+                        curve: Curves.linear,
                       )
                   : null,
               child: const Text('Previous'),
