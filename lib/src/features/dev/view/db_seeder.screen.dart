@@ -95,7 +95,7 @@ class DbSeederScreen extends ConsumerWidget {
             },
             child: const Text('Seed ru_GPT-4o-mini'),
           ),
-        ].intersperse(DSSpacingTokens.m.verticalSpace).toList(),
+        ].intersperse(DSSpacingTokens.m.verticalBox).toList(),
       ),
     );
   }

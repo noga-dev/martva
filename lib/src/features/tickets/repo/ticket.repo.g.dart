@@ -20,7 +20,23 @@ final ticketRepoProvider = Provider<TicketRepo>.internal(
 );
 
 typedef TicketRepoRef = ProviderRef<TicketRepo>;
-String _$getTicketsHash() => r'fc39affa227333163d690efe11f8e286c9b7933b';
+String _$getExamTicketsHash() => r'14e8521f10bcc80851f71ebd48644b9c1b4dd70d';
+
+/// See also [getExamTickets].
+@ProviderFor(getExamTickets)
+final getExamTicketsProvider =
+    AutoDisposeFutureProvider<List<TicketDto>>.internal(
+  getExamTickets,
+  name: r'getExamTicketsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getExamTicketsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetExamTicketsRef = AutoDisposeFutureProviderRef<List<TicketDto>>;
+String _$getTicketsHash() => r'2ea5c8d6480dc6c4ad5a52db07b73752e90b6184';
 
 /// See also [getTickets].
 @ProviderFor(getTickets)

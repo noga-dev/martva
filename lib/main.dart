@@ -42,6 +42,12 @@ void registerErrorHandlers() {
   // * Show some error UI if any uncaught exception happens
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
+    if (kDebugMode) {
+      if (details.exceptionAsString().startsWith(
+          r'''A KeyDownEvent is dispatched, but the state shows that the physical key is already pressed. If this occurs in real application, please report this bug to Flutter. If this occurs in unit tests, please ensure that simulated events follow Flutter's event model as documented in `HardwareKeyboard`. This was the event: KeyDownEvent#d4581(physicalKey: PhysicalKeyboardKey#ea6e1(usbHidUsage: "''')) {
+        return;
+      }
+    }
     logger.e(
       '[[[flutter error]]]',
       time: DateTime.now(),

@@ -13,14 +13,13 @@ class SupabaseTicketRepo implements TicketRepo {
   Future<List<TicketDto>> select({
     required Locale language,
     required TicketTranslation translation,
+    required int limit,
+    required bool sortByOrdinalId,
   }) async {
     final String actualTranslation =
         "${language.languageCode}_${translation.dbName}";
 
-    try {
-      final response = await Supabase.instance.client
-          .from('tickets')
-          .select('''
+    final queryBuilder = Supabase.instance.client.from('tickets').select('''
           id,
           ordinal_id,
           image_url,
@@ -33,11 +32,23 @@ class SupabaseTicketRepo implements TicketRepo {
             is_correct,
             ordinal
           )
-        ''')
-          .eq('ticket_details.translation', actualTranslation)
-          .eq('ticket_answers.translation', actualTranslation)
-          .limit(3)
-          .order('ordinal_id', ascending: true);
+        ''');
+
+    final filterBuilder = queryBuilder
+        .eq('ticket_details.translation', actualTranslation)
+        .eq('ticket_answers.translation', actualTranslation);
+
+    final orderBuilder = sortByOrdinalId
+        ? filterBuilder.order(
+            'ordinal_id',
+            ascending: true,
+          )
+        : filterBuilder;
+
+    final limitBuilder = orderBuilder.limit(limit);
+
+    try {
+      final response = await limitBuilder;
 
       if (response.isEmpty) {
         logger.t('No tickets found for translation: $actualTranslation');
@@ -58,7 +69,9 @@ class SupabaseTicketRepo implements TicketRepo {
         stackTrace: StackTrace.current,
       );
 
-      return [];
+      rethrow;
+
+      // return [];
     }
   }
 
@@ -72,7 +85,7 @@ class SupabaseTicketRepo implements TicketRepo {
         "${language.languageCode}_${translation.dbName}";
 
     try {
-      final response = await Supabase.instance.client
+      final queryBuilder = Supabase.instance.client
           .from('tickets')
           .select('''
           id,
@@ -89,8 +102,9 @@ class SupabaseTicketRepo implements TicketRepo {
         ''')
           .eq('ticket_details.translation', actualTranslation)
           .eq('ticket_answers.translation', actualTranslation)
-          .or('id.in.(${ids.join(',')})')
-          .order('ordinal_id', ascending: true);
+          .or('id.in.(${ids.join(',')})');
+
+      final response = await queryBuilder;
 
       if (response.isEmpty) {
         logger.t('No tickets found for translation: $actualTranslation');

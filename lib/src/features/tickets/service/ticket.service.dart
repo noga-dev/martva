@@ -16,8 +16,10 @@ class TicketService {
     final localizationRepo = _ref.read(localizationRepoProvider);
 
     final results = repo.select(
+      limit: 30,
       language: localizationRepo,
       translation: TicketTranslation.gpt4oMini,
+      sortByOrdinalId: true,
     );
 
     return results;

@@ -16,27 +16,28 @@ enum DSSpacingTokens {
 
   final double value;
 
-  EdgeInsetsDirectional scaleBy(double scale) =>
+  EdgeInsetsGeometry scaleBy(double scale) =>
       EdgeInsetsDirectional.all(value * scale);
 
-  EdgeInsetsDirectional get all => EdgeInsetsDirectional.all(value);
+  EdgeInsetsGeometry get allInsets => EdgeInsetsDirectional.all(value);
 
-  EdgeInsetsDirectional get horizontal =>
+  EdgeInsetsGeometry get horizontalInsets =>
       EdgeInsetsDirectional.symmetric(horizontal: value);
-  EdgeInsetsDirectional get vertical =>
+  EdgeInsetsGeometry get verticalInsets =>
       EdgeInsetsDirectional.symmetric(vertical: value);
 
-  EdgeInsetsDirectional get start => EdgeInsetsDirectional.only(start: value);
-  EdgeInsetsDirectional get top => EdgeInsetsDirectional.only(top: value);
-  EdgeInsetsDirectional get end => EdgeInsetsDirectional.only(end: value);
-  EdgeInsetsDirectional get bottom => EdgeInsetsDirectional.only(bottom: value);
+  EdgeInsetsGeometry get startInsets =>
+      EdgeInsetsDirectional.only(start: value);
+  EdgeInsetsGeometry get topInsets => EdgeInsetsDirectional.only(top: value);
+  EdgeInsetsGeometry get endInsets => EdgeInsetsDirectional.only(end: value);
+  EdgeInsetsGeometry get bottomInsets =>
+      EdgeInsetsDirectional.only(bottom: value);
 
-  SizedBox get horizontalSpace => SizedBox(width: value);
-  SizedBox get verticalSpace => SizedBox(height: value);
-  SizedBox get squareSpace => SizedBox.square(dimension: value);
-  SizedBox scaledHorizontalSpace(double scale) =>
-      SizedBox(width: value * scale);
-  SizedBox scaledVerticalSpace(double scale) => SizedBox(height: value * scale);
-  SizedBox scaledSquareSpace(double scale) =>
+  SizedBox get horizontalBox => SizedBox(width: value);
+  SizedBox get verticalBox => SizedBox(height: value);
+  SizedBox get squareBox => SizedBox.square(dimension: value);
+  SizedBox scaledHorizontalBox(double scale) => SizedBox(width: value * scale);
+  SizedBox scaledVerticalBox(double scale) => SizedBox(height: value * scale);
+  SizedBox scaledSquareBox(double scale) =>
       SizedBox.square(dimension: value * scale);
 }

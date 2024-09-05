@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:martva/src/core/utils/aliases/string.dart';
-import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 
 part 'flashcard.dto.freezed.dart';
 part 'flashcard.dto.g.dart';
@@ -20,7 +19,7 @@ class FlashcardDto with _$FlashcardDto {
       defaultValue: '',
       name: 'ticket_id',
     )
-    TicketId ticketId,
+    UUID ticketId,
     @Default('')
     @JsonKey(
       defaultValue: '',

@@ -5,8 +5,6 @@ import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 part 'ticket.dto.freezed.dart';
 part 'ticket.dto.g.dart';
 
-typedef TicketId = String;
-
 @JsonSerializable()
 @Freezed(fromJson: false)
 class TicketDto with _$TicketDto {

@@ -2,10 +2,8 @@
 
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:martva/src/core/i18n/data/localization.repo.dart';
-import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
+import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,9 +16,7 @@ class ExamController extends _$ExamController {
 
   @override
   ExamState build() {
-    final ticketRepo = ref.watch(ticketRepoProvider);
-    final ticketTranslation = ref.watch(ticketTranslationNotiferProvider);
-    final language = ref.watch(localizationRepoProvider);
+    final ticketsFuture = ref.watch(getExamTicketsProvider.future);
 
     ref.onDispose(() {
       if (_timer != null) {
@@ -28,13 +24,9 @@ class ExamController extends _$ExamController {
       }
     });
 
-    _startTimer();
+    _loadQuestions(ticketsFuture: ticketsFuture);
 
-    _loadQuestions(
-      ticketRepo: ticketRepo,
-      translation: ticketTranslation,
-      language: language,
-    );
+    _startTimer();
 
     return stateOrNull ?? const ExamState();
   }
@@ -54,20 +46,9 @@ class ExamController extends _$ExamController {
   }
 
   Future<void> _loadQuestions({
-    required TicketRepo ticketRepo,
-    required TicketTranslation translation,
-    required Locale language,
+    required Future<List<TicketDto>> ticketsFuture,
   }) async {
-    final tickets = await ticketRepo.select(
-      language: language,
-      translation: translation,
-    );
-
-    logger.d(
-      '${tickets.map((e) => e.id).toList()}'
-      '\n'
-      '${state.solutions.map((e) => e.ticket.id).toList()}',
-    );
+    final tickets = await ticketsFuture;
 
     if (stateOrNull == null || state.solutions.isEmpty) {
       state = ExamState(
@@ -116,11 +97,19 @@ class ExamController extends _$ExamController {
 
   void selectAnswer(int questionIndex, AnswerDto answer) {
     final updatedAnswers = [...state.solutions];
+
     updatedAnswers[questionIndex] = updatedAnswers[questionIndex].copyWith(
       selectedAnswer: answer,
+      showExplanation: !answer.correct,
     );
 
-    state = state.copyWith(solutions: updatedAnswers);
+    state = state.copyWith(
+      solutions: updatedAnswers,
+    );
+
+    if (answer.correct) {
+      nextQuestion();
+    }
   }
 
   void setQuestionIndex(int index) {
