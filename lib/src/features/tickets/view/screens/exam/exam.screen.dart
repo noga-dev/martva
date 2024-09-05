@@ -1,20 +1,16 @@
-// exam_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/core/theme/view/atoms/error_message.atom.dart';
-import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/constants.dart';
-import 'package:martva/src/core/utils/extensions/list.dart';
 import 'package:martva/src/core/utils/messaging/toaster.dart';
-import 'package:martva/src/features/tickets/dto/answer.dto.dart';
+import 'package:martva/src/core/utils/methods/answer_color.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.controller.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.state.dart';
-import 'package:martva/src/features/tickets/view/shared/molecules/ticket_image_molecule.dart';
+import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ExamScreen extends HookConsumerWidget {
@@ -133,22 +129,54 @@ class _ExamBody extends HookConsumerWidget {
         //   ),
         // ),
       ),
-      body: Skeletonizer(
-        enabled: isLoading,
-        ignorePointers: isLoading,
-        enableSwitchAnimation: true,
-        child: PageView.builder(
-          controller: pageController,
-          itemCount: examState.solutions.length,
-          itemBuilder: (context, index) {
-            return _TicketWidget(
-              examState: examState,
-              questionIndex: index,
-            );
-          },
-        ),
+      body: _TicketListTemplate(
+        isLoading: isLoading,
+        pageController: pageController,
+        examState: examState,
       ),
       bottomNavigationBar: _NavigationButtons(pageController: pageController),
+    );
+  }
+}
+
+class _TicketListTemplate extends ConsumerWidget {
+  const _TicketListTemplate({
+    required this.isLoading,
+    required this.pageController,
+    required this.examState,
+  });
+
+  final bool isLoading;
+  final PageController pageController;
+  final ExamState examState;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Skeletonizer(
+      enabled: isLoading,
+      enableSwitchAnimation: true,
+      child: PageView.builder(
+        controller: pageController,
+        itemCount: examState.solutions.length,
+        itemBuilder: (context, pageIndex) {
+          return TicketCardOrganism(
+            question: examState.solutions[pageIndex],
+            onAnswerSelected:
+                examState.solutions[pageIndex].selectedAnswer == null
+                    ? (answer) {
+                        if (answer == null) {
+                          return;
+                        }
+
+                        ref.read(examControllerProvider.notifier).selectAnswer(
+                              pageIndex,
+                              answer,
+                            );
+                      }
+                    : null,
+          );
+        },
+      ),
     );
   }
 }
@@ -270,7 +298,7 @@ class _QuestionIndexWidget extends ConsumerWidget {
             padding: DSSpacingTokens.s.allInsets,
             itemBuilder: (context, index) => TextButton(
               style: TextButton.styleFrom(
-                backgroundColor: _getAnswerColor(
+                backgroundColor: getAnswerColor(
                   answer: null,
                   solution: examState.solutions[index].selectedAnswer,
                 ),
@@ -291,8 +319,36 @@ class _QuestionIndexWidget extends ConsumerWidget {
           ),
         ),
       ),
-      child: Text(
-          '${examState.currentQuestionIndex + 1}/${examState.solutions.length}'),
+      child: Column(
+        children: [
+          Text('${examState.currentQuestionIndex + 1}'
+              '/'
+              '${examState.solutions.length}'),
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text:
+                      '${examState.solutions.where((e) => e.selectedAnswer?.correct ?? false).length}',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: Colors.green),
+                ),
+                const TextSpan(text: '/'),
+                TextSpan(
+                  text:
+                      '${examState.solutions.where((e) => e.selectedAnswer?.correct == false).length}',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -353,140 +409,6 @@ class _TranslationDropdownWidget extends HookConsumerWidget {
       ),
     );
   }
-}
-
-class _TicketWidget extends HookConsumerWidget {
-  final ExamState examState;
-  final int questionIndex;
-
-  const _TicketWidget({
-    required this.examState,
-    required this.questionIndex,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentQuestion = examState.solutions[questionIndex];
-    final ticketTranslation = ref.watch(ticketTranslationNotiferProvider);
-
-    return SingleChildScrollView(
-      padding: DSSpacingTokens.xl.allInsets,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AnimatedSize(
-            duration: DSDurationTokens.xxxs.duration,
-            reverseDuration: DSDurationTokens.xxxs.duration,
-            curve: Curves.linear,
-            alignment: Alignment.bottomCenter,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: currentQuestion.showExplanation
-                  ? [
-                      Card(
-                        margin: EdgeInsets.zero,
-                        child: Padding(
-                          padding: DSSpacingTokens.m.allInsets,
-                          child: Text(
-                            currentQuestion.ticket.explanation.isEmpty
-                                ? 'No explanation from ${ticketTranslation.name}.'
-                                    ' Change source in settings.'
-                                : currentQuestion.ticket.explanation,
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
-                      ),
-                      DSSpacingTokens.l.verticalBox,
-                    ]
-                  : [const SizedBox.shrink()],
-            ),
-          ),
-          Text(currentQuestion.ticket.question),
-          DSSpacingTokens.xxl.verticalBox,
-          if (currentQuestion.ticket.image.isNotEmpty) ...[
-            TicketImageMolecule(
-              ticket: currentQuestion.ticket,
-            ),
-            DSSpacingTokens.xxl.verticalBox,
-          ],
-          ...currentQuestion.ticket.answers.map<Widget>((answer) {
-            return Card(
-              elevation: 0,
-              margin: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: _getAnswerColor(
-                    answer: answer,
-                    solution: currentQuestion.selectedAnswer,
-                  ),
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: RadioListTile.adaptive(
-                value: answer.ordinal,
-                groupValue: currentQuestion.selectedAnswer?.ordinal,
-                onChanged: currentQuestion.selectedAnswer == null
-                    ? (val) {
-                        ref.read(examControllerProvider.notifier).selectAnswer(
-                              questionIndex,
-                              answer,
-                            );
-                      }
-                    : null,
-                fillColor: WidgetStateProperty.all(
-                  _getAnswerColor(
-                    answer: answer,
-                    solution: currentQuestion.selectedAnswer,
-                  ),
-                ),
-                dense: true,
-                visualDensity: VisualDensity.adaptivePlatformDensity,
-                title: Text(
-                  answer.answer,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-            );
-          }).intersperse(DSSpacingTokens.xxl.verticalBox),
-        ],
-      ),
-    );
-  }
-}
-
-Color _getAnswerColor({
-  required AnswerDto? answer,
-  required AnswerDto? solution,
-}) {
-  if (solution == null) {
-    return Colors.grey.withOpacity(0.5);
-  }
-
-  if (answer == null) {
-    if (solution.correct) {
-      return Colors.green.withOpacity(0.5);
-    }
-
-    if (!solution.correct) {
-      return Colors.red.withOpacity(0.5);
-    }
-
-    return Colors.grey.withOpacity(0.5);
-  }
-
-  // Incorrect answer selected by user
-  if (answer.ordinal == solution.ordinal && !answer.correct) {
-    return Colors.red.withOpacity(0.5);
-  }
-
-  // Correct answer (both selected and actual)
-  if (answer.correct) {
-    return Colors.green.withOpacity(0.5);
-  }
-
-  // Any other case (unselected incorrect answers)
-  return Colors.grey.withOpacity(0.5);
 }
 
 class _NavigationButtons extends HookConsumerWidget {
