@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
+import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
@@ -26,13 +26,14 @@ class SupabaseTicketRepo implements TicketRepo {
 
   @override
   Future<List<TicketDto>> getTickets({
-    required Locale language,
+    required SupportedLocale language,
     required TicketTranslation translation,
     required int limit,
     required bool sortByOrdinalId,
   }) async {
-    final String actualTranslation =
-        "${language.languageCode}_${translation.dbName}";
+    final String actualTranslation = "${language.dbName}_${translation.dbName}";
+
+    assert(actualTranslation != 'ge_gpt4o_mini', 'invalid translation');
 
     final queryBuilder =
         Supabase.instance.client.from('tickets').select(_selectTickets);
@@ -81,11 +82,10 @@ class SupabaseTicketRepo implements TicketRepo {
   @override
   Future<List<TicketDto>> getTicketsById({
     required List<String> ids,
-    required Locale language,
+    required SupportedLocale language,
     required TicketTranslation translation,
   }) async {
-    final String actualTranslation =
-        "${language.languageCode}_${translation.dbName}";
+    final String actualTranslation = "${language.dbName}_${translation.dbName}";
 
     try {
       final queryBuilder = Supabase.instance.client
@@ -137,7 +137,7 @@ class SupabaseTicketRepo implements TicketRepo {
 
   @override
   Future<List<TicketDto>> getExamTickets({
-    required Locale language,
+    required SupportedLocale language,
     required TicketTranslation translation,
     required List<String> ticketIds,
   }) async {

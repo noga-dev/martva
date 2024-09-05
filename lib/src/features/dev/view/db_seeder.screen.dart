@@ -84,7 +84,7 @@ class DbSeederScreen extends ConsumerWidget {
           ElevatedButton(
             onPressed: () async {
               final data =
-                  await rootBundle.loadString(Assets.i18n.tickets.enGpt4omini);
+                  await rootBundle.loadString(Assets.i18n.tickets.ruGpt4omini);
               final List<dynamic> list = json.decode(data);
 
               // Process and insert data
@@ -182,7 +182,7 @@ Future<void> upsertTicketTranslation(
   String explanation,
 ) async {
   final existingTranslation = await supabase
-      .from('ticket_translations')
+      .from('ticket_details')
       .select()
       .eq('ticket_id', ticketId)
       .eq('translation', translation)
@@ -196,7 +196,7 @@ Future<void> upsertTicketTranslation(
     return;
   }
 
-  await supabase.from('ticket_translations').upsert(
+  await supabase.from('ticket_details').upsert(
     {
       'ticket_id': ticketId,
       'translation': translation,

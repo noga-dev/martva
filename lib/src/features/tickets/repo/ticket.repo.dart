@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/core/utils/constants.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
@@ -29,13 +28,13 @@ enum TicketTranslation {
 abstract class TicketRepo {
   Future<List<TicketDto>> getTickets({
     required int limit,
-    required Locale language,
+    required SupportedLocale language,
     required TicketTranslation translation,
     required bool sortByOrdinalId,
   });
 
   Future<List<TicketDto>> getExamTickets({
-    required Locale language,
+    required SupportedLocale language,
     required TicketTranslation translation,
     required List<String> ticketIds,
   });
@@ -44,7 +43,7 @@ abstract class TicketRepo {
 
   Future<List<TicketDto>> getTicketsById({
     required List<String> ids,
-    required Locale language,
+    required SupportedLocale language,
     required TicketTranslation translation,
   });
 }
@@ -95,7 +94,10 @@ Future<List<TicketDto>> getExamTickets(GetExamTicketsRef ref) async {
   );
 }
 
-@riverpod
+@Riverpod(dependencies: [
+  LocalizationRepo,
+  TicketTranslationNotifer,
+])
 Future<List<TicketDto>> getTickets(GetTicketsRef ref) async {
   final localizationRepo = ref.watch(localizationRepoProvider);
   final translation = ref.watch(ticketTranslationNotiferProvider);

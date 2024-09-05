@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/core/theme/view/atoms/error_message.atom.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
@@ -152,22 +153,27 @@ class _ExamBody extends HookConsumerWidget {
   }
 }
 
-class _SettingsBottomSheet extends StatelessWidget {
+class _SettingsBottomSheet extends HookWidget {
   const _SettingsBottomSheet();
 
   @override
   Widget build(BuildContext context) {
+    final animController = useAnimationController();
+
     return BottomSheet(
+      animationController: animController,
+      backgroundColor: Colors.transparent,
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.5,
       ),
       onClosing: () {},
       builder: (context) => Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: DSSpacingTokens.m.allInsets,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _TranslationDropdownWidget(),
+            const _TranslationDropdownWidget(),
+            const _LanguageDropdownWidget(),
             ListTile(
               title: const Text('Randomize answer order'),
               trailing: Switch(
@@ -183,6 +189,43 @@ class _SettingsBottomSheet extends StatelessWidget {
                   ))
               .toList(),
         ),
+      ),
+    );
+  }
+}
+
+class _LanguageDropdownWidget extends ConsumerWidget {
+  const _LanguageDropdownWidget();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lang = ref.watch(localizationRepoProvider);
+    final trans = ref.watch(ticketTranslationNotiferProvider);
+
+    return ListTile(
+      titleAlignment: ListTileTitleAlignment.center,
+      leading: const Icon(Icons.language_sharp),
+      title: SegmentedButton<SupportedLocale>(
+        style: SegmentedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          visualDensity: VisualDensity.standard,
+        ),
+        showSelectedIcon: false,
+        selected: {lang},
+        segments: SupportedLocale.values.map((SupportedLocale locale) {
+          return ButtonSegment(
+            enabled: locale != SupportedLocale.ge ||
+                trans != TicketTranslation.gpt4oMini,
+            value: locale,
+            label: Text(locale.name),
+          );
+        }).toList(),
+        onSelectionChanged: (Set<SupportedLocale> newValue) {
+          if (newValue.isNotEmpty) {
+            ref.read(localizationRepoProvider.notifier).update(newValue.first);
+            Navigator.of(context).pop();
+          }
+        },
       ),
     );
   }
@@ -254,16 +297,27 @@ class _TimerWidget extends HookConsumerWidget {
 }
 
 class _TranslationDropdownWidget extends HookConsumerWidget {
+  const _TranslationDropdownWidget();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final trans = ref.watch(ticketTranslationNotiferProvider);
+    final lang = ref.watch(localizationRepoProvider);
+
     return ListTile(
       titleAlignment: ListTileTitleAlignment.center,
       leading: const Icon(Icons.translate),
       title: SegmentedButton(
-        selected: {ref.watch(ticketTranslationNotiferProvider)},
+        style: SegmentedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          visualDensity: VisualDensity.standard,
+        ),
+        selected: {trans},
         showSelectedIcon: false,
         segments: TicketTranslation.values.map((TicketTranslation translation) {
           return ButtonSegment(
+            enabled: lang != SupportedLocale.ge ||
+                translation != TicketTranslation.gpt4oMini,
             value: translation,
             label: Text(translation.name),
           );

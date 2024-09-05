@@ -11,7 +11,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'exam.controller.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [
+  getExamTickets,
+])
 class ExamController extends _$ExamController {
   Timer? _timer;
 
