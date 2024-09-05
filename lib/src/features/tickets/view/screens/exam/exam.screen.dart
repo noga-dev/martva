@@ -1,14 +1,13 @@
 // exam_screen.dart
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/theme/view/atoms/error_message.atom.dart';
+import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/constants.dart';
 import 'package:martva/src/core/utils/extensions/list.dart';
-import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/core/utils/messaging/toaster.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
@@ -207,35 +206,26 @@ class _QuestionIndexWidget extends ConsumerWidget {
             shrinkWrap: true,
             itemCount: examState.solutions.length,
             padding: DSSpacingTokens.s.allInsets,
-            itemBuilder: (context, index) {
-              logger.d(
-                  '${examState.solutions[index].ticket.answers.firstWhereOrNull(
-                (element) => element.correct,
-              )}'
-                  '\n'
-                  '${examState.solutions[index].selectedAnswer}');
-
-              return TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: _getAnswerColor(
-                    answer: null,
-                    solution: examState.solutions[index].selectedAnswer,
-                  ),
-                  padding: EdgeInsets.zero,
+            itemBuilder: (context, index) => TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: _getAnswerColor(
+                  answer: null,
+                  solution: examState.solutions[index].selectedAnswer,
                 ),
-                onPressed: () {
-                  ref
-                      .read(examControllerProvider.notifier)
-                      .setQuestionIndex(index);
+                padding: EdgeInsets.zero,
+              ),
+              onPressed: () {
+                ref
+                    .read(examControllerProvider.notifier)
+                    .setQuestionIndex(index);
 
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  (index + 1).toString(),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              );
-            },
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                (index + 1).toString(),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
           ),
         ),
       ),
@@ -278,6 +268,7 @@ class _TranslationDropdownWidget extends HookConsumerWidget {
             ref
                 .read(ticketTranslationNotiferProvider.notifier)
                 .update(newValue.first);
+            Navigator.of(context).pop();
           }
         },
       ),
@@ -311,51 +302,62 @@ class _ExamContent extends HookConsumerWidget {
             TicketImageMolecule(
               ticket: currentQuestion.ticket,
             ),
-          if (currentQuestion.showExplanation) ...[
-            DSSpacingTokens.xl.verticalBox,
-            Text(
-              'Explanation:',
-              style: Theme.of(context).textTheme.labelMedium,
+          AnimatedSize(
+            duration: DSDurationTokens.xxxs.duration,
+            reverseDuration: DSDurationTokens.xxxs.duration,
+            curve: Curves.easeInOut,
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: currentQuestion.showExplanation
+                  ? [
+                      DSSpacingTokens.xl.verticalBox,
+                      const Text('Explanation:'),
+                      Text(currentQuestion.ticket.explanation.isEmpty
+                          ? 'No explanation from ${ticketTranslation.name}.'
+                              ' Change source in settings.'
+                          : currentQuestion.ticket.explanation),
+                    ]
+                  : [const SizedBox.shrink()],
             ),
-            Text(currentQuestion.ticket.explanation.isEmpty
-                ? 'No explanation from ${ticketTranslation.name}.'
-                    ' Change source in settings.'
-                : currentQuestion.ticket.explanation),
-          ],
+          ),
           DSSpacingTokens.xl.verticalBox,
           ...currentQuestion.ticket.answers.map<Widget>((answer) {
-            return RadioListTile.adaptive(
-              value: answer.ordinal,
-              groupValue: currentQuestion.selectedAnswer?.ordinal,
-              onChanged: currentQuestion.selectedAnswer == null
-                  ? (val) {
-                      ref.read(examControllerProvider.notifier).selectAnswer(
-                            questionIndex,
-                            answer,
-                          );
-                    }
-                  : null,
-              fillColor: WidgetStateProperty.all(
-                _getAnswerColor(
-                  answer: answer,
-                  solution: currentQuestion.selectedAnswer,
-                ),
-              ),
-              dense: true,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
+            return Card(
+              elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6),
                 side: BorderSide(
-                  width: 1,
                   color: _getAnswerColor(
                     answer: answer,
                     solution: currentQuestion.selectedAnswer,
                   ),
                 ),
+                borderRadius: BorderRadius.circular(8),
               ),
-              title: Text(
-                answer.answer,
-                style: Theme.of(context).textTheme.bodyMedium,
+              child: RadioListTile.adaptive(
+                value: answer.ordinal,
+                groupValue: currentQuestion.selectedAnswer?.ordinal,
+                onChanged: currentQuestion.selectedAnswer == null
+                    ? (val) {
+                        ref.read(examControllerProvider.notifier).selectAnswer(
+                              questionIndex,
+                              answer,
+                            );
+                      }
+                    : null,
+                fillColor: WidgetStateProperty.all(
+                  _getAnswerColor(
+                    answer: answer,
+                    solution: currentQuestion.selectedAnswer,
+                  ),
+                ),
+                dense: true,
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+                title: Text(
+                  answer.answer,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             );
           }).intersperse(DSSpacingTokens.xxl.verticalBox),

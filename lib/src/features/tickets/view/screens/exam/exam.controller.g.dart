@@ -6,7 +6,7 @@ part of 'exam.controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$examControllerHash() => r'8bba13647afe37e315b18a8b7f41d4dcc17fec52';
+String _$examControllerHash() => r'0885195c03250281d8c1abea443e906981738d63';
 
 /// See also [ExamController].
 @ProviderFor(ExamController)

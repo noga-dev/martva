@@ -7,65 +7,65 @@ class Toaster {
     String message, {
     Alignment align = const Alignment(0, -0.86),
     Color color = Colors.grey,
-    Duration duration = DurationTokens.longest,
+    Duration? duration,
   }) {
     BotToast.showText(
       text: message,
       align: align,
       contentColor: color,
-      duration: duration,
+      duration: duration ?? DSDurationTokens.xxxl.duration,
     );
   }
 
   static void info(
     String message, {
     Alignment align = const Alignment(0, -0.75),
-    Duration duration = DurationTokens.long,
+    Duration? duration,
   }) {
     _toast(
       message,
       align: align,
       color: Colors.blue,
-      duration: duration,
+      duration: duration ?? DSDurationTokens.l.duration,
     );
   }
 
   static void success(
     String message, {
     Alignment align = const Alignment(0, -0.86),
-    Duration duration = DurationTokens.normal,
+    Duration? duration,
   }) {
     _toast(
       message,
       align: const Alignment(0, -0.86),
       color: Colors.green,
-      duration: duration,
+      duration: duration ?? DSDurationTokens.m.duration,
     );
   }
 
   static void warn(
     String message, {
     Alignment align = const Alignment(0, -0.86),
-    Duration duration = DurationTokens.longer,
+    Duration? duration,
   }) {
     _toast(
       message,
       align: const Alignment(0, -0.86),
       color: Colors.orange,
-      duration: duration,
+      duration: duration ?? DSDurationTokens.xl.duration,
     );
   }
 
   static void error(
     String message, {
     Alignment align = const Alignment(0, -0.86),
-    Duration duration = DurationTokens.longest,
+    Duration? duration,
   }) {
     _toast(
       message,
       align: const Alignment(0, -0.86),
       color: Colors.red,
-      duration: duration,
+      duration: duration ?? DSDurationTokens.l.duration,
     );
   }
 
@@ -74,7 +74,7 @@ class Toaster {
       message,
       align: const Alignment(0, -0.86),
       color: Colors.purple,
-      duration: DurationTokens.short,
+      duration: DSDurationTokens.s.duration,
     );
   }
 }

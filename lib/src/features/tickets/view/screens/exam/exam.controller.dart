@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
@@ -32,8 +33,6 @@ class ExamController extends _$ExamController {
   }
 
   void _startTimer() {
-    if (_timer != null) return;
-
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       state = AsyncValue.data(state.value!.copyWith(
         timeLeft: state.value!.timeLeft - const Duration(seconds: 1),
@@ -64,26 +63,13 @@ class ExamController extends _$ExamController {
           solutions: tickets.map(
             (ticket) {
               final newAnswer = state.value!.solutions
-                      .firstWhere(
-                        (question) => question.ticket.id == ticket.id,
-                        orElse: () => QuestionState(
-                          ticket: ticket,
-                          selectedAnswer: null,
-                          showExplanation: false,
-                        ),
-                      )
-                      .selectedAnswer ??
-                  const AnswerDto();
+                  .firstWhereOrNull(
+                      (question) => question.ticket.id == ticket.id)
+                  ?.selectedAnswer;
 
               return QuestionState(
                 ticket: ticket,
-                selectedAnswer: AnswerDto(
-                  answer: ticket.answers
-                      .firstWhere((e) => e.ordinal == newAnswer.ordinal)
-                      .answer,
-                  ordinal: newAnswer.ordinal,
-                  correct: newAnswer.correct,
-                ),
+                selectedAnswer: newAnswer,
                 showExplanation: state.value!.solutions
                     .firstWhere((question) => question.ticket.id == ticket.id)
                     .showExplanation,
