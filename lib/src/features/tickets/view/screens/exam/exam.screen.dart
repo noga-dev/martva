@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/extensions/list.dart';
+import 'package:martva/src/core/utils/messaging/toaster.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.controller.dart';
@@ -33,6 +34,21 @@ class ExamScreen extends HookConsumerWidget {
       pageController.addListener(listener);
       return () => pageController.removeListener(listener);
     }, [pageController]);
+
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (pageController.hasClients &&
+            (pageController.page?.round() ?? 0) !=
+                examState.currentQuestionIndex) {
+          pageController.animateToPage(
+            examState.currentQuestionIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+      return null;
+    }, [examState.currentQuestionIndex, pageController]);
 
     return Scaffold(
       appBar: AppBar(
@@ -109,6 +125,13 @@ class _SettingsBottomSheet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _TranslationDropdownWidget(),
+            ListTile(
+              title: const Text('Randomize answer order'),
+              trailing: Switch(
+                value: false,
+                onChanged: (value) => Toaster.unimplemented(),
+              ),
+            ),
           ]
               .map((e) => Card(
                     elevation: 0,
@@ -191,7 +214,6 @@ class _TranslationDropdownWidget extends HookConsumerWidget {
     return ListTile(
       titleAlignment: ListTileTitleAlignment.center,
       leading: const Icon(Icons.translate),
-      visualDensity: VisualDensity.compact,
       title: SegmentedButton(
         selected: {ref.watch(ticketTranslationNotiferProvider)},
         showSelectedIcon: false,
@@ -315,6 +337,7 @@ class _NavigationButtons extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final examState = ref.watch(examControllerProvider);
     final examController = ref.watch(examControllerProvider.notifier);
     final currentIndex = ref.watch(
         examControllerProvider.select((state) => state.currentQuestionIndex));
@@ -338,7 +361,10 @@ class _NavigationButtons extends HookConsumerWidget {
           ),
           Expanded(
             child: TextButton(
-              onPressed: () => examController.toggleExplanation(currentIndex),
+              onPressed:
+                  examState.solutions[currentIndex].selectedAnswer == null
+                      ? null
+                      : () => examController.toggleExplanation(currentIndex),
               child: const Text('Explain'),
             ),
           ),

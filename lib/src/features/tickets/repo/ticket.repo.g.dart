@@ -20,7 +20,24 @@ final ticketRepoProvider = Provider<TicketRepo>.internal(
 );
 
 typedef TicketRepoRef = ProviderRef<TicketRepo>;
-String _$getExamTicketsHash() => r'14e8521f10bcc80851f71ebd48644b9c1b4dd70d';
+String _$getRandomTicketIdsHash() =>
+    r'109c9c313c5dfd19d3ab6806cc3fb36821837cd2';
+
+/// See also [getRandomTicketIds].
+@ProviderFor(getRandomTicketIds)
+final getRandomTicketIdsProvider =
+    AutoDisposeFutureProvider<List<String>>.internal(
+  getRandomTicketIds,
+  name: r'getRandomTicketIdsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getRandomTicketIdsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetRandomTicketIdsRef = AutoDisposeFutureProviderRef<List<String>>;
+String _$getExamTicketsHash() => r'e858eece4bc746be2b3348fcca90cc332dfe62ce';
 
 /// See also [getExamTickets].
 @ProviderFor(getExamTickets)
@@ -36,7 +53,7 @@ final getExamTicketsProvider =
 );
 
 typedef GetExamTicketsRef = AutoDisposeFutureProviderRef<List<TicketDto>>;
-String _$getTicketsHash() => r'2ea5c8d6480dc6c4ad5a52db07b73752e90b6184';
+String _$getTicketsHash() => r'2fe5d53010449f33c134f80024ced7e1d75e745c';
 
 /// See also [getTickets].
 @ProviderFor(getTickets)

@@ -68,4 +68,13 @@ class Toaster {
       duration: duration,
     );
   }
+
+  static void unimplemented([String message = 'Unimplemented']) {
+    _toast(
+      message,
+      align: const Alignment(0, -0.86),
+      color: Colors.purple,
+      duration: DurationTokens.short,
+    );
+  }
 }

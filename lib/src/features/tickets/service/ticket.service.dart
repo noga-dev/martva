@@ -15,7 +15,7 @@ class TicketService {
     final repo = _ref.read(ticketRepoProvider);
     final localizationRepo = _ref.read(localizationRepoProvider);
 
-    final results = repo.select(
+    final results = repo.getTickets(
       limit: 30,
       language: localizationRepo,
       translation: TicketTranslation.gpt4oMini,

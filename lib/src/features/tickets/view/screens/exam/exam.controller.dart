@@ -108,7 +108,10 @@ class ExamController extends _$ExamController {
     );
 
     if (answer.correct) {
-      nextQuestion();
+      // Delay next question to allow for animation
+      Future.delayed(const Duration(milliseconds: 400), () {
+        nextQuestion();
+      });
     }
   }
 

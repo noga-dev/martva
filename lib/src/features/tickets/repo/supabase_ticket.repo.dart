@@ -6,20 +6,7 @@ import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SupabaseTicketRepo implements TicketRepo {
-  const SupabaseTicketRepo();
-
-  @override
-  Future<List<TicketDto>> select({
-    required Locale language,
-    required TicketTranslation translation,
-    required int limit,
-    required bool sortByOrdinalId,
-  }) async {
-    final String actualTranslation =
-        "${language.languageCode}_${translation.dbName}";
-
-    final queryBuilder = Supabase.instance.client.from('tickets').select('''
+const _selectTickets = '''
           id,
           ordinal_id,
           image_url,
@@ -32,7 +19,23 @@ class SupabaseTicketRepo implements TicketRepo {
             is_correct,
             ordinal
           )
-        ''');
+        ''';
+
+class SupabaseTicketRepo implements TicketRepo {
+  const SupabaseTicketRepo();
+
+  @override
+  Future<List<TicketDto>> getTickets({
+    required Locale language,
+    required TicketTranslation translation,
+    required int limit,
+    required bool sortByOrdinalId,
+  }) async {
+    final String actualTranslation =
+        "${language.languageCode}_${translation.dbName}";
+
+    final queryBuilder =
+        Supabase.instance.client.from('tickets').select(_selectTickets);
 
     final filterBuilder = queryBuilder
         .eq('ticket_details.translation', actualTranslation)
@@ -87,19 +90,7 @@ class SupabaseTicketRepo implements TicketRepo {
     try {
       final queryBuilder = Supabase.instance.client
           .from('tickets')
-          .select('''
-          id,
-          ordinal_id,
-          image_url,
-          ticket_details!inner (
-            question,
-            explanation
-          ),
-          ticket_answers!inner (
-            answer,
-            is_correct
-          )
-        ''')
+          .select(_selectTickets)
           .eq('ticket_details.translation', actualTranslation)
           .eq('ticket_answers.translation', actualTranslation)
           .or('id.in.(${ids.join(',')})');
@@ -127,6 +118,38 @@ class SupabaseTicketRepo implements TicketRepo {
 
       return [];
     }
+  }
+
+  @override
+  Future<List<String>> getRandomizedTicketIds() async {
+    final ticketIds =
+        await Supabase.instance.client.from('tickets').select('id');
+
+    // randomize
+    ticketIds.shuffle();
+
+    // final limitIds = getTicketIds.take(Constants.examTicketsLimit);
+
+    final parsedIds = ticketIds.map((e) => e['id'].toString()).toList();
+
+    return parsedIds;
+  }
+
+  @override
+  Future<List<TicketDto>> getExamTickets({
+    required Locale language,
+    required TicketTranslation translation,
+    required List<String> ticketIds,
+  }) async {
+    // sadly no ez way to do this on backend
+
+    final examTickets = await getTicketsById(
+      ids: ticketIds,
+      language: language,
+      translation: translation,
+    );
+
+    return examTickets;
   }
 }
 
