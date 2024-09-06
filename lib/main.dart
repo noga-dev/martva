@@ -25,6 +25,7 @@ void main() async {
     url: 'https://yjuwxskhexdsggvfzypi.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqdXd4c2toZXhkc2dndmZ6eXBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQ1MzU3NTcsImV4cCI6MjA0MDExMTc1N30.pjimjJ604HL2QpdhhZIGyPaJUoQAd299_05uQk0OBaU',
+    debug: kDebugMode,
   );
 
   final container = ProviderContainer(
@@ -90,6 +91,10 @@ void registerErrorHandlers() {
           r'''A KeyDownEvent is dispatched, but the state shows that the physical key is already pressed. If this occurs in real application, please report this bug to Flutter. If this occurs in unit tests, please ensure that simulated events follow Flutter's event model as documented in `HardwareKeyboard`. This was the event: KeyDownEvent#d4581(physicalKey: PhysicalKeyboardKey#ea6e1(usbHidUsage: "''')) {
         return;
       }
+      if (details.exceptionAsString().startsWith(
+          r'''Attempted to send a key down event when no keys are in keysPressed.''')) {
+        return;
+      }
     }
     logger.e(
       '[[[flutter error]]]',
@@ -106,6 +111,7 @@ void registerErrorHandlers() {
       stackTrace: stack,
       error: error.toString(),
     );
+
     return true;
   };
   // * Show some error UI when any widget in the app fails to build

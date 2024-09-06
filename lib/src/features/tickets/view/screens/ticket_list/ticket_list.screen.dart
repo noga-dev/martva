@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:martva/src/core/router/router.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/enums/license_category.dart';
 import 'package:martva/src/core/utils/enums/question_category.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
-import 'package:martva/src/features/tickets/view/screens/ticket_details/ticket_details.screen.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.controller.dart';
 
 class TicketsScreen extends HookConsumerWidget {
@@ -15,31 +15,37 @@ class TicketsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final license = ref.watch(licenseCategoryNotifierProvider);
+    final question = ref.watch(questionCategoryNotifierProvider);
     final state = ref.watch(ticketListControllerProvider);
     final controller = ref.read(ticketListControllerProvider.notifier);
     final pagingController = useMemoized(
-        () => PagingController<int, TicketDto>(
-              firstPageKey: 0,
-            ),
-        []);
+      () => PagingController<int, TicketDto>(
+        firstPageKey: 0,
+      ),
+      [license, question],
+    );
 
-    useEffect(() {
-      pagingController.addPageRequestListener((pageKey) async {
-        try {
-          final result = await controller.fetchPage(pageKey);
-          if (result.isLastPage) {
-            pagingController.appendLastPage(result.tickets);
-          } else {
-            pagingController.appendPage(result.tickets, pageKey + 1);
+    useEffect(
+      () {
+        pagingController.addPageRequestListener((pageKey) async {
+          try {
+            final result = await controller.fetchPage(pageKey);
+            if (result.isLastPage) {
+              pagingController.appendLastPage(result.tickets);
+            } else {
+              pagingController.appendPage(result.tickets, pageKey + 1);
+            }
+          } catch (e) {
+            pagingController.error = e;
           }
-        } catch (e) {
-          pagingController.error = e;
-        }
-      });
-      return () {
-        pagingController.dispose();
-      };
-    }, []);
+        });
+        return () {
+          pagingController.dispose();
+        };
+      },
+      [license, question],
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -205,10 +211,10 @@ class TicketListItem extends HookConsumerWidget {
           Wrap(
             spacing: 4,
             runSpacing: 4,
-            children: LicenseCategory.simplifiedBarAll
+            children: LicenseCategory.valuesBarAll
                 .where((e) => e.tickets.contains(ticket.ordinalId))
                 .map((e) => _Tag(
-                      name: e.category,
+                      name: e.selectName,
                       color: e.color.withOpacity(0.5),
                     ))
                 .toList(),
@@ -227,13 +233,7 @@ class TicketListItem extends HookConsumerWidget {
           ),
         ],
       ),
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => TicketDetailScreen(ticketId: ticket.id),
-          ),
-        );
-      },
+      onTap: () => TicketDetailsRoute(id: ticket.id).push(context),
     );
   }
 }
@@ -252,7 +252,7 @@ class _Tag extends StatelessWidget {
     return Chip(
       // labelPadding: EdgeInsets.zero,
       padding: EdgeInsets.zero,
-      label: const Text('test'),
+      label: Text(name),
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
       backgroundColor: color,
       shape: const RoundedRectangleBorder(

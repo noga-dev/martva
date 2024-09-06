@@ -8,6 +8,8 @@ part 'ticket_details.state.freezed.dart';
 class TicketDetailsState with _$TicketDetailsState {
   const factory TicketDetailsState({
     @Default(QuestionState(ticket: TicketDto())) QuestionState solution,
+    @Default('') String nextTicketId,
+    @Default('') String prevTicketId,
   }) = _TicketDetailsState;
 
   static TicketDetailsState skeleton() => TicketDetailsState(

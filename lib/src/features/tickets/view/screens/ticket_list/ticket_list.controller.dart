@@ -9,6 +9,9 @@ part 'ticket_list.controller.g.dart';
 class TicketListController extends _$TicketListController {
   @override
   Future<TicketListState> build() async {
+    ref.watch(licenseCategoryNotifierProvider);
+    ref.watch(questionCategoryNotifierProvider);
+
     return const TicketListState();
   }
 

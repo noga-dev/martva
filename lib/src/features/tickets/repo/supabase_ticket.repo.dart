@@ -88,6 +88,18 @@ class SupabaseTicketRepo implements TicketRepo {
     required SupportedLocale language,
     required TicketTranslation translation,
   }) async {
+    if (ids.isEmpty) {
+      return [];
+    }
+
+    if (!ids.any((element) => RegExp(
+          r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+          caseSensitive: false,
+        ).hasMatch(element))) {
+      logger.e('Invalid ticket id: $ids');
+      return [];
+    }
+
     final String actualTranslation = "${language.dbName}_${translation.dbName}";
 
     try {

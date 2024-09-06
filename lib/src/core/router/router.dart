@@ -15,6 +15,7 @@ import 'package:martva/src/features/home/view/home_screen.dart';
 import 'package:martva/src/features/settings/view/settings_screen.dart';
 import 'package:martva/src/features/srs/view/screens/flashcards.screen.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.screen.dart';
+import 'package:martva/src/features/tickets/view/screens/ticket_details/ticket_details.screen.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -79,7 +80,13 @@ class SignupRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<TicketsRoute>(path: '/tickets')
+// tickets start
+@TypedGoRoute<TicketsRoute>(
+  path: '/tickets',
+  routes: [
+    TypedGoRoute<TicketDetailsRoute>(path: ':id'),
+  ],
+)
 class TicketsRoute extends GoRouteData {
   const TicketsRoute();
 
@@ -88,6 +95,23 @@ class TicketsRoute extends GoRouteData {
     return const TicketsScreen();
   }
 }
+
+class TicketDetailsRoute extends GoRouteData {
+  const TicketDetailsRoute({
+    required this.id,
+  });
+
+  final String id;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return TicketDetailScreen(
+      ticketId: id,
+    );
+  }
+}
+
+// tickets end
 
 @TypedGoRoute<ReviewsRoute>(path: '/reviews')
 class ReviewsRoute extends GoRouteData {

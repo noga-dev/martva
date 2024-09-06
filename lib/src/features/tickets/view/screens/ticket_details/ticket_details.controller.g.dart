@@ -7,7 +7,7 @@ part of 'ticket_details.controller.dart';
 // **************************************************************************
 
 String _$ticketDetailsControllerHash() =>
-    r'6bc1035ec96e67d23d7ab0e7bca4e325417b638e';
+    r'237c12c68472802bdb9ffd7e1faaf43973975344';
 
 /// Copied from Dart SDK
 class _SystemHash {

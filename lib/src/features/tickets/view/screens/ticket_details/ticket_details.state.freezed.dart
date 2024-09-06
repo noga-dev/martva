@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$TicketDetailsState {
   QuestionState get solution => throw _privateConstructorUsedError;
+  String get nextTicketId => throw _privateConstructorUsedError;
+  String get prevTicketId => throw _privateConstructorUsedError;
 
   /// Create a copy of TicketDetailsState
   /// with the given fields replaced by the non-null parameter values.
@@ -31,7 +33,7 @@ abstract class $TicketDetailsStateCopyWith<$Res> {
           TicketDetailsState value, $Res Function(TicketDetailsState) then) =
       _$TicketDetailsStateCopyWithImpl<$Res, TicketDetailsState>;
   @useResult
-  $Res call({QuestionState solution});
+  $Res call({QuestionState solution, String nextTicketId, String prevTicketId});
 
   $QuestionStateCopyWith<$Res> get solution;
 }
@@ -52,12 +54,22 @@ class _$TicketDetailsStateCopyWithImpl<$Res, $Val extends TicketDetailsState>
   @override
   $Res call({
     Object? solution = null,
+    Object? nextTicketId = null,
+    Object? prevTicketId = null,
   }) {
     return _then(_value.copyWith(
       solution: null == solution
           ? _value.solution
           : solution // ignore: cast_nullable_to_non_nullable
               as QuestionState,
+      nextTicketId: null == nextTicketId
+          ? _value.nextTicketId
+          : nextTicketId // ignore: cast_nullable_to_non_nullable
+              as String,
+      prevTicketId: null == prevTicketId
+          ? _value.prevTicketId
+          : prevTicketId // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -80,7 +92,7 @@ abstract class _$$TicketDetailsStateImplCopyWith<$Res>
       __$$TicketDetailsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({QuestionState solution});
+  $Res call({QuestionState solution, String nextTicketId, String prevTicketId});
 
   @override
   $QuestionStateCopyWith<$Res> get solution;
@@ -100,12 +112,22 @@ class __$$TicketDetailsStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? solution = null,
+    Object? nextTicketId = null,
+    Object? prevTicketId = null,
   }) {
     return _then(_$TicketDetailsStateImpl(
       solution: null == solution
           ? _value.solution
           : solution // ignore: cast_nullable_to_non_nullable
               as QuestionState,
+      nextTicketId: null == nextTicketId
+          ? _value.nextTicketId
+          : nextTicketId // ignore: cast_nullable_to_non_nullable
+              as String,
+      prevTicketId: null == prevTicketId
+          ? _value.prevTicketId
+          : prevTicketId // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -114,15 +136,23 @@ class __$$TicketDetailsStateImplCopyWithImpl<$Res>
 
 class _$TicketDetailsStateImpl implements _TicketDetailsState {
   const _$TicketDetailsStateImpl(
-      {this.solution = const QuestionState(ticket: TicketDto())});
+      {this.solution = const QuestionState(ticket: TicketDto()),
+      this.nextTicketId = '',
+      this.prevTicketId = ''});
 
   @override
   @JsonKey()
   final QuestionState solution;
+  @override
+  @JsonKey()
+  final String nextTicketId;
+  @override
+  @JsonKey()
+  final String prevTicketId;
 
   @override
   String toString() {
-    return 'TicketDetailsState(solution: $solution)';
+    return 'TicketDetailsState(solution: $solution, nextTicketId: $nextTicketId, prevTicketId: $prevTicketId)';
   }
 
   @override
@@ -131,11 +161,16 @@ class _$TicketDetailsStateImpl implements _TicketDetailsState {
         (other.runtimeType == runtimeType &&
             other is _$TicketDetailsStateImpl &&
             (identical(other.solution, solution) ||
-                other.solution == solution));
+                other.solution == solution) &&
+            (identical(other.nextTicketId, nextTicketId) ||
+                other.nextTicketId == nextTicketId) &&
+            (identical(other.prevTicketId, prevTicketId) ||
+                other.prevTicketId == prevTicketId));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, solution);
+  int get hashCode =>
+      Object.hash(runtimeType, solution, nextTicketId, prevTicketId);
 
   /// Create a copy of TicketDetailsState
   /// with the given fields replaced by the non-null parameter values.
@@ -148,11 +183,17 @@ class _$TicketDetailsStateImpl implements _TicketDetailsState {
 }
 
 abstract class _TicketDetailsState implements TicketDetailsState {
-  const factory _TicketDetailsState({final QuestionState solution}) =
-      _$TicketDetailsStateImpl;
+  const factory _TicketDetailsState(
+      {final QuestionState solution,
+      final String nextTicketId,
+      final String prevTicketId}) = _$TicketDetailsStateImpl;
 
   @override
   QuestionState get solution;
+  @override
+  String get nextTicketId;
+  @override
+  String get prevTicketId;
 
   /// Create a copy of TicketDetailsState
   /// with the given fields replaced by the non-null parameter values.

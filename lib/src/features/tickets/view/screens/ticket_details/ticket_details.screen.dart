@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:martva/src/core/router/router.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_details/ticket_details.controller.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_details/ticket_details.state.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/quick_settings_organism.dart';
@@ -43,44 +44,52 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      drawer: const QuickSettingsOrganism(),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Skeletonizer(
-          enabled: isLoading,
-          child: Row(
-            children: [
-              const BackButton(),
-              Text('Ticket #${state.solution.ticket.ordinalId}'),
-              const Spacer(),
-              Builder(builder: (context) {
-                return IconButton(
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                  icon: const Icon(Icons.settings),
-                );
-              }),
-            ],
+    final controller = ref.read(
+        ticketDetailsControllerProvider(id: state.solution.ticket.id).notifier);
+
+    return Dismissible(
+      key: UniqueKey(),
+      onDismissed: (direction) => direction == DismissDirection.endToStart
+          ? TicketDetailsRoute(id: state.nextTicketId).replace(context)
+          : TicketDetailsRoute(id: state.prevTicketId).replace(context),
+      background: TicketDetailScreen(ticketId: state.prevTicketId),
+      secondaryBackground: TicketDetailScreen(ticketId: state.nextTicketId),
+      child: Scaffold(
+        drawer: const QuickSettingsOrganism(),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Skeletonizer(
+            enabled: isLoading,
+            child: Row(
+              children: [
+                const BackButton(),
+                Text('Ticket #${state.solution.ticket.ordinalId}'),
+                const Spacer(),
+                Builder(builder: (context) {
+                  return IconButton(
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                    icon: const Icon(Icons.settings),
+                  );
+                }),
+              ],
+            ),
           ),
         ),
-      ),
-      body: Skeletonizer(
-        enabled: isLoading,
-        child: TicketCardOrganism(
-          question: state.solution,
-          onAnswerSelected: state.solution.selectedAnswer == null
-              ? (answered) {
-                  if (answered == null) {
-                    return;
-                  }
+        body: Skeletonizer(
+          enabled: isLoading,
+          enableSwitchAnimation: true,
+          child: TicketCardOrganism(
+            question: state.solution,
+            onAnswerSelected: state.solution.selectedAnswer == null
+                ? (answered) {
+                    if (answered == null) {
+                      return;
+                    }
 
-                  ref
-                      .read(ticketDetailsControllerProvider(
-                              id: state.solution.ticket.id)
-                          .notifier)
-                      .saveAnswer(answered);
-                }
-              : null,
+                    controller.saveAnswer(answered);
+                  }
+                : null,
+          ),
         ),
       ),
     );

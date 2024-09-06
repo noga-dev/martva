@@ -90,6 +90,12 @@ extension $SignupRouteExtension on SignupRoute {
 RouteBase get $ticketsRoute => GoRouteData.$route(
       path: '/tickets',
       factory: $TicketsRouteExtension._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: ':id',
+          factory: $TicketDetailsRouteExtension._fromState,
+        ),
+      ],
     );
 
 extension $TicketsRouteExtension on TicketsRoute {
@@ -97,6 +103,26 @@ extension $TicketsRouteExtension on TicketsRoute {
 
   String get location => GoRouteData.$location(
         '/tickets',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $TicketDetailsRouteExtension on TicketDetailsRoute {
+  static TicketDetailsRoute _fromState(GoRouterState state) =>
+      TicketDetailsRoute(
+        id: state.pathParameters['id']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tickets/${Uri.encodeComponent(id)}',
       );
 
   void go(BuildContext context) => context.go(location);

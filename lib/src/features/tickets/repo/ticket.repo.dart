@@ -172,7 +172,7 @@ Future<TicketDto> getTicketByOrdinal(
     ordinals: [ordinal],
     language: localizationRepo,
     translation: translation,
-    from: 1,
+    from: 0,
     to: 1,
   );
 
@@ -272,7 +272,7 @@ FutureOr<
         language: locale,
         translation: translation,
         from: offset,
-        to: offset + limit,
+        to: offset + limit - 1,
       );
 
   return results;
