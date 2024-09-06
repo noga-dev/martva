@@ -39,6 +39,9 @@ enum QuestionCategory {
 
   const QuestionCategory(this.value);
 
+  static List<QuestionCategory> get valuesBarAll =>
+      QuestionCategory.values.where((e) => e != QuestionCategory.all).toList();
+
   String get name => switch (this) {
         QuestionCategory.all => "All",
         QuestionCategory.driverPedestrianSigns =>

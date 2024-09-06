@@ -1,36 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/core/router/router.dart';
-import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
+import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
 import 'package:martva/src/core/utils/enums/license_category.dart';
 import 'package:martva/src/core/utils/enums/question_category.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.controller.dart';
+import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.state.dart';
+import 'package:martva/src/features/tickets/view/shared/organisms/quick_settings_organism.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-class TicketsScreen extends HookConsumerWidget {
-  const TicketsScreen({super.key});
+class TicketListScreen extends HookConsumerWidget {
+  const TicketListScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final screenState = ref.watch(ticketListControllerProvider);
+
+    return screenState.when(
+      error: (error, stack) => Center(child: Text(error.toString())),
+      loading: () => _TicketsBody(
+        isLoading: true,
+        screenState: TicketListState.skeleton(),
+      ),
+      data: (state) => _TicketsBody(
+        isLoading: false,
+        screenState: state,
+      ),
+    );
+  }
+}
+
+class _TicketsBody extends HookConsumerWidget {
+  const _TicketsBody({
+    required this.isLoading,
+    required this.screenState,
+  });
+
+  final bool isLoading;
+  final TicketListState screenState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final license = ref.watch(licenseCategoryNotifierProvider);
     final question = ref.watch(questionCategoryNotifierProvider);
-    final state = ref.watch(ticketListControllerProvider);
-    final controller = ref.read(ticketListControllerProvider.notifier);
+    final localization = ref.watch(localizationRepoProvider);
+    final translation = ref.watch(ticketTranslationNotiferProvider);
+    final screenController = ref.read(ticketListControllerProvider.notifier);
     final pagingController = useMemoized(
       () => PagingController<int, TicketDto>(
         firstPageKey: 0,
       ),
-      [license, question],
+      [license, question, localization, translation, screenState],
     );
 
     useEffect(
       () {
         pagingController.addPageRequestListener((pageKey) async {
           try {
-            final result = await controller.fetchPage(pageKey);
+            final result = await screenController.fetchPage(pageKey);
             if (result.isLastPage) {
               pagingController.appendLastPage(result.tickets);
             } else {
@@ -44,35 +77,108 @@ class TicketsScreen extends HookConsumerWidget {
           pagingController.dispose();
         };
       },
-      [license, question],
+      [license, question, localization, translation, screenState],
     );
 
     return Scaffold(
+      drawer: const QuickSettingsOrganism(),
       appBar: AppBar(
-        title: const Text('Library'),
-        actions: const [
-          _LicenseCategory(),
-          _QuestionCategory(),
-        ],
+        automaticallyImplyLeading: false,
+        title: Skeletonizer(
+          enabled: isLoading,
+          enableSwitchAnimation: true,
+          child: Row(
+            children: [
+              BackButton(
+                onPressed: () => screenState.showSearchBar == true
+                    ? ref
+                        .read(ticketListControllerProvider.notifier)
+                        .updateSearchState(showSearchbar: false)
+                    : context.pop(),
+              ),
+              Expanded(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: screenState.showSearchBar
+                      ? Focus(
+                          onFocusChange: (hasFocus) {
+                            if (!hasFocus) {
+                              ref
+                                  .read(ticketListControllerProvider.notifier)
+                                  .updateSearchState(showSearchbar: false);
+                            }
+                          },
+                          child: SearchBar(
+                            onChanged: (value) {
+                              ref
+                                  .read(ticketListControllerProvider.notifier)
+                                  .updateSearchState(query: value);
+                            },
+                            autoFocus: true,
+                            onSubmitted: (value) => ref
+                                .read(ticketListControllerProvider.notifier)
+                                .updateSearchState(showSearchbar: false),
+                          ),
+                        )
+                      : Row(
+                          children: [
+                            const Text('Library'),
+                            const Spacer(),
+                            IconButton(
+                              onPressed: () => ref
+                                  .read(ticketListControllerProvider.notifier)
+                                  .updateSearchState(showSearchbar: true),
+                              icon: const Icon(Icons.search),
+                            ),
+                            const _LicenseCategory(),
+                            const _QuestionCategory(),
+                            Builder(builder: (context) {
+                              return IconButton(
+                                onPressed: () =>
+                                    Scaffold.of(context).openDrawer(),
+                                icon: const Icon(Icons.settings),
+                              );
+                            }),
+                          ],
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      body: state.when(
-        data: (tickets) => PagedListView<int, TicketDto>(
+      body: Skeletonizer(
+        enabled: isLoading,
+        enableSwitchAnimation: true,
+        child: PagedListView<int, TicketDto>(
           pagingController: pagingController,
           builderDelegate: PagedChildBuilderDelegate<TicketDto>(
             firstPageErrorIndicatorBuilder: (context) => const Center(
               child: Text('Error'),
             ),
-            noItemsFoundIndicatorBuilder: (context) => const Center(
-              child: Text('No items found'),
-            ),
-            firstPageProgressIndicatorBuilder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ),
             newPageErrorIndicatorBuilder: (context) => const Center(
               child: Text('Error'),
             ),
+            firstPageProgressIndicatorBuilder: (context) => Skeletonizer(
+              enabled: true,
+              enableSwitchAnimation: true,
+              effect: ShimmerEffect(
+                duration: DSDurationTokens.xxs.duration,
+                highlightColor: Colors.white,
+                baseColor: Colors.grey,
+              ),
+              child: Column(
+                children: screenState.tickets
+                    .take(4)
+                    .map((e) => TicketListItem(ticket: e))
+                    .toList(),
+              ),
+            ),
             newPageProgressIndicatorBuilder: (context) => const Center(
               child: CircularProgressIndicator(),
+            ),
+            noItemsFoundIndicatorBuilder: (context) => const Center(
+              child: Text('No items found'),
             ),
             noMoreItemsIndicatorBuilder: (context) => const Center(
               child: Text('No more items'),
@@ -80,8 +186,6 @@ class TicketsScreen extends HookConsumerWidget {
             itemBuilder: (context, item, index) => TicketListItem(ticket: item),
           ),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text(error.toString())),
       ),
     );
   }
@@ -211,19 +315,7 @@ class TicketListItem extends HookConsumerWidget {
           Wrap(
             spacing: 4,
             runSpacing: 4,
-            children: LicenseCategory.valuesBarAll
-                .where((e) => e.tickets.contains(ticket.ordinalId))
-                .map((e) => _Tag(
-                      name: e.selectName,
-                      color: e.color.withOpacity(0.5),
-                    ))
-                .toList(),
-          ),
-          DSSpacingTokens.m.verticalBox,
-          Wrap(
-            spacing: 4,
-            runSpacing: 4,
-            children: QuestionCategory.values
+            children: QuestionCategory.valuesBarAll
                 .where((e) => e.tickets.contains(ticket.ordinalId))
                 .map((e) => _Tag(
                       name: e.name,
@@ -232,6 +324,20 @@ class TicketListItem extends HookConsumerWidget {
                 .toList(),
           ),
         ],
+      ),
+      trailing: SizedBox(
+        width: 132,
+        child: Wrap(
+          spacing: 4,
+          runSpacing: 4,
+          children: LicenseCategory.valuesBarAll
+              .where((e) => e.tickets.contains(ticket.ordinalId))
+              .map((e) => _Tag(
+                    name: e.selectName,
+                    color: e.color.withOpacity(0.5),
+                  ))
+              .toList(),
+        ),
       ),
       onTap: () => TicketDetailsRoute(id: ticket.id).push(context),
     );

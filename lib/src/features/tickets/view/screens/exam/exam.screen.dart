@@ -16,16 +16,16 @@ class ExamScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final examStateAsync = ref.watch(examControllerProvider);
+    final screenState = ref.watch(examControllerProvider);
 
-    return examStateAsync.when(
+    return screenState.when(
       loading: () => _ExamBody(
-        examState: ExamState.skeleton(),
+        screenState: ExamState.skeleton(),
         isLoading: true,
       ),
       error: (e, __) => Center(child: ErrorMessageAtom(e.toString())),
-      data: (examState) => _ExamBody(
-        examState: examState,
+      data: (state) => _ExamBody(
+        screenState: state,
         isLoading: false,
       ),
     );
@@ -34,26 +34,27 @@ class ExamScreen extends HookConsumerWidget {
 
 class _ExamBody extends HookConsumerWidget {
   const _ExamBody({
-    required this.examState,
+    required this.screenState,
     required this.isLoading,
   });
 
-  final ExamState examState;
+  final ExamState screenState;
   final bool isLoading;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenController = ref.read(examControllerProvider.notifier);
     final pageController = usePageController(
-      initialPage: examState.currentQuestionIndex,
+      initialPage: screenState.currentQuestionIndex,
       keepPage: false,
-      keys: [examState.currentQuestionIndex],
+      keys: [screenState.currentQuestionIndex],
     );
 
     useEffect(() {
       void listener() {
         final newIndex = pageController.page?.round() ?? 0;
-        if (newIndex != examState.currentQuestionIndex) {
-          ref.read(examControllerProvider.notifier).setQuestionIndex(newIndex);
+        if (newIndex != screenState.currentQuestionIndex) {
+          screenController.setQuestionIndex(newIndex);
         }
       }
 
@@ -65,16 +66,16 @@ class _ExamBody extends HookConsumerWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (pageController.hasClients &&
             (pageController.page?.round() ?? 0) !=
-                examState.currentQuestionIndex) {
+                screenState.currentQuestionIndex) {
           pageController.animateToPage(
-            examState.currentQuestionIndex,
+            screenState.currentQuestionIndex,
             duration: const Duration(milliseconds: 300),
             curve: Curves.linear,
           );
         }
       });
       return null;
-    }, [examState.currentQuestionIndex, pageController]);
+    }, [screenState.currentQuestionIndex, pageController]);
 
     return Scaffold(
       drawer: const QuickSettingsOrganism(),
@@ -91,7 +92,7 @@ class _ExamBody extends HookConsumerWidget {
               const Spacer(),
               _TimerWidget(),
               const Spacer(),
-              _QuestionIndexWidget(examState: examState),
+              _QuestionIndexWidget(screenState: screenState),
               Builder(builder: (context) {
                 return IconButton(
                   onPressed: () => Scaffold.of(context).openDrawer(),
@@ -129,7 +130,7 @@ class _ExamBody extends HookConsumerWidget {
       body: _TicketListTemplate(
         isLoading: isLoading,
         pageController: pageController,
-        examState: examState,
+        screenState: screenState,
       ),
       bottomNavigationBar: _NavigationButtons(pageController: pageController),
     );
@@ -140,35 +141,37 @@ class _TicketListTemplate extends ConsumerWidget {
   const _TicketListTemplate({
     required this.isLoading,
     required this.pageController,
-    required this.examState,
+    required this.screenState,
   });
 
   final bool isLoading;
   final PageController pageController;
-  final ExamState examState;
+  final ExamState screenState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenController = ref.read(examControllerProvider.notifier);
+
     return Skeletonizer(
       enabled: isLoading,
       enableSwitchAnimation: true,
       child: PageView.builder(
         controller: pageController,
-        itemCount: examState.solutions.length,
+        itemCount: screenState.solutions.length,
         itemBuilder: (context, pageIndex) {
           return TicketCardOrganism(
-            question: examState.solutions[pageIndex],
+            question: screenState.solutions[pageIndex],
             onAnswerSelected:
-                examState.solutions[pageIndex].selectedAnswer == null
+                screenState.solutions[pageIndex].selectedAnswer == null
                     ? (answer) {
                         if (answer == null) {
                           return;
                         }
 
-                        ref.read(examControllerProvider.notifier).selectAnswer(
-                              pageIndex,
-                              answer,
-                            );
+                        screenController.selectAnswer(
+                          pageIndex,
+                          answer,
+                        );
                       }
                     : null,
           );
@@ -180,10 +183,10 @@ class _TicketListTemplate extends ConsumerWidget {
 
 class _QuestionIndexWidget extends ConsumerWidget {
   const _QuestionIndexWidget({
-    required this.examState,
+    required this.screenState,
   });
 
-  final ExamState examState;
+  final ExamState screenState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -199,13 +202,13 @@ class _QuestionIndexWidget extends ConsumerWidget {
               mainAxisSpacing: DSSpacingTokens.s.value,
             ),
             shrinkWrap: true,
-            itemCount: examState.solutions.length,
+            itemCount: screenState.solutions.length,
             padding: DSSpacingTokens.s.allInsets,
             itemBuilder: (context, index) => TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: getAnswerColor(
                   answer: null,
-                  solution: examState.solutions[index].selectedAnswer,
+                  solution: screenState.solutions[index].selectedAnswer,
                 ),
                 padding: EdgeInsets.zero,
               ),
@@ -226,15 +229,15 @@ class _QuestionIndexWidget extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          Text('${examState.currentQuestionIndex + 1}'
+          Text('${screenState.currentQuestionIndex + 1}'
               '/'
-              '${examState.solutions.length}'),
+              '${screenState.solutions.length}'),
           Text.rich(
             TextSpan(
               children: [
                 TextSpan(
                   text:
-                      '${examState.solutions.where((e) => e.selectedAnswer?.correct ?? false).length}',
+                      '${screenState.solutions.where((e) => e.selectedAnswer?.correct ?? false).length}',
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium
@@ -243,7 +246,7 @@ class _QuestionIndexWidget extends ConsumerWidget {
                 const TextSpan(text: '/'),
                 TextSpan(
                   text:
-                      '${examState.solutions.where((e) => e.selectedAnswer?.correct == false).length}',
+                      '${screenState.solutions.where((e) => e.selectedAnswer?.correct == false).length}',
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium

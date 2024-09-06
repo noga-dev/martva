@@ -23,11 +23,11 @@ class TicketDetailScreen extends HookConsumerWidget {
       error: (error, stack) => Center(child: Text(error.toString())),
       loading: () => _Body(
         isLoading: true,
-        state: TicketDetailsState.skeleton(),
+        screenState: TicketDetailsState.skeleton(),
       ),
       data: (data) => _Body(
         isLoading: false,
-        state: data,
+        screenState: data,
       ),
     );
   }
@@ -36,24 +36,26 @@ class TicketDetailScreen extends HookConsumerWidget {
 class _Body extends ConsumerWidget {
   const _Body({
     required this.isLoading,
-    required this.state,
+    required this.screenState,
   });
 
-  final TicketDetailsState state;
+  final TicketDetailsState screenState;
   final bool isLoading;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.read(
-        ticketDetailsControllerProvider(id: state.solution.ticket.id).notifier);
+    final screenController = ref.read(
+        ticketDetailsControllerProvider(id: screenState.solution.ticket.id)
+            .notifier);
 
     return Dismissible(
       key: UniqueKey(),
       onDismissed: (direction) => direction == DismissDirection.endToStart
-          ? TicketDetailsRoute(id: state.nextTicketId).replace(context)
-          : TicketDetailsRoute(id: state.prevTicketId).replace(context),
-      background: TicketDetailScreen(ticketId: state.prevTicketId),
-      secondaryBackground: TicketDetailScreen(ticketId: state.nextTicketId),
+          ? TicketDetailsRoute(id: screenState.nextTicketId).replace(context)
+          : TicketDetailsRoute(id: screenState.prevTicketId).replace(context),
+      background: TicketDetailScreen(ticketId: screenState.prevTicketId),
+      secondaryBackground:
+          TicketDetailScreen(ticketId: screenState.nextTicketId),
       child: Scaffold(
         drawer: const QuickSettingsOrganism(),
         appBar: AppBar(
@@ -63,7 +65,7 @@ class _Body extends ConsumerWidget {
             child: Row(
               children: [
                 const BackButton(),
-                Text('Ticket #${state.solution.ticket.ordinalId}'),
+                Text('Ticket #${screenState.solution.ticket.ordinalId}'),
                 const Spacer(),
                 Builder(builder: (context) {
                   return IconButton(
@@ -79,14 +81,14 @@ class _Body extends ConsumerWidget {
           enabled: isLoading,
           enableSwitchAnimation: true,
           child: TicketCardOrganism(
-            question: state.solution,
-            onAnswerSelected: state.solution.selectedAnswer == null
+            question: screenState.solution,
+            onAnswerSelected: screenState.solution.selectedAnswer == null
                 ? (answered) {
                     if (answered == null) {
                       return;
                     }
 
-                    controller.saveAnswer(answered);
+                    screenController.saveAnswer(answered);
                   }
                 : null,
           ),

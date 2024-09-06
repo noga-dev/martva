@@ -16,11 +16,12 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$TicketListState {
-  int get currentQuestionIndex => throw _privateConstructorUsedError;
   int get totalCount => throw _privateConstructorUsedError;
   int get limit => throw _privateConstructorUsedError;
   int get page => throw _privateConstructorUsedError;
   List<TicketDto> get tickets => throw _privateConstructorUsedError;
+  String get query => throw _privateConstructorUsedError;
+  bool get showSearchBar => throw _privateConstructorUsedError;
 
   /// Create a copy of TicketListState
   /// with the given fields replaced by the non-null parameter values.
@@ -36,11 +37,12 @@ abstract class $TicketListStateCopyWith<$Res> {
       _$TicketListStateCopyWithImpl<$Res, TicketListState>;
   @useResult
   $Res call(
-      {int currentQuestionIndex,
-      int totalCount,
+      {int totalCount,
       int limit,
       int page,
-      List<TicketDto> tickets});
+      List<TicketDto> tickets,
+      String query,
+      bool showSearchBar});
 }
 
 /// @nodoc
@@ -58,17 +60,14 @@ class _$TicketListStateCopyWithImpl<$Res, $Val extends TicketListState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? currentQuestionIndex = null,
     Object? totalCount = null,
     Object? limit = null,
     Object? page = null,
     Object? tickets = null,
+    Object? query = null,
+    Object? showSearchBar = null,
   }) {
     return _then(_value.copyWith(
-      currentQuestionIndex: null == currentQuestionIndex
-          ? _value.currentQuestionIndex
-          : currentQuestionIndex // ignore: cast_nullable_to_non_nullable
-              as int,
       totalCount: null == totalCount
           ? _value.totalCount
           : totalCount // ignore: cast_nullable_to_non_nullable
@@ -85,6 +84,14 @@ class _$TicketListStateCopyWithImpl<$Res, $Val extends TicketListState>
           ? _value.tickets
           : tickets // ignore: cast_nullable_to_non_nullable
               as List<TicketDto>,
+      query: null == query
+          ? _value.query
+          : query // ignore: cast_nullable_to_non_nullable
+              as String,
+      showSearchBar: null == showSearchBar
+          ? _value.showSearchBar
+          : showSearchBar // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -98,11 +105,12 @@ abstract class _$$TicketListStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int currentQuestionIndex,
-      int totalCount,
+      {int totalCount,
       int limit,
       int page,
-      List<TicketDto> tickets});
+      List<TicketDto> tickets,
+      String query,
+      bool showSearchBar});
 }
 
 /// @nodoc
@@ -118,17 +126,14 @@ class __$$TicketListStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? currentQuestionIndex = null,
     Object? totalCount = null,
     Object? limit = null,
     Object? page = null,
     Object? tickets = null,
+    Object? query = null,
+    Object? showSearchBar = null,
   }) {
     return _then(_$TicketListStateImpl(
-      currentQuestionIndex: null == currentQuestionIndex
-          ? _value.currentQuestionIndex
-          : currentQuestionIndex // ignore: cast_nullable_to_non_nullable
-              as int,
       totalCount: null == totalCount
           ? _value.totalCount
           : totalCount // ignore: cast_nullable_to_non_nullable
@@ -145,6 +150,14 @@ class __$$TicketListStateImplCopyWithImpl<$Res>
           ? _value._tickets
           : tickets // ignore: cast_nullable_to_non_nullable
               as List<TicketDto>,
+      query: null == query
+          ? _value.query
+          : query // ignore: cast_nullable_to_non_nullable
+              as String,
+      showSearchBar: null == showSearchBar
+          ? _value.showSearchBar
+          : showSearchBar // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -153,16 +166,14 @@ class __$$TicketListStateImplCopyWithImpl<$Res>
 
 class _$TicketListStateImpl implements _TicketListState {
   const _$TicketListStateImpl(
-      {this.currentQuestionIndex = 0,
-      this.totalCount = 0,
+      {this.totalCount = 0,
       this.limit = Constants.ticketListLimit,
       this.page = 1,
-      final List<TicketDto> tickets = const []})
+      final List<TicketDto> tickets = const [],
+      this.query = '',
+      this.showSearchBar = false})
       : _tickets = tickets;
 
-  @override
-  @JsonKey()
-  final int currentQuestionIndex;
   @override
   @JsonKey()
   final int totalCount;
@@ -182,8 +193,15 @@ class _$TicketListStateImpl implements _TicketListState {
   }
 
   @override
+  @JsonKey()
+  final String query;
+  @override
+  @JsonKey()
+  final bool showSearchBar;
+
+  @override
   String toString() {
-    return 'TicketListState(currentQuestionIndex: $currentQuestionIndex, totalCount: $totalCount, limit: $limit, page: $page, tickets: $tickets)';
+    return 'TicketListState(totalCount: $totalCount, limit: $limit, page: $page, tickets: $tickets, query: $query, showSearchBar: $showSearchBar)';
   }
 
   @override
@@ -191,18 +209,19 @@ class _$TicketListStateImpl implements _TicketListState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TicketListStateImpl &&
-            (identical(other.currentQuestionIndex, currentQuestionIndex) ||
-                other.currentQuestionIndex == currentQuestionIndex) &&
             (identical(other.totalCount, totalCount) ||
                 other.totalCount == totalCount) &&
             (identical(other.limit, limit) || other.limit == limit) &&
             (identical(other.page, page) || other.page == page) &&
-            const DeepCollectionEquality().equals(other._tickets, _tickets));
+            const DeepCollectionEquality().equals(other._tickets, _tickets) &&
+            (identical(other.query, query) || other.query == query) &&
+            (identical(other.showSearchBar, showSearchBar) ||
+                other.showSearchBar == showSearchBar));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, currentQuestionIndex, totalCount,
-      limit, page, const DeepCollectionEquality().hash(_tickets));
+  int get hashCode => Object.hash(runtimeType, totalCount, limit, page,
+      const DeepCollectionEquality().hash(_tickets), query, showSearchBar);
 
   /// Create a copy of TicketListState
   /// with the given fields replaced by the non-null parameter values.
@@ -216,14 +235,13 @@ class _$TicketListStateImpl implements _TicketListState {
 
 abstract class _TicketListState implements TicketListState {
   const factory _TicketListState(
-      {final int currentQuestionIndex,
-      final int totalCount,
+      {final int totalCount,
       final int limit,
       final int page,
-      final List<TicketDto> tickets}) = _$TicketListStateImpl;
+      final List<TicketDto> tickets,
+      final String query,
+      final bool showSearchBar}) = _$TicketListStateImpl;
 
-  @override
-  int get currentQuestionIndex;
   @override
   int get totalCount;
   @override
@@ -232,6 +250,10 @@ abstract class _TicketListState implements TicketListState {
   int get page;
   @override
   List<TicketDto> get tickets;
+  @override
+  String get query;
+  @override
+  bool get showSearchBar;
 
   /// Create a copy of TicketListState
   /// with the given fields replaced by the non-null parameter values.
