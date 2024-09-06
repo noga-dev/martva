@@ -1,5 +1,7 @@
 import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/core/utils/constants.dart';
+import 'package:martva/src/core/utils/enums/license_category.dart';
+import 'package:martva/src/core/utils/enums/question_category.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/supabase_ticket.repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -114,4 +116,12 @@ Future<List<TicketDto>> getTickets(GetTicketsRef ref) async {
     translation: translation,
     sortByOrdinalId: true,
   );
+}
+
+List<int> ticketOrdinalsByLicenseCategory(LicenseCategory category) {
+  return category.tickets;
+}
+
+List<int> ticketOrdinalsByQuestionCategory(QuestionCategory category) {
+  return category.tickets;
 }

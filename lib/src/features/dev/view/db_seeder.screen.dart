@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:martva/gen/assets.gen.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/extensions/list.dart';
 import 'package:martva/src/core/utils/messaging/logger.dart';
@@ -22,79 +18,79 @@ class DbSeederScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          ElevatedButton(
-            onPressed: () async {
-              final data =
-                  await rootBundle.loadString(Assets.i18n.tickets.geTeoriaonge);
-              final List<dynamic> list = json.decode(data);
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     final data =
+          //         await rootBundle.loadString(Assets.i18n.tickets.geTeoriaonge);
+          //     final List<dynamic> list = json.decode(data);
 
-              // Process and insert data
-              await processData(
-                  Supabase.instance.client, 'ge_teoria.on.ge', list);
+          //     // Process and insert data
+          //     await processData(
+          //         Supabase.instance.client, 'ge_teoria.on.ge', list);
 
-              logger.d('Data seeding completed.');
-            },
-            child: const Text('Seed ge_teoria.on.ge'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final data =
-                  await rootBundle.loadString(Assets.i18n.tickets.enTeoriaonge);
-              final List<dynamic> list = json.decode(data);
+          //     logger.d('Data seeding completed.');
+          //   },
+          //   child: const Text('Seed ge_teoria.on.ge'),
+          // ),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     final data =
+          //         await rootBundle.loadString(Assets.i18n.tickets.enTeoriaonge);
+          //     final List<dynamic> list = json.decode(data);
 
-              // Process and insert data
-              await processData(
-                  Supabase.instance.client, 'en_teoria.on.ge', list);
+          //     // Process and insert data
+          //     await processData(
+          //         Supabase.instance.client, 'en_teoria.on.ge', list);
 
-              logger.d('Data seeding completed.');
-            },
-            child: const Text('Seed en_teoria.on.ge'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final data =
-                  await rootBundle.loadString(Assets.i18n.tickets.ruTeoriaonge);
-              final List<dynamic> list = json.decode(data);
+          //     logger.d('Data seeding completed.');
+          //   },
+          //   child: const Text('Seed en_teoria.on.ge'),
+          // ),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     final data =
+          //         await rootBundle.loadString(Assets.i18n.tickets.ruTeoriaonge);
+          //     final List<dynamic> list = json.decode(data);
 
-              // Process and insert data
-              await processData(
-                  Supabase.instance.client, 'ru_teoria.on.ge', list);
+          //     // Process and insert data
+          //     await processData(
+          //         Supabase.instance.client, 'ru_teoria.on.ge', list);
 
-              logger.d('Data seeding completed.');
-            },
-            child: const Text('Seed ru_teoria.on.ge'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final data =
-                  await rootBundle.loadString(Assets.i18n.tickets.enGpt4omini);
-              final List<dynamic> list = json.decode(data);
+          //     logger.d('Data seeding completed.');
+          //   },
+          //   child: const Text('Seed ru_teoria.on.ge'),
+          // ),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     final data =
+          //         await rootBundle.loadString(Assets.i18n.tickets.enGpt4omini);
+          //     final List<dynamic> list = json.decode(data);
 
-              // Process and insert data
-              await processData(
-                Supabase.instance.client,
-                'en_GPT-4o-mini',
-                list,
-              );
+          //     // Process and insert data
+          //     await processData(
+          //       Supabase.instance.client,
+          //       'en_GPT-4o-mini',
+          //       list,
+          //     );
 
-              logger.d('Data seeding completed.');
-            },
-            child: const Text('Seed en_GPT-4o-mini'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final data =
-                  await rootBundle.loadString(Assets.i18n.tickets.ruGpt4omini);
-              final List<dynamic> list = json.decode(data);
+          //     logger.d('Data seeding completed.');
+          //   },
+          //   child: const Text('Seed en_GPT-4o-mini'),
+          // ),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     final data =
+          //         await rootBundle.loadString(Assets.i18n.tickets.ruGpt4omini);
+          //     final List<dynamic> list = json.decode(data);
 
-              // Process and insert data
-              await processData(
-                  Supabase.instance.client, 'ru_GPT-4o-mini', list);
+          //     // Process and insert data
+          //     await processData(
+          //         Supabase.instance.client, 'ru_GPT-4o-mini', list);
 
-              logger.d('Data seeding completed.');
-            },
-            child: const Text('Seed ru_GPT-4o-mini'),
-          ),
+          //     logger.d('Data seeding completed.');
+          //   },
+          //   child: const Text('Seed ru_GPT-4o-mini'),
+          // ),
         ].intersperse(DSSpacingTokens.m.verticalBox).toList(),
       ),
     );
