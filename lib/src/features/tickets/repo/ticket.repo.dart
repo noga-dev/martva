@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/core/utils/constants.dart';
 import 'package:martva/src/core/utils/enums/license_category.dart';
@@ -118,6 +119,70 @@ Future<List<TicketDto>> getExamTickets(GetExamTicketsRef ref) async {
   LocalizationRepo,
   TicketTranslationNotifer,
 ])
+Future<List<TicketDto>> getTicketsById(
+  GetTicketsByIdRef ref, {
+  required List<String> ids,
+}) async {
+  final localizationRepo = ref.watch(localizationRepoProvider);
+  final translation = ref.watch(ticketTranslationNotiferProvider);
+  final ticketRepo = ref.watch(ticketRepoProvider);
+
+  return ticketRepo.getTicketsById(
+    ids: ids,
+    language: localizationRepo,
+    translation: translation,
+  );
+}
+
+@Riverpod(dependencies: [
+  LocalizationRepo,
+  TicketTranslationNotifer,
+])
+Future<TicketDto> getTicketById(
+  GetTicketByIdRef ref, {
+  required String id,
+}) async {
+  final localizationRepo = ref.watch(localizationRepoProvider);
+  final translation = ref.watch(ticketTranslationNotiferProvider);
+  final ticketRepo = ref.watch(ticketRepoProvider);
+
+  final tickets = await ticketRepo.getTicketsById(
+    ids: [id],
+    language: localizationRepo,
+    translation: translation,
+  );
+
+  return tickets.first;
+}
+
+// get by ordinal
+@Riverpod(dependencies: [
+  LocalizationRepo,
+  TicketTranslationNotifer,
+])
+Future<TicketDto> getTicketByOrdinal(
+  GetTicketByOrdinalRef ref, {
+  required int ordinal,
+}) async {
+  final localizationRepo = ref.watch(localizationRepoProvider);
+  final translation = ref.watch(ticketTranslationNotiferProvider);
+  final ticketRepo = ref.watch(ticketRepoProvider);
+
+  final result = await ticketRepo.getTicketsByOrdinal(
+    ordinals: [ordinal],
+    language: localizationRepo,
+    translation: translation,
+    from: 1,
+    to: 1,
+  );
+
+  return result.tickets.first;
+}
+
+@Riverpod(dependencies: [
+  LocalizationRepo,
+  TicketTranslationNotifer,
+])
 Future<List<TicketDto>> getTickets(GetTicketsRef ref) async {
   final localizationRepo = ref.watch(localizationRepoProvider);
   final translation = ref.watch(ticketTranslationNotiferProvider);
@@ -135,7 +200,7 @@ Future<List<TicketDto>> getTickets(GetTicketsRef ref) async {
 class LicenseCategoryNotifier extends _$LicenseCategoryNotifier {
   @override
   LicenseCategory build() {
-    return LicenseCategory.values.first;
+    return LicenseCategory.all;
   }
 
   void update(LicenseCategory category) {
@@ -147,7 +212,7 @@ class LicenseCategoryNotifier extends _$LicenseCategoryNotifier {
 class QuestionCategoryNotifier extends _$QuestionCategoryNotifier {
   @override
   QuestionCategory build() {
-    return QuestionCategory.values.first;
+    return QuestionCategory.all;
   }
 
   void update(QuestionCategory category) {
@@ -179,7 +244,10 @@ class QuestionCategoryNotifier extends _$QuestionCategoryNotifier {
 //   return tickets;
 // }
 
-@riverpod
+@Riverpod(dependencies: [
+  LocalizationRepo,
+  TicketTranslationNotifer,
+])
 FutureOr<
     ({
       List<TicketDto> tickets,
@@ -208,6 +276,21 @@ FutureOr<
       );
 
   return results;
+}
+
+@riverpod
+Future<List<int>> filteredTicketOrdinals(FilteredTicketOrdinalsRef ref) async {
+  final licenseCategory = ref.watch(licenseCategoryNotifierProvider);
+  final questionCategory = ref.watch(questionCategoryNotifierProvider);
+
+  final licenseOrdinals = licenseCategory.tickets;
+  final questionOrdinals = questionCategory.tickets;
+
+  final combinedOrdinals = {...licenseOrdinals, ...questionOrdinals}.toList();
+
+  final sorted = combinedOrdinals.sortedBy<num>((e) => e);
+
+  return sorted;
 }
 
 // @riverpod

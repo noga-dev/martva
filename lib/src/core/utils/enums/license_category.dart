@@ -37,6 +37,20 @@ enum LicenseCategory {
         LicenseCategory.bPlusC1Mil => 'B+C1 Mil',
       };
 
+  Color get color => switch (this) {
+        LicenseCategory.all => Colors.transparent,
+        LicenseCategory.a || LicenseCategory.a1 => Colors.blue,
+        LicenseCategory.am => Colors.lightBlue,
+        LicenseCategory.b || LicenseCategory.b1 => Colors.lime,
+        LicenseCategory.c => Colors.indigo,
+        LicenseCategory.c1 => Colors.purple,
+        LicenseCategory.d => Colors.orange,
+        LicenseCategory.d1 => Colors.red,
+        LicenseCategory.t || LicenseCategory.s => Colors.amber,
+        LicenseCategory.tram => Colors.pink,
+        LicenseCategory.bPlusC1Mil => Colors.green,
+      };
+
   Icon get icon => Icon(switch (this) {
         LicenseCategory.all => Icons.drive_eta,
         LicenseCategory.a => Icons.drive_eta,
@@ -85,6 +99,12 @@ enum LicenseCategory {
         LicenseCategory.tram => 'Tram',
         LicenseCategory.bPlusC1Mil => 'B+C1 Mil',
       };
+
+  static List<LicenseCategory> get simplifiedBarAll => simplified
+      .where(
+        (element) => element != LicenseCategory.all,
+      )
+      .toList();
 
   LicenseCategory get simpler => switch (this) {
         LicenseCategory.all => LicenseCategory.all,

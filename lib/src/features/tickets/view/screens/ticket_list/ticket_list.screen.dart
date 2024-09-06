@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/enums/license_category.dart';
 import 'package:martva/src/core/utils/enums/question_category.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
-import 'package:martva/src/features/tickets/view/screens/ticket_details/ticket_details.dart';
+import 'package:martva/src/features/tickets/view/screens/ticket_details/ticket_details.screen.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.controller.dart';
-import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
 
 class TicketsScreen extends HookConsumerWidget {
   const TicketsScreen({super.key});
@@ -71,26 +71,7 @@ class TicketsScreen extends HookConsumerWidget {
             noMoreItemsIndicatorBuilder: (context) => const Center(
               child: Text('No more items'),
             ),
-            itemBuilder: (context, item, index) => Column(
-              children: [
-                Text(
-                  '${item.ordinalId}',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                TicketCardOrganism(
-                  onAnswerSelected: (answer) {
-                    ref
-                        .read(ticketListControllerProvider.notifier)
-                        .updateTicket(item.copyWith(
-                            //  selectedAnswer: answer,
-                            ));
-                  },
-                  question: QuestionState(
-                    ticket: item,
-                  ),
-                ),
-              ],
-            ),
+            itemBuilder: (context, item, index) => TicketListItem(ticket: item),
           ),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -214,15 +195,36 @@ class TicketListItem extends HookConsumerWidget {
     return ListTile(
       leading: Text(ticket.ordinalId.toString()),
       title: Text(ticket.question),
-      trailing: const Text(
-        // 'Next review:\n${dueItem.nextReviewDate.toString().split(' ')[0]}',
-        'sdasd',
-      ),
-      subtitle: const Wrap(
+      isThreeLine: true,
+      // trailing: const Text(
+      //   'Next review:\n${dueItem.nextReviewDate.toString().split(' ')[0]}',
+      // ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _Tag.one(),
-          _Tag.two(),
-          _Tag.three(),
+          Wrap(
+            spacing: 4,
+            runSpacing: 4,
+            children: LicenseCategory.simplifiedBarAll
+                .where((e) => e.tickets.contains(ticket.ordinalId))
+                .map((e) => _Tag(
+                      name: e.category,
+                      color: e.color.withOpacity(0.5),
+                    ))
+                .toList(),
+          ),
+          DSSpacingTokens.m.verticalBox,
+          Wrap(
+            spacing: 4,
+            runSpacing: 4,
+            children: QuestionCategory.values
+                .where((e) => e.tickets.contains(ticket.ordinalId))
+                .map((e) => _Tag(
+                      name: e.name,
+                      color: Colors.transparent,
+                    ))
+                .toList(),
+          ),
         ],
       ),
       onTap: () {
@@ -237,11 +239,13 @@ class TicketListItem extends HookConsumerWidget {
 }
 
 class _Tag extends StatelessWidget {
-  const _Tag.one() : color = Colors.red;
-  const _Tag.two() : color = Colors.blue;
-  const _Tag.three() : color = Colors.green;
+  const _Tag({
+    required this.name,
+    required this.color,
+  });
 
   final Color color;
+  final String name;
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'ticket_list.controller.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [filteredTickets])
 class TicketListController extends _$TicketListController {
   @override
   Future<TicketListState> build() async {

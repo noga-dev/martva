@@ -11,6 +11,7 @@ class ImageSizeRepo extends _$ImageSizeRepo {
 }
 
 const largeImages = [
+  26,
   167,
   212,
   1161,

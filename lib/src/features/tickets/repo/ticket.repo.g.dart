@@ -61,6 +61,442 @@ final getExamTicketsProvider =
 );
 
 typedef GetExamTicketsRef = AutoDisposeFutureProviderRef<List<TicketDto>>;
+String _$getTicketsByIdHash() => r'95696b7d4a9a44ed05270a51301224fb9af678c2';
+
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
+
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+/// See also [getTicketsById].
+@ProviderFor(getTicketsById)
+const getTicketsByIdProvider = GetTicketsByIdFamily();
+
+/// See also [getTicketsById].
+class GetTicketsByIdFamily extends Family<AsyncValue<List<TicketDto>>> {
+  /// See also [getTicketsById].
+  const GetTicketsByIdFamily();
+
+  /// See also [getTicketsById].
+  GetTicketsByIdProvider call({
+    required List<String> ids,
+  }) {
+    return GetTicketsByIdProvider(
+      ids: ids,
+    );
+  }
+
+  @override
+  GetTicketsByIdProvider getProviderOverride(
+    covariant GetTicketsByIdProvider provider,
+  ) {
+    return call(
+      ids: provider.ids,
+    );
+  }
+
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    localizationRepoProvider,
+    ticketTranslationNotiferProvider
+  ];
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    localizationRepoProvider,
+    ...?localizationRepoProvider.allTransitiveDependencies,
+    ticketTranslationNotiferProvider,
+    ...?ticketTranslationNotiferProvider.allTransitiveDependencies
+  };
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getTicketsByIdProvider';
+}
+
+/// See also [getTicketsById].
+class GetTicketsByIdProvider
+    extends AutoDisposeFutureProvider<List<TicketDto>> {
+  /// See also [getTicketsById].
+  GetTicketsByIdProvider({
+    required List<String> ids,
+  }) : this._internal(
+          (ref) => getTicketsById(
+            ref as GetTicketsByIdRef,
+            ids: ids,
+          ),
+          from: getTicketsByIdProvider,
+          name: r'getTicketsByIdProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getTicketsByIdHash,
+          dependencies: GetTicketsByIdFamily._dependencies,
+          allTransitiveDependencies:
+              GetTicketsByIdFamily._allTransitiveDependencies,
+          ids: ids,
+        );
+
+  GetTicketsByIdProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.ids,
+  }) : super.internal();
+
+  final List<String> ids;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<TicketDto>> Function(GetTicketsByIdRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetTicketsByIdProvider._internal(
+        (ref) => create(ref as GetTicketsByIdRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        ids: ids,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<TicketDto>> createElement() {
+    return _GetTicketsByIdProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetTicketsByIdProvider && other.ids == ids;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, ids.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetTicketsByIdRef on AutoDisposeFutureProviderRef<List<TicketDto>> {
+  /// The parameter `ids` of this provider.
+  List<String> get ids;
+}
+
+class _GetTicketsByIdProviderElement
+    extends AutoDisposeFutureProviderElement<List<TicketDto>>
+    with GetTicketsByIdRef {
+  _GetTicketsByIdProviderElement(super.provider);
+
+  @override
+  List<String> get ids => (origin as GetTicketsByIdProvider).ids;
+}
+
+String _$getTicketByIdHash() => r'511212f348132c86bddb6d492145fb102e2af06f';
+
+/// See also [getTicketById].
+@ProviderFor(getTicketById)
+const getTicketByIdProvider = GetTicketByIdFamily();
+
+/// See also [getTicketById].
+class GetTicketByIdFamily extends Family<AsyncValue<TicketDto>> {
+  /// See also [getTicketById].
+  const GetTicketByIdFamily();
+
+  /// See also [getTicketById].
+  GetTicketByIdProvider call({
+    required String id,
+  }) {
+    return GetTicketByIdProvider(
+      id: id,
+    );
+  }
+
+  @override
+  GetTicketByIdProvider getProviderOverride(
+    covariant GetTicketByIdProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    localizationRepoProvider,
+    ticketTranslationNotiferProvider
+  ];
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    localizationRepoProvider,
+    ...?localizationRepoProvider.allTransitiveDependencies,
+    ticketTranslationNotiferProvider,
+    ...?ticketTranslationNotiferProvider.allTransitiveDependencies
+  };
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getTicketByIdProvider';
+}
+
+/// See also [getTicketById].
+class GetTicketByIdProvider extends AutoDisposeFutureProvider<TicketDto> {
+  /// See also [getTicketById].
+  GetTicketByIdProvider({
+    required String id,
+  }) : this._internal(
+          (ref) => getTicketById(
+            ref as GetTicketByIdRef,
+            id: id,
+          ),
+          from: getTicketByIdProvider,
+          name: r'getTicketByIdProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getTicketByIdHash,
+          dependencies: GetTicketByIdFamily._dependencies,
+          allTransitiveDependencies:
+              GetTicketByIdFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  GetTicketByIdProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String id;
+
+  @override
+  Override overrideWith(
+    FutureOr<TicketDto> Function(GetTicketByIdRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetTicketByIdProvider._internal(
+        (ref) => create(ref as GetTicketByIdRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<TicketDto> createElement() {
+    return _GetTicketByIdProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetTicketByIdProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetTicketByIdRef on AutoDisposeFutureProviderRef<TicketDto> {
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _GetTicketByIdProviderElement
+    extends AutoDisposeFutureProviderElement<TicketDto> with GetTicketByIdRef {
+  _GetTicketByIdProviderElement(super.provider);
+
+  @override
+  String get id => (origin as GetTicketByIdProvider).id;
+}
+
+String _$getTicketByOrdinalHash() =>
+    r'851e1f24064e40442a9f874d5f96a6a7d7d8262a';
+
+/// See also [getTicketByOrdinal].
+@ProviderFor(getTicketByOrdinal)
+const getTicketByOrdinalProvider = GetTicketByOrdinalFamily();
+
+/// See also [getTicketByOrdinal].
+class GetTicketByOrdinalFamily extends Family<AsyncValue<TicketDto>> {
+  /// See also [getTicketByOrdinal].
+  const GetTicketByOrdinalFamily();
+
+  /// See also [getTicketByOrdinal].
+  GetTicketByOrdinalProvider call({
+    required int ordinal,
+  }) {
+    return GetTicketByOrdinalProvider(
+      ordinal: ordinal,
+    );
+  }
+
+  @override
+  GetTicketByOrdinalProvider getProviderOverride(
+    covariant GetTicketByOrdinalProvider provider,
+  ) {
+    return call(
+      ordinal: provider.ordinal,
+    );
+  }
+
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    localizationRepoProvider,
+    ticketTranslationNotiferProvider
+  ];
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    localizationRepoProvider,
+    ...?localizationRepoProvider.allTransitiveDependencies,
+    ticketTranslationNotiferProvider,
+    ...?ticketTranslationNotiferProvider.allTransitiveDependencies
+  };
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getTicketByOrdinalProvider';
+}
+
+/// See also [getTicketByOrdinal].
+class GetTicketByOrdinalProvider extends AutoDisposeFutureProvider<TicketDto> {
+  /// See also [getTicketByOrdinal].
+  GetTicketByOrdinalProvider({
+    required int ordinal,
+  }) : this._internal(
+          (ref) => getTicketByOrdinal(
+            ref as GetTicketByOrdinalRef,
+            ordinal: ordinal,
+          ),
+          from: getTicketByOrdinalProvider,
+          name: r'getTicketByOrdinalProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getTicketByOrdinalHash,
+          dependencies: GetTicketByOrdinalFamily._dependencies,
+          allTransitiveDependencies:
+              GetTicketByOrdinalFamily._allTransitiveDependencies,
+          ordinal: ordinal,
+        );
+
+  GetTicketByOrdinalProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.ordinal,
+  }) : super.internal();
+
+  final int ordinal;
+
+  @override
+  Override overrideWith(
+    FutureOr<TicketDto> Function(GetTicketByOrdinalRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetTicketByOrdinalProvider._internal(
+        (ref) => create(ref as GetTicketByOrdinalRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        ordinal: ordinal,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<TicketDto> createElement() {
+    return _GetTicketByOrdinalProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetTicketByOrdinalProvider && other.ordinal == ordinal;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, ordinal.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetTicketByOrdinalRef on AutoDisposeFutureProviderRef<TicketDto> {
+  /// The parameter `ordinal` of this provider.
+  int get ordinal;
+}
+
+class _GetTicketByOrdinalProviderElement
+    extends AutoDisposeFutureProviderElement<TicketDto>
+    with GetTicketByOrdinalRef {
+  _GetTicketByOrdinalProviderElement(super.provider);
+
+  @override
+  int get ordinal => (origin as GetTicketByOrdinalProvider).ordinal;
+}
+
 String _$getTicketsHash() => r'fcf919509a523d951237af5f0a7312cf83bf532d';
 
 /// See also [getTickets].
@@ -83,28 +519,7 @@ final getTicketsProvider = AutoDisposeFutureProvider<List<TicketDto>>.internal(
 );
 
 typedef GetTicketsRef = AutoDisposeFutureProviderRef<List<TicketDto>>;
-String _$filteredTicketsHash() => r'2d0eaa0b5036f4daf5a410a3193b415e47499f36';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
+String _$filteredTicketsHash() => r'cc9f6b0ffcfff21d12c497b5d0d85865a7b9f0d9';
 
 /// See also [filteredTickets].
 @ProviderFor(filteredTickets)
@@ -137,12 +552,21 @@ class FilteredTicketsFamily
     );
   }
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    localizationRepoProvider,
+    ticketTranslationNotiferProvider
+  ];
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    localizationRepoProvider,
+    ...?localizationRepoProvider.allTransitiveDependencies,
+    ticketTranslationNotiferProvider,
+    ...?ticketTranslationNotiferProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
@@ -255,6 +679,23 @@ class _FilteredTicketsProviderElement extends AutoDisposeFutureProviderElement<
   int get offset => (origin as FilteredTicketsProvider).offset;
 }
 
+String _$filteredTicketOrdinalsHash() =>
+    r'6ea4f3ccce93f16630b2816e8f915576beaea2df';
+
+/// See also [filteredTicketOrdinals].
+@ProviderFor(filteredTicketOrdinals)
+final filteredTicketOrdinalsProvider =
+    AutoDisposeFutureProvider<List<int>>.internal(
+  filteredTicketOrdinals,
+  name: r'filteredTicketOrdinalsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$filteredTicketOrdinalsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef FilteredTicketOrdinalsRef = AutoDisposeFutureProviderRef<List<int>>;
 String _$ticketTranslationNotiferHash() =>
     r'7475b6334ca3c19c0effb765725c9e3f9fc41df1';
 
@@ -273,7 +714,7 @@ final ticketTranslationNotiferProvider =
 
 typedef _$TicketTranslationNotifer = Notifier<TicketTranslation>;
 String _$licenseCategoryNotifierHash() =>
-    r'84dc48c5178f2c5e0718f2e2da172df7ccd2831a';
+    r'a7bf5403c835fb5755ed650ec04edaf3903b6d2e';
 
 /// See also [LicenseCategoryNotifier].
 @ProviderFor(LicenseCategoryNotifier)
@@ -290,7 +731,7 @@ final licenseCategoryNotifierProvider = AutoDisposeNotifierProvider<
 
 typedef _$LicenseCategoryNotifier = AutoDisposeNotifier<LicenseCategory>;
 String _$questionCategoryNotifierHash() =>
-    r'9c6d16bb7b0c06f619f495c609c5f80c5b0ca7bb';
+    r'2f0a474097dace2d1907784a16a028ad16757a9a';
 
 /// See also [QuestionCategoryNotifier].
 @ProviderFor(QuestionCategoryNotifier)
