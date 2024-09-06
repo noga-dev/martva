@@ -1,4 +1,5 @@
 enum QuestionCategory {
+  all(0),
   driverPedestrianSigns(1),
   trafficRules(2),
   warningSigns(3),
@@ -36,7 +37,82 @@ enum QuestionCategory {
 
   const QuestionCategory(this.value);
 
+  String get name => switch (this) {
+        QuestionCategory.all => "All",
+        QuestionCategory.driverPedestrianSigns =>
+          "Driver, Passenger, and Pedestrian Signs",
+        QuestionCategory.trafficRules => "Traffic Rules and Conditions",
+        QuestionCategory.warningSigns => "Warning Signs",
+        QuestionCategory.prioritySigns => "Priority Signs",
+        QuestionCategory.prohibitionSigns => "Prohibition Signs",
+        QuestionCategory.directionSigns => "Direction Signs",
+        QuestionCategory.infoDisplaySigns => "Information and Display Signs",
+        QuestionCategory.serviceSigns => "Service Signs",
+        QuestionCategory.additionalInfoSigns => "Additional Information Signs",
+        QuestionCategory.roadworkSignals => "Traffic Light Signals",
+        QuestionCategory.regulatorySignals => "Regulatory Signals",
+        QuestionCategory.slipperySurface => "Slippery Surface",
+        QuestionCategory.specialSignals => "Use of Special Signals",
+        QuestionCategory.emergencySignals => "Emergency Light Signaling",
+        QuestionCategory.guidanceAudibleSigns =>
+          "Guidance Instruments, Audible Signal",
+        QuestionCategory.movementSteering => "Movement, Maneuvering, Roadway",
+        QuestionCategory.roundaboutApproach =>
+          "Overtaking by Bypassing Opponent",
+        QuestionCategory.travelSpeed => "Movement Speed",
+        QuestionCategory.bufferZone => "Braking Distance, Distance",
+        QuestionCategory.crossroadCrossing => "Crossing Intersection",
+        QuestionCategory.railwayCrossing => "Railway Crossing",
+        QuestionCategory.motorwayTravel => "Movement on Motorway",
+        QuestionCategory.residentialPriority =>
+          "Residential Zone, Route Priority",
+        QuestionCategory.parking => "Towing",
+        QuestionCategory.educationalRoute => "Educational Route",
+        QuestionCategory.pedestriansFreight => "Freight, People, Cargo",
+        QuestionCategory.bicycleMopedCrossing =>
+          "Bicycle, Moped, and Livestock Crossing",
+        QuestionCategory.roadMarking => "Road Marking",
+        QuestionCategory.medicalAssistance => "Medical Assistance",
+        QuestionCategory.movementSafety => "Movement Safety",
+        QuestionCategory.administrativeLaw => "Administrative Law",
+        QuestionCategory.ecoDriving => "Eco-Driving",
+      };
+
   List<int> get tickets => switch (this) {
+        QuestionCategory.all => <int>{
+            ..._one,
+            ..._two,
+            ..._three,
+            ..._four,
+            ..._five,
+            ..._six,
+            ..._seven,
+            ..._eight,
+            ..._nine,
+            ..._ten,
+            ..._eleven,
+            ..._twelve,
+            ..._thirteen,
+            ..._fourteen,
+            ..._fifteen,
+            ..._sixteen,
+            ..._seventeen,
+            ..._eighteen,
+            ..._nineteen,
+            ..._twenty,
+            ..._twentyone,
+            ..._twentytwo,
+            ..._twentythree,
+            ..._twentyfour,
+            ..._twentyfive,
+            ..._twentysix,
+            ..._twentyseven,
+            ..._twentyeight,
+            ..._twentynine,
+            ..._thirty,
+            ..._thirtyone,
+            ..._thirtytwo
+          }.toList(),
         QuestionCategory.driverPedestrianSigns => _one,
         QuestionCategory.trafficRules => _two,
         QuestionCategory.warningSigns => _three,

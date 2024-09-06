@@ -1,4 +1,5 @@
 enum LicenseCategory {
+  all(0),
   a(1),
   a1(1),
   am(10),
@@ -17,7 +18,96 @@ enum LicenseCategory {
 
   final int value;
 
+  String get category => switch (this) {
+        LicenseCategory.all => 'All',
+        LicenseCategory.a => 'A',
+        LicenseCategory.a1 => 'A1',
+        LicenseCategory.am => 'AM',
+        LicenseCategory.b => 'B',
+        LicenseCategory.b1 => 'B1',
+        LicenseCategory.c => 'C',
+        LicenseCategory.c1 => 'C1',
+        LicenseCategory.d => 'D',
+        LicenseCategory.d1 => 'D1',
+        LicenseCategory.t => 'T',
+        LicenseCategory.s => 'S',
+        LicenseCategory.tram => 'Tram',
+        LicenseCategory.bPlusC1Mil => 'B+C1 Mil',
+      };
+
+  String get name => switch (this) {
+        LicenseCategory.all => 'All',
+        LicenseCategory.a => 'Motorcycle',
+        LicenseCategory.a1 => 'Light motorcycle',
+        LicenseCategory.am => 'Moped and light ATV',
+        LicenseCategory.b => 'Light vehicle',
+        LicenseCategory.b1 => 'Quadricycle',
+        LicenseCategory.c => 'Truck',
+        LicenseCategory.c1 => 'Light truck',
+        LicenseCategory.d => 'Bus',
+        LicenseCategory.d1 => 'Minibus',
+        LicenseCategory.t => 'Agricultural',
+        LicenseCategory.s => 'Road construction machinery',
+        LicenseCategory.tram => 'Tram',
+        LicenseCategory.bPlusC1Mil =>
+          'B and C1 category for military personnel',
+      };
+
+  String get selectNames => switch (this) {
+        LicenseCategory.all => 'All',
+        LicenseCategory.a || LicenseCategory.a1 => 'A,A1',
+        LicenseCategory.am => 'AM',
+        LicenseCategory.b || LicenseCategory.b1 => 'B,B1',
+        LicenseCategory.c => 'C',
+        LicenseCategory.c1 => 'C1',
+        LicenseCategory.d => 'D',
+        LicenseCategory.d1 => 'D1',
+        LicenseCategory.t || LicenseCategory.s => 'T,S',
+        LicenseCategory.tram => 'Tram',
+        LicenseCategory.bPlusC1Mil => 'B+C1 Mil',
+      };
+
+  LicenseCategory get simpler => switch (this) {
+        LicenseCategory.all => LicenseCategory.all,
+        LicenseCategory.a || LicenseCategory.a1 => LicenseCategory.a,
+        LicenseCategory.am => LicenseCategory.am,
+        LicenseCategory.b || LicenseCategory.b1 => LicenseCategory.b,
+        LicenseCategory.c => LicenseCategory.c,
+        LicenseCategory.c1 => LicenseCategory.c1,
+        LicenseCategory.d => LicenseCategory.d,
+        LicenseCategory.d1 => LicenseCategory.d1,
+        LicenseCategory.t || LicenseCategory.s => LicenseCategory.t,
+        LicenseCategory.tram => LicenseCategory.tram,
+        LicenseCategory.bPlusC1Mil => LicenseCategory.bPlusC1Mil,
+      };
+
+  static List<LicenseCategory> get simplified => [
+        LicenseCategory.all,
+        LicenseCategory.a,
+        LicenseCategory.am,
+        LicenseCategory.b,
+        LicenseCategory.c,
+        LicenseCategory.c1,
+        LicenseCategory.d,
+        LicenseCategory.d1,
+        LicenseCategory.t,
+        LicenseCategory.tram,
+        LicenseCategory.bPlusC1Mil,
+      ];
+
   List<int> get tickets => switch (this) {
+        LicenseCategory.all => <int>{
+            ..._one,
+            ..._two,
+            ..._three,
+            ..._four,
+            ..._five,
+            ..._six,
+            ..._seven,
+            ..._eight,
+            ..._nine,
+            ..._ten,
+          }.toList(),
         LicenseCategory.a || LicenseCategory.a1 => _one,
         LicenseCategory.am => _ten,
         LicenseCategory.b || LicenseCategory.b1 => _two,

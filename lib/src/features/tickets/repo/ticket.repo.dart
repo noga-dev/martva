@@ -21,7 +21,7 @@ enum TicketTranslation {
 
   String get name {
     return switch (this) {
-      TicketTranslation.original => 'teoria.on.ge',
+      TicketTranslation.original => 'original',
       TicketTranslation.gpt4oMini => 'Martva',
     };
   }
@@ -118,10 +118,42 @@ Future<List<TicketDto>> getTickets(GetTicketsRef ref) async {
   );
 }
 
-List<int> ticketOrdinalsByLicenseCategory(LicenseCategory category) {
+@riverpod
+class LicenseCategoryNotifier extends _$LicenseCategoryNotifier {
+  @override
+  LicenseCategory build() {
+    return LicenseCategory.values.first;
+  }
+
+  void update(LicenseCategory category) {
+    state = category;
+  }
+}
+
+@riverpod
+class QuestionCategoryNotifier extends _$QuestionCategoryNotifier {
+  @override
+  QuestionCategory build() {
+    return QuestionCategory.values.first;
+  }
+
+  void update(QuestionCategory category) {
+    state = category;
+  }
+}
+
+@riverpod
+List<int> ticketOrdinalsByLicenseCategory(
+    TicketOrdinalsByLicenseCategoryRef ref) {
+  final category = ref.watch(licenseCategoryNotifierProvider);
+
   return category.tickets;
 }
 
-List<int> ticketOrdinalsByQuestionCategory(QuestionCategory category) {
+@riverpod
+List<int> ticketOrdinalsByQuestionCategory(
+    TicketOrdinalsByQuestionCategoryRef ref) {
+  final category = ref.watch(questionCategoryNotifierProvider);
+
   return category.tickets;
 }
