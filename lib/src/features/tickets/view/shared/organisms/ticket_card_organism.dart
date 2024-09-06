@@ -1,13 +1,33 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/extensions/list.dart';
 import 'package:martva/src/core/utils/methods/answer_color.dart';
 import 'package:martva/src/features/tickets/dto/answer.dto.dart';
+import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
-import 'package:martva/src/features/tickets/view/screens/exam/exam.state.dart';
 import 'package:martva/src/features/tickets/view/shared/molecules/ticket_image_molecule.dart';
+
+part 'ticket_card_organism.freezed.dart';
+
+@freezed
+class QuestionState with _$QuestionState {
+  const factory QuestionState({
+    required TicketDto ticket,
+    @Default(null) AnswerDto? selectedAnswer,
+    @Default(false) bool showExplanation,
+  }) = _QuestionState;
+
+  static QuestionState skeleton() => QuestionState(
+        ticket: TicketDto.skeleton(),
+        selectedAnswer: null,
+        showExplanation: Random().nextBool(),
+      );
+}
 
 class TicketCardOrganism extends HookConsumerWidget {
   const TicketCardOrganism({

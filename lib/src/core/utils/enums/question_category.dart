@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum QuestionCategory {
   all(0),
   driverPedestrianSigns(1),
@@ -77,6 +79,42 @@ enum QuestionCategory {
         QuestionCategory.administrativeLaw => "Administrative Law",
         QuestionCategory.ecoDriving => "Eco-Driving",
       };
+
+  Icon get icon => Icon(switch (this) {
+        QuestionCategory.all => Icons.category,
+        QuestionCategory.driverPedestrianSigns => Icons.category,
+        QuestionCategory.trafficRules => Icons.category,
+        QuestionCategory.warningSigns => Icons.category,
+        QuestionCategory.prioritySigns => Icons.category,
+        QuestionCategory.prohibitionSigns => Icons.category,
+        QuestionCategory.directionSigns => Icons.category,
+        QuestionCategory.infoDisplaySigns => Icons.category,
+        QuestionCategory.serviceSigns => Icons.category,
+        QuestionCategory.additionalInfoSigns => Icons.category,
+        QuestionCategory.roadworkSignals => Icons.category,
+        QuestionCategory.regulatorySignals => Icons.category,
+        QuestionCategory.specialSignals => Icons.category,
+        QuestionCategory.emergencySignals => Icons.category,
+        QuestionCategory.guidanceAudibleSigns => Icons.category,
+        QuestionCategory.movementSteering => Icons.category,
+        QuestionCategory.roundaboutApproach => Icons.category,
+        QuestionCategory.travelSpeed => Icons.category,
+        QuestionCategory.bufferZone => Icons.category,
+        QuestionCategory.crossroadCrossing => Icons.category,
+        QuestionCategory.railwayCrossing => Icons.category,
+        QuestionCategory.motorwayTravel => Icons.category,
+        QuestionCategory.residentialPriority => Icons.category,
+        QuestionCategory.parking => Icons.category,
+        QuestionCategory.educationalRoute => Icons.category,
+        QuestionCategory.pedestriansFreight => Icons.category,
+        QuestionCategory.bicycleMopedCrossing => Icons.category,
+        QuestionCategory.roadMarking => Icons.category,
+        QuestionCategory.medicalAssistance => Icons.category,
+        QuestionCategory.movementSafety => Icons.category,
+        QuestionCategory.administrativeLaw => Icons.category,
+        QuestionCategory.ecoDriving => Icons.category,
+        QuestionCategory.slipperySurface => Icons.category,
+      });
 
   List<int> get tickets => switch (this) {
         QuestionCategory.all => <int>{

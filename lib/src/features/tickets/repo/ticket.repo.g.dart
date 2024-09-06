@@ -83,40 +83,178 @@ final getTicketsProvider = AutoDisposeFutureProvider<List<TicketDto>>.internal(
 );
 
 typedef GetTicketsRef = AutoDisposeFutureProviderRef<List<TicketDto>>;
-String _$ticketOrdinalsByLicenseCategoryHash() =>
-    r'a0d15316ee22b6987fbbe179ca5266ae97e3c03b';
+String _$filteredTicketsHash() => r'2d0eaa0b5036f4daf5a410a3193b415e47499f36';
 
-/// See also [ticketOrdinalsByLicenseCategory].
-@ProviderFor(ticketOrdinalsByLicenseCategory)
-final ticketOrdinalsByLicenseCategoryProvider =
-    AutoDisposeProvider<List<int>>.internal(
-  ticketOrdinalsByLicenseCategory,
-  name: r'ticketOrdinalsByLicenseCategoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$ticketOrdinalsByLicenseCategoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
 
-typedef TicketOrdinalsByLicenseCategoryRef = AutoDisposeProviderRef<List<int>>;
-String _$ticketOrdinalsByQuestionCategoryHash() =>
-    r'64eeccb90bc07a17639b9f67c39dbf9064a87329';
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
 
-/// See also [ticketOrdinalsByQuestionCategory].
-@ProviderFor(ticketOrdinalsByQuestionCategory)
-final ticketOrdinalsByQuestionCategoryProvider =
-    AutoDisposeProvider<List<int>>.internal(
-  ticketOrdinalsByQuestionCategory,
-  name: r'ticketOrdinalsByQuestionCategoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$ticketOrdinalsByQuestionCategoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
 
-typedef TicketOrdinalsByQuestionCategoryRef = AutoDisposeProviderRef<List<int>>;
+/// See also [filteredTickets].
+@ProviderFor(filteredTickets)
+const filteredTicketsProvider = FilteredTicketsFamily();
+
+/// See also [filteredTickets].
+class FilteredTicketsFamily
+    extends Family<AsyncValue<({List<TicketDto> tickets, int totalCount})>> {
+  /// See also [filteredTickets].
+  const FilteredTicketsFamily();
+
+  /// See also [filteredTickets].
+  FilteredTicketsProvider call({
+    required int limit,
+    required int offset,
+  }) {
+    return FilteredTicketsProvider(
+      limit: limit,
+      offset: offset,
+    );
+  }
+
+  @override
+  FilteredTicketsProvider getProviderOverride(
+    covariant FilteredTicketsProvider provider,
+  ) {
+    return call(
+      limit: provider.limit,
+      offset: provider.offset,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'filteredTicketsProvider';
+}
+
+/// See also [filteredTickets].
+class FilteredTicketsProvider extends AutoDisposeFutureProvider<
+    ({List<TicketDto> tickets, int totalCount})> {
+  /// See also [filteredTickets].
+  FilteredTicketsProvider({
+    required int limit,
+    required int offset,
+  }) : this._internal(
+          (ref) => filteredTickets(
+            ref as FilteredTicketsRef,
+            limit: limit,
+            offset: offset,
+          ),
+          from: filteredTicketsProvider,
+          name: r'filteredTicketsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$filteredTicketsHash,
+          dependencies: FilteredTicketsFamily._dependencies,
+          allTransitiveDependencies:
+              FilteredTicketsFamily._allTransitiveDependencies,
+          limit: limit,
+          offset: offset,
+        );
+
+  FilteredTicketsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.limit,
+    required this.offset,
+  }) : super.internal();
+
+  final int limit;
+  final int offset;
+
+  @override
+  Override overrideWith(
+    FutureOr<({List<TicketDto> tickets, int totalCount})> Function(
+            FilteredTicketsRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FilteredTicketsProvider._internal(
+        (ref) => create(ref as FilteredTicketsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        limit: limit,
+        offset: offset,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<({List<TicketDto> tickets, int totalCount})>
+      createElement() {
+    return _FilteredTicketsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FilteredTicketsProvider &&
+        other.limit == limit &&
+        other.offset == offset;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, limit.hashCode);
+    hash = _SystemHash.combine(hash, offset.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FilteredTicketsRef on AutoDisposeFutureProviderRef<
+    ({List<TicketDto> tickets, int totalCount})> {
+  /// The parameter `limit` of this provider.
+  int get limit;
+
+  /// The parameter `offset` of this provider.
+  int get offset;
+}
+
+class _FilteredTicketsProviderElement extends AutoDisposeFutureProviderElement<
+    ({List<TicketDto> tickets, int totalCount})> with FilteredTicketsRef {
+  _FilteredTicketsProviderElement(super.provider);
+
+  @override
+  int get limit => (origin as FilteredTicketsProvider).limit;
+  @override
+  int get offset => (origin as FilteredTicketsProvider).offset;
+}
+
 String _$ticketTranslationNotiferHash() =>
     r'7475b6334ca3c19c0effb765725c9e3f9fc41df1';
 

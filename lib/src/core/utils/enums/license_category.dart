@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum LicenseCategory {
   all(0),
   a(1),
@@ -34,6 +36,23 @@ enum LicenseCategory {
         LicenseCategory.tram => 'Tram',
         LicenseCategory.bPlusC1Mil => 'B+C1 Mil',
       };
+
+  Icon get icon => Icon(switch (this) {
+        LicenseCategory.all => Icons.drive_eta,
+        LicenseCategory.a => Icons.drive_eta,
+        LicenseCategory.a1 => Icons.drive_eta,
+        LicenseCategory.am => Icons.drive_eta,
+        LicenseCategory.b => Icons.drive_eta,
+        LicenseCategory.b1 => Icons.drive_eta,
+        LicenseCategory.c => Icons.drive_eta,
+        LicenseCategory.c1 => Icons.drive_eta,
+        LicenseCategory.d => Icons.drive_eta,
+        LicenseCategory.d1 => Icons.drive_eta,
+        LicenseCategory.t => Icons.drive_eta,
+        LicenseCategory.s => Icons.drive_eta,
+        LicenseCategory.tram => Icons.drive_eta,
+        LicenseCategory.bPlusC1Mil => Icons.drive_eta,
+      });
 
   String get name => switch (this) {
         LicenseCategory.all => 'All',

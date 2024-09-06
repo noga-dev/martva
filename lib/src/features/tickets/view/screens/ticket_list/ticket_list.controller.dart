@@ -1,15 +1,61 @@
-// import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
-// import 'package:martva/src/features/tickets/service/ticket.service.dart';
-// import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
+import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
+import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.state.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-// part 'ticket_list.controller.g.dart';
+part 'ticket_list.controller.g.dart';
 
-// @riverpod
-// class TicketListController extends _$TicketListController {
-//   @override
-//   Future<List<TicketDto>> build() async {
-//     final ticketService = ref.read(ticketServiceProvider);
+@riverpod
+class TicketListController extends _$TicketListController {
+  @override
+  Future<TicketListState> build() async {
+    return const TicketListState();
+  }
 
-//     return ticketService.getTickets();
-//   }
-// }
+  Future<
+      ({
+        List<TicketDto> tickets,
+        bool isLastPage,
+      })> fetchPage(int pageKey) async {
+    final currentPage = pageKey;
+    final newItems = await ref.read(
+      filteredTicketsProvider(
+        limit: state.value!.limit,
+        offset: currentPage * state.value!.limit,
+      ).future,
+    );
+
+    final isLastPage = newItems.tickets.isEmpty;
+
+    if (isLastPage) {
+      state = AsyncValue.data(
+        TicketListState(
+          tickets: [...state.value!.tickets, ...newItems.tickets],
+        ),
+      );
+      return (
+        tickets: <TicketDto>[],
+        isLastPage: true,
+      );
+    } else {
+      final nextPageKey = currentPage + 1;
+      state = AsyncValue.data(
+        TicketListState(
+          page: nextPageKey,
+          tickets: [...state.value!.tickets, ...newItems.tickets],
+        ),
+      );
+
+      return (
+        tickets: newItems.tickets,
+        isLastPage: false,
+      );
+    }
+  }
+
+  void updateTicket(TicketDto ticket) {
+    state = const AsyncValue.data(
+      TicketListState(),
+    );
+  }
+}

@@ -2,8 +2,7 @@ import 'dart:math';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:martva/src/core/utils/constants.dart';
-import 'package:martva/src/features/tickets/dto/answer.dto.dart';
-import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
+import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
 
 part 'exam.state.freezed.dart';
 
@@ -20,18 +19,7 @@ class ExamState with _$ExamState {
         timeLeft: Constants.examTicketsTime,
         solutions: List.generate(
           Random().nextInt(4) + 1,
-          (_) => QuestionState(
-            ticket: TicketDto.skeleton(),
-          ),
+          (_) => QuestionState.skeleton(),
         ),
       );
-}
-
-@freezed
-class QuestionState with _$QuestionState {
-  const factory QuestionState({
-    required TicketDto ticket,
-    AnswerDto? selectedAnswer,
-    @Default(false) bool showExplanation,
-  }) = _QuestionState;
 }

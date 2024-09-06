@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/core/utils/messaging/logger.dart';
@@ -162,6 +164,71 @@ class SupabaseTicketRepo implements TicketRepo {
       'ticket_id': ticketId,
       'answer_id': answerId,
     });
+  }
+
+  // @override
+  // Future<int> getTotalTicketsCount() async {
+  //   final response =
+  //       await Supabase.instance.client.from('tickets').select('id').count();
+
+  //   return response.count;
+  // }
+
+  @override
+  FutureOr<
+      ({
+        List<TicketDto> tickets,
+        int totalCount,
+      })> getTicketsByOrdinal({
+    required List<int> ordinals,
+    required SupportedLocale language,
+    required TicketTranslation translation,
+    required int from,
+    required int to,
+  }) async {
+    final String actualTranslation = "${language.dbName}_${translation.dbName}";
+
+    try {
+      final queryBuilder = Supabase.instance.client
+          .from('tickets')
+          .select(_selectTickets)
+          .eq('ticket_details.translation', actualTranslation)
+          .eq('ticket_answers.translation', actualTranslation)
+          .or('ordinal_id.in.(${ordinals.join(',')})')
+          .order('ordinal_id', ascending: true)
+          .range(from, to)
+          .count();
+
+      final response = await queryBuilder;
+
+      if (response.data.isEmpty) {
+        logger.t('No tickets found for translation: $actualTranslation');
+
+        return (
+          tickets: <TicketDto>[],
+          totalCount: 0,
+        );
+      }
+
+      final parsed = response.data.map(_extractTicket).toList();
+
+      return Future.value((
+        tickets: parsed,
+        totalCount: response.count,
+      ));
+    } catch (e) {
+      logger.e(
+        'Error fetching tickets: $e',
+        time: DateTime.now(),
+        error: e,
+        stackTrace: StackTrace.current,
+      );
+
+      return Future.value((
+        tickets: <TicketDto>[],
+        totalCount: 0,
+      ));
+    }
   }
 }
 

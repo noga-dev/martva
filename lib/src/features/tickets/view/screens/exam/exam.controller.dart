@@ -8,6 +8,7 @@ import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/service/ticket.service.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.state.dart';
+import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'exam.controller.g.dart';

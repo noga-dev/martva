@@ -42,11 +42,24 @@ abstract class TicketRepo {
   });
 
   Future<List<String>> getRandomizedTicketIds();
+  // Future<int> getTotalTicketsCount();
 
   Future<List<TicketDto>> getTicketsById({
     required List<String> ids,
     required SupportedLocale language,
     required TicketTranslation translation,
+  });
+
+  FutureOr<
+      ({
+        List<TicketDto> tickets,
+        int totalCount,
+      })> getTicketsByOrdinal({
+    required List<int> ordinals,
+    required SupportedLocale language,
+    required TicketTranslation translation,
+    required int from,
+    required int to,
   });
 
   Future<void> setUserAnswer({
@@ -142,18 +155,64 @@ class QuestionCategoryNotifier extends _$QuestionCategoryNotifier {
   }
 }
 
-@riverpod
-List<int> ticketOrdinalsByLicenseCategory(
-    TicketOrdinalsByLicenseCategoryRef ref) {
-  final category = ref.watch(licenseCategoryNotifierProvider);
+// @riverpod
+// Future<List<int>> ticketOrdinalsByLicenseCategory(
+//     TicketsByLicenseCategoryRef ref) async {
+//   final category = ref.watch(licenseCategoryNotifierProvider);
+//   final locale = ref.watch(localizationRepoProvider);
+//   final translation = ref.watch(ticketTranslationNotiferProvider);
 
-  return category.tickets;
+//   final ids = category.tickets
+
+//   return tickets;
+// }
+
+// @riverpod
+// Future<List<int>> ticketOrdinalsByQuestionCategory(
+//     TicketsByQuestionCategoryRef ref) async {
+//   final question = ref.watch(questionCategoryNotifierProvider);
+//   final locale = ref.watch(localizationRepoProvider);
+//   final translation = ref.watch(ticketTranslationNotiferProvider);
+
+//   final ordinals = question.tickets;
+
+//   return tickets;
+// }
+
+@riverpod
+FutureOr<
+    ({
+      List<TicketDto> tickets,
+      int totalCount,
+    })> filteredTickets(
+  FilteredTicketsRef ref, {
+  required int limit,
+  required int offset,
+}) async {
+  final licenseCategory = ref.watch(licenseCategoryNotifierProvider);
+  final questionCategory = ref.watch(questionCategoryNotifierProvider);
+  final locale = ref.watch(localizationRepoProvider);
+  final translation = ref.watch(ticketTranslationNotiferProvider);
+
+  final licenseOrdinals = licenseCategory.tickets;
+  final questionOrdinals = questionCategory.tickets;
+
+  final combinedOrdinals = {...licenseOrdinals, ...questionOrdinals}.toList();
+
+  final results = await ref.watch(ticketRepoProvider).getTicketsByOrdinal(
+        ordinals: combinedOrdinals,
+        language: locale,
+        translation: translation,
+        from: offset,
+        to: offset + limit,
+      );
+
+  return results;
 }
 
-@riverpod
-List<int> ticketOrdinalsByQuestionCategory(
-    TicketOrdinalsByQuestionCategoryRef ref) {
-  final category = ref.watch(questionCategoryNotifierProvider);
+// @riverpod
+// Future<int> getTotalTicketsCount(GetTotalTicketsCountRef ref) async {
+//   final ticketRepo = ref.watch(ticketRepoProvider);
 
-  return category.tickets;
-}
+//   return ticketRepo.getTotalTicketsCount();
+// }
