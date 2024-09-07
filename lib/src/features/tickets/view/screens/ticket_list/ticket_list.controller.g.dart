@@ -7,7 +7,7 @@ part of 'ticket_list.controller.dart';
 // **************************************************************************
 
 String _$ticketListControllerHash() =>
-    r'1e349817d3ad33d47e215fe5c6e96a7f3e570de6';
+    r'3271251f1103489c062f5e47d1b329e1fa3bfc42';
 
 /// See also [TicketListController].
 @ProviderFor(TicketListController)

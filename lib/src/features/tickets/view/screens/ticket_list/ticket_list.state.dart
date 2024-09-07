@@ -13,6 +13,8 @@ class TicketListState with _$TicketListState {
     @Default([]) List<TicketDto> tickets,
     @Default('') String query,
     @Default(false) bool showSearchBar,
+    @Default(false) bool isLoading,
+    @Default(true) bool hasMore,
   }) = _TicketListState;
 
   static TicketListState skeleton() => TicketListState(

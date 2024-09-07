@@ -9,7 +9,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'ticket_details.controller.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [
+  getTicketById,
+  getTicketByOrdinal,
+  getTicketByOrdinal,
+])
 class TicketDetailsController extends _$TicketDetailsController {
   @override
   Future<TicketDetailsState> build({

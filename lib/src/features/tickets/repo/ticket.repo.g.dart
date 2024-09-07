@@ -519,7 +519,7 @@ final getTicketsProvider = AutoDisposeFutureProvider<List<TicketDto>>.internal(
 );
 
 typedef GetTicketsRef = AutoDisposeFutureProviderRef<List<TicketDto>>;
-String _$filteredTicketsHash() => r'82e6a580a39362a27e339e9b34821546c695983f';
+String _$filteredTicketsHash() => r'6157251c8f990b9f18b511807a5c32068844d4b6';
 
 /// See also [filteredTickets].
 @ProviderFor(filteredTickets)
@@ -680,7 +680,7 @@ class _FilteredTicketsProviderElement extends AutoDisposeFutureProviderElement<
 }
 
 String _$filteredTicketOrdinalsHash() =>
-    r'6ea4f3ccce93f16630b2816e8f915576beaea2df';
+    r'f0bcc6ed48455ce80c3a47b2c05205afbbf4f102';
 
 /// See also [filteredTicketOrdinals].
 @ProviderFor(filteredTicketOrdinals)

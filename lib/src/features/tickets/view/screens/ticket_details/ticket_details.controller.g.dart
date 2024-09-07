@@ -7,7 +7,7 @@ part of 'ticket_details.controller.dart';
 // **************************************************************************
 
 String _$ticketDetailsControllerHash() =>
-    r'237c12c68472802bdb9ffd7e1faaf43973975344';
+    r'd239e8a3135cb3729032a58ea714921fdc577991';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -67,12 +67,21 @@ class TicketDetailsControllerFamily
     );
   }
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    getTicketByIdProvider,
+    getTicketByOrdinalProvider
+  ];
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    getTicketByIdProvider,
+    ...?getTicketByIdProvider.allTransitiveDependencies,
+    getTicketByOrdinalProvider,
+    ...?getTicketByOrdinalProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get allTransitiveDependencies =>

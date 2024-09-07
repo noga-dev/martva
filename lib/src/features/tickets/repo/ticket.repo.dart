@@ -265,10 +265,13 @@ FutureOr<
   final licenseOrdinals = licenseCategory.tickets;
   final questionOrdinals = questionCategory.tickets;
 
-  final combinedOrdinals = {...licenseOrdinals, ...questionOrdinals}.toList();
+  // final combinedOrdinals = {...licenseOrdinals, ...questionOrdinals}.toList();
+
+  final commonOrdinals =
+      licenseOrdinals.toSet().intersection(questionOrdinals.toSet()).toList();
 
   final results = await ref.watch(ticketRepoProvider).getTicketsByOrdinal(
-        ordinals: combinedOrdinals,
+        ordinals: commonOrdinals,
         language: locale,
         translation: translation,
         from: offset,
@@ -286,9 +289,12 @@ Future<List<int>> filteredTicketOrdinals(FilteredTicketOrdinalsRef ref) async {
   final licenseOrdinals = licenseCategory.tickets;
   final questionOrdinals = questionCategory.tickets;
 
-  final combinedOrdinals = {...licenseOrdinals, ...questionOrdinals}.toList();
+  // final combinedOrdinals = {...licenseOrdinals, ...questionOrdinals}.toList();
 
-  final sorted = combinedOrdinals.sortedBy<num>((e) => e);
+  final commonOrdinals =
+      licenseOrdinals.toSet().intersection(questionOrdinals.toSet()).toList();
+
+  final sorted = commonOrdinals.sortedBy<num>((e) => e);
 
   return sorted;
 }

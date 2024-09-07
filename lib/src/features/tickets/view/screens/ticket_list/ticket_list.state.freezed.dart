@@ -22,6 +22,8 @@ mixin _$TicketListState {
   List<TicketDto> get tickets => throw _privateConstructorUsedError;
   String get query => throw _privateConstructorUsedError;
   bool get showSearchBar => throw _privateConstructorUsedError;
+  bool get isLoading => throw _privateConstructorUsedError;
+  bool get hasMore => throw _privateConstructorUsedError;
 
   /// Create a copy of TicketListState
   /// with the given fields replaced by the non-null parameter values.
@@ -42,7 +44,9 @@ abstract class $TicketListStateCopyWith<$Res> {
       int page,
       List<TicketDto> tickets,
       String query,
-      bool showSearchBar});
+      bool showSearchBar,
+      bool isLoading,
+      bool hasMore});
 }
 
 /// @nodoc
@@ -66,6 +70,8 @@ class _$TicketListStateCopyWithImpl<$Res, $Val extends TicketListState>
     Object? tickets = null,
     Object? query = null,
     Object? showSearchBar = null,
+    Object? isLoading = null,
+    Object? hasMore = null,
   }) {
     return _then(_value.copyWith(
       totalCount: null == totalCount
@@ -92,6 +98,14 @@ class _$TicketListStateCopyWithImpl<$Res, $Val extends TicketListState>
           ? _value.showSearchBar
           : showSearchBar // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hasMore: null == hasMore
+          ? _value.hasMore
+          : hasMore // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -110,7 +124,9 @@ abstract class _$$TicketListStateImplCopyWith<$Res>
       int page,
       List<TicketDto> tickets,
       String query,
-      bool showSearchBar});
+      bool showSearchBar,
+      bool isLoading,
+      bool hasMore});
 }
 
 /// @nodoc
@@ -132,6 +148,8 @@ class __$$TicketListStateImplCopyWithImpl<$Res>
     Object? tickets = null,
     Object? query = null,
     Object? showSearchBar = null,
+    Object? isLoading = null,
+    Object? hasMore = null,
   }) {
     return _then(_$TicketListStateImpl(
       totalCount: null == totalCount
@@ -158,6 +176,14 @@ class __$$TicketListStateImplCopyWithImpl<$Res>
           ? _value.showSearchBar
           : showSearchBar // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hasMore: null == hasMore
+          ? _value.hasMore
+          : hasMore // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -171,7 +197,9 @@ class _$TicketListStateImpl implements _TicketListState {
       this.page = 1,
       final List<TicketDto> tickets = const [],
       this.query = '',
-      this.showSearchBar = false})
+      this.showSearchBar = false,
+      this.isLoading = false,
+      this.hasMore = true})
       : _tickets = tickets;
 
   @override
@@ -198,10 +226,16 @@ class _$TicketListStateImpl implements _TicketListState {
   @override
   @JsonKey()
   final bool showSearchBar;
+  @override
+  @JsonKey()
+  final bool isLoading;
+  @override
+  @JsonKey()
+  final bool hasMore;
 
   @override
   String toString() {
-    return 'TicketListState(totalCount: $totalCount, limit: $limit, page: $page, tickets: $tickets, query: $query, showSearchBar: $showSearchBar)';
+    return 'TicketListState(totalCount: $totalCount, limit: $limit, page: $page, tickets: $tickets, query: $query, showSearchBar: $showSearchBar, isLoading: $isLoading, hasMore: $hasMore)';
   }
 
   @override
@@ -216,12 +250,23 @@ class _$TicketListStateImpl implements _TicketListState {
             const DeepCollectionEquality().equals(other._tickets, _tickets) &&
             (identical(other.query, query) || other.query == query) &&
             (identical(other.showSearchBar, showSearchBar) ||
-                other.showSearchBar == showSearchBar));
+                other.showSearchBar == showSearchBar) &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
+            (identical(other.hasMore, hasMore) || other.hasMore == hasMore));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, totalCount, limit, page,
-      const DeepCollectionEquality().hash(_tickets), query, showSearchBar);
+  int get hashCode => Object.hash(
+      runtimeType,
+      totalCount,
+      limit,
+      page,
+      const DeepCollectionEquality().hash(_tickets),
+      query,
+      showSearchBar,
+      isLoading,
+      hasMore);
 
   /// Create a copy of TicketListState
   /// with the given fields replaced by the non-null parameter values.
@@ -240,7 +285,9 @@ abstract class _TicketListState implements TicketListState {
       final int page,
       final List<TicketDto> tickets,
       final String query,
-      final bool showSearchBar}) = _$TicketListStateImpl;
+      final bool showSearchBar,
+      final bool isLoading,
+      final bool hasMore}) = _$TicketListStateImpl;
 
   @override
   int get totalCount;
@@ -254,6 +301,10 @@ abstract class _TicketListState implements TicketListState {
   String get query;
   @override
   bool get showSearchBar;
+  @override
+  bool get isLoading;
+  @override
+  bool get hasMore;
 
   /// Create a copy of TicketListState
   /// with the given fields replaced by the non-null parameter values.

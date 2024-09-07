@@ -1,12 +1,13 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/router/router.dart';
 import 'package:martva/src/core/theme/view/templates/shimmer.template.dart';
+import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/enums/license_category.dart';
 import 'package:martva/src/core/utils/enums/question_category.dart';
+import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.controller.dart';
@@ -45,6 +46,22 @@ class _TicketsBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final scrollController = useScrollController();
+
+    useEffect(() {
+      void listener() {
+        if (scrollController.position.maxScrollExtent -
+                scrollController.offset <=
+            500) {
+          logger.w('loadMore: ${scrollController.offset}');
+          ref.read(ticketListControllerProvider.notifier).loadMore();
+        }
+      }
+
+      scrollController.addListener(listener);
+      return () => scrollController.removeListener(listener);
+    }, [scrollController]);
+
     return Scaffold(
       drawer: const QuickSettingsOrganism(),
       appBar: AppBar(
@@ -114,66 +131,21 @@ class _TicketsBody extends HookConsumerWidget {
       body: ShimmerTemplate(
         enabled: isLoading,
         child: ListView.builder(
-          itemCount: screenState.totalCount,
+          controller: scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: screenState.tickets.length + (screenState.hasMore ? 1 : 0),
           itemBuilder: (context, index) {
-            return _TicketListPage(
-              page: index ~/ screenState.limit + 1,
-              pageSize: screenState.limit,
-              index: index,
+            return ShimmerTemplate(
+              enabled: index >= screenState.tickets.length,
+              child: TicketListItem(
+                ticket: index >= screenState.tickets.length
+                    ? TicketDto.skeleton()
+                    : screenState.tickets[index],
+              ),
             );
           },
         ),
       ),
-    );
-  }
-}
-
-class _TicketListPage extends HookConsumerWidget {
-  const _TicketListPage({
-    required this.page,
-    required this.pageSize,
-    required this.index,
-  });
-
-  final int page;
-  final int pageSize;
-  final int index;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final screenState = ref.watch(ticketListControllerProvider);
-    final fetchPageFuture = useMemoized(
-        () => ref.read(ticketListControllerProvider.notifier).fetchPage(page),
-        []);
-    final fetchPageResult = useFuture(fetchPageFuture);
-
-    return screenState.when(
-      error: (error, stack) => Center(child: Text(error.toString())),
-      loading: () => TicketListItem(ticket: TicketDto.skeleton()),
-      data: (data) {
-        if (index % pageSize >= data.totalCount) {
-          return const Icon(Icons.last_page);
-        }
-
-        if (fetchPageResult.hasError) {
-          return Center(child: Text(fetchPageResult.error.toString()));
-        }
-
-        if (screenState.valueOrNull?.tickets.elementAtOrNull(index) == null) {
-          return TicketListItem(ticket: TicketDto.skeleton());
-        }
-
-        // logger.d('fetchPage: $index $page');
-
-        return ShimmerTemplate(
-          enabled: fetchPageResult.connectionState == ConnectionState.waiting,
-          child: TicketListItem(
-            ticket: screenState.value!.tickets
-                    .firstWhereIndexedOrNull((i, j) => i == index) ??
-                TicketDto.skeleton(),
-          ),
-        );
-      },
     );
   }
 }
@@ -290,7 +262,10 @@ class TicketListItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return ListTile(
-      leading: Text(ticket.ordinalId.toString()),
+      leading: Text(
+        ticket.ordinalId.toString(),
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
       title: Text(ticket.question),
       isThreeLine: true,
       // trailing: const Text(
@@ -299,6 +274,7 @@ class TicketListItem extends HookConsumerWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          DSSpacingTokens.xxs.verticalBox,
           Wrap(
             spacing: 4,
             runSpacing: 4,
@@ -313,7 +289,7 @@ class TicketListItem extends HookConsumerWidget {
         ],
       ),
       trailing: SizedBox(
-        width: 132,
+        width: 136,
         child: Wrap(
           spacing: 4,
           runSpacing: 4,

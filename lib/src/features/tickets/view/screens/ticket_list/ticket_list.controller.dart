@@ -6,7 +6,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'ticket_list.controller.g.dart';
 
-@Riverpod(dependencies: [filteredTickets, filteredTickets])
+@Riverpod(dependencies: [
+  filteredTickets,
+])
 class TicketListController extends _$TicketListController {
   @override
   Future<TicketListState> build() async {
@@ -16,38 +18,48 @@ class TicketListController extends _$TicketListController {
 
     logger.w('filtered: ${filtered.totalCount}');
 
-    return TicketListState(totalCount: filtered.totalCount);
+    state = AsyncData(TicketListState(totalCount: filtered.totalCount));
+
+    await ref.read(ticketListControllerProvider.notifier).loadMore();
+
+    return state.value!;
   }
 
-  Future<void> fetchPage(int pageKey) async {
-    // if (pageKey != state.value!.page) {
-    //   return;
-    // }
+  Future<void> loadMore() async {
+    final currentState = state.value!;
+    logger.w('loadMore: ${currentState.isLoading} ${currentState.hasMore}');
+    if (currentState.isLoading || !currentState.hasMore) return;
 
-    final currentPage = pageKey - 1;
+    state = AsyncValue.data(currentState.copyWith(isLoading: true));
 
-    final newItems = await ref.read(
-      filteredTicketsProvider(
-        limit: state.value!.limit,
-        offset: currentPage * state.value!.limit,
-      ).future,
-    );
-
-    final isLastPage = newItems.tickets.isEmpty;
-
-    if (isLastPage) {
-      state = AsyncData(state.value!.copyWith(
-        tickets: [...state.value!.tickets, ...newItems.tickets],
-      ));
-    } else {
-      final nextPageKey = currentPage + 1;
-      state = AsyncValue.data(
-        state.value!.copyWith(
-          page: nextPageKey,
-          tickets: [...state.value!.tickets, ...newItems.tickets],
-        ),
+    try {
+      final newItems = await ref.read(
+        filteredTicketsProvider(
+          limit: currentState.limit,
+          offset: currentState.tickets.length,
+        ).future,
       );
+
+      final updatedTickets = [...currentState.tickets, ...newItems.tickets];
+      final hasMore = newItems.tickets.length == currentState.limit;
+
+      state = AsyncValue.data(currentState.copyWith(
+        tickets: updatedTickets,
+        totalCount: newItems.totalCount,
+        isLoading: false,
+        hasMore: hasMore,
+      ));
+
+      logger.d(
+          'loadMore: ${updatedTickets.length} ${updatedTickets.map((e) => e.ordinalId).toList()}');
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncValue.data(TicketListState());
+    await loadMore();
   }
 
   void updateTicket(TicketDto ticket) {
