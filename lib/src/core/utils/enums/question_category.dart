@@ -83,6 +83,44 @@ enum QuestionCategory {
         QuestionCategory.ecoDriving => "Eco-Driving",
       };
 
+  Color get color => switch (this) {
+        QuestionCategory.all => Colors.transparent,
+        QuestionCategory.driverPedestrianSigns => Colors.amber,
+        QuestionCategory.trafficRules => Colors.blue,
+        QuestionCategory.warningSigns => Colors.blueGrey,
+        QuestionCategory.prioritySigns => Colors.brown,
+        QuestionCategory.prohibitionSigns => Colors.cyan,
+        QuestionCategory.directionSigns => Colors.deepOrange,
+        QuestionCategory.infoDisplaySigns => Colors.deepPurple,
+        QuestionCategory.serviceSigns => Colors.green,
+        QuestionCategory.additionalInfoSigns => Colors.grey,
+        QuestionCategory.roadworkSignals => Colors.indigo,
+        QuestionCategory.regulatorySignals => Colors.lightBlue,
+        QuestionCategory.specialSignals => Colors.lightGreen,
+        QuestionCategory.emergencySignals => Colors.lime,
+        QuestionCategory.guidanceAudibleSigns => Colors.orange,
+        QuestionCategory.movementSteering => Colors.pink,
+        QuestionCategory.roundaboutApproach => Colors.purple,
+        QuestionCategory.travelSpeed => Colors.red,
+        QuestionCategory.bufferZone => Colors.teal,
+        QuestionCategory.slipperySurface => Colors.yellow,
+        QuestionCategory.crossroadCrossing => Colors.amberAccent.shade700,
+        QuestionCategory.railwayCrossing => Colors.blueAccent.shade700,
+        QuestionCategory.motorwayTravel => Colors.cyanAccent.shade700,
+        QuestionCategory.residentialPriority =>
+          Colors.deepOrangeAccent.shade700,
+        QuestionCategory.parking => Colors.deepPurpleAccent.shade700,
+        QuestionCategory.educationalRoute => Colors.greenAccent.shade700,
+        QuestionCategory.pedestriansFreight => Colors.indigoAccent.shade700,
+        QuestionCategory.bicycleMopedCrossing =>
+          Colors.lightGreenAccent.shade700,
+        QuestionCategory.roadMarking => Colors.limeAccent.shade700,
+        QuestionCategory.medicalAssistance => Colors.orangeAccent.shade700,
+        QuestionCategory.movementSafety => Colors.pinkAccent.shade700,
+        QuestionCategory.administrativeLaw => Colors.purpleAccent.shade700,
+        QuestionCategory.ecoDriving => Colors.redAccent.shade700,
+      };
+
   Icon get icon => Icon(switch (this) {
         QuestionCategory.all => Icons.category,
         QuestionCategory.driverPedestrianSigns => Icons.category,

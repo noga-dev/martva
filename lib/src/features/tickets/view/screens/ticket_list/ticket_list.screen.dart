@@ -1,11 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/core/router/router.dart';
-import 'package:martva/src/core/theme/view/tokens/ds_duration_tokens.dart';
+import 'package:martva/src/core/theme/view/templates/shimmer.template.dart';
 import 'package:martva/src/core/utils/enums/license_category.dart';
 import 'package:martva/src/core/utils/enums/question_category.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
@@ -13,7 +12,6 @@ import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.controller.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.state.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/quick_settings_organism.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class TicketListScreen extends HookConsumerWidget {
   const TicketListScreen({super.key});
@@ -47,46 +45,12 @@ class _TicketsBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final license = ref.watch(licenseCategoryNotifierProvider);
-    final question = ref.watch(questionCategoryNotifierProvider);
-    final localization = ref.watch(localizationRepoProvider);
-    final translation = ref.watch(ticketTranslationNotiferProvider);
-    final screenController = ref.read(ticketListControllerProvider.notifier);
-    final pagingController = useMemoized(
-      () => PagingController<int, TicketDto>(
-        firstPageKey: 0,
-      ),
-      [license, question, localization, translation, screenState],
-    );
-
-    useEffect(
-      () {
-        pagingController.addPageRequestListener((pageKey) async {
-          try {
-            final result = await screenController.fetchPage(pageKey);
-            if (result.isLastPage) {
-              pagingController.appendLastPage(result.tickets);
-            } else {
-              pagingController.appendPage(result.tickets, pageKey + 1);
-            }
-          } catch (e) {
-            pagingController.error = e;
-          }
-        });
-        return () {
-          pagingController.dispose();
-        };
-      },
-      [license, question, localization, translation, screenState],
-    );
-
     return Scaffold(
       drawer: const QuickSettingsOrganism(),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Skeletonizer(
+        title: ShimmerTemplate(
           enabled: isLoading,
-          enableSwitchAnimation: true,
           child: Row(
             children: [
               BackButton(
@@ -147,46 +111,69 @@ class _TicketsBody extends HookConsumerWidget {
           ),
         ),
       ),
-      body: Skeletonizer(
+      body: ShimmerTemplate(
         enabled: isLoading,
-        enableSwitchAnimation: true,
-        child: PagedListView<int, TicketDto>(
-          pagingController: pagingController,
-          builderDelegate: PagedChildBuilderDelegate<TicketDto>(
-            firstPageErrorIndicatorBuilder: (context) => const Center(
-              child: Text('Error'),
-            ),
-            newPageErrorIndicatorBuilder: (context) => const Center(
-              child: Text('Error'),
-            ),
-            firstPageProgressIndicatorBuilder: (context) => Skeletonizer(
-              enabled: true,
-              enableSwitchAnimation: true,
-              effect: ShimmerEffect(
-                duration: DSDurationTokens.xxs.duration,
-                highlightColor: Colors.white,
-                baseColor: Colors.grey,
-              ),
-              child: Column(
-                children: screenState.tickets
-                    .take(4)
-                    .map((e) => TicketListItem(ticket: e))
-                    .toList(),
-              ),
-            ),
-            newPageProgressIndicatorBuilder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ),
-            noItemsFoundIndicatorBuilder: (context) => const Center(
-              child: Text('No items found'),
-            ),
-            noMoreItemsIndicatorBuilder: (context) => const Center(
-              child: Text('No more items'),
-            ),
-            itemBuilder: (context, item, index) => TicketListItem(ticket: item),
-          ),
+        child: ListView.builder(
+          itemCount: screenState.totalCount,
+          itemBuilder: (context, index) {
+            return _TicketListPage(
+              page: index ~/ screenState.limit + 1,
+              pageSize: screenState.limit,
+              index: index,
+            );
+          },
         ),
       ),
+    );
+  }
+}
+
+class _TicketListPage extends HookConsumerWidget {
+  const _TicketListPage({
+    required this.page,
+    required this.pageSize,
+    required this.index,
+  });
+
+  final int page;
+  final int pageSize;
+  final int index;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final screenState = ref.watch(ticketListControllerProvider);
+    final fetchPageFuture = useMemoized(
+        () => ref.read(ticketListControllerProvider.notifier).fetchPage(page),
+        []);
+    final fetchPageResult = useFuture(fetchPageFuture);
+
+    return screenState.when(
+      error: (error, stack) => Center(child: Text(error.toString())),
+      loading: () => TicketListItem(ticket: TicketDto.skeleton()),
+      data: (data) {
+        if (index % pageSize >= data.totalCount) {
+          return const Icon(Icons.last_page);
+        }
+
+        if (fetchPageResult.hasError) {
+          return Center(child: Text(fetchPageResult.error.toString()));
+        }
+
+        if (screenState.valueOrNull?.tickets.elementAtOrNull(index) == null) {
+          return TicketListItem(ticket: TicketDto.skeleton());
+        }
+
+        // logger.d('fetchPage: $index $page');
+
+        return ShimmerTemplate(
+          enabled: fetchPageResult.connectionState == ConnectionState.waiting,
+          child: TicketListItem(
+            ticket: screenState.value!.tickets
+                    .firstWhereIndexedOrNull((i, j) => i == index) ??
+                TicketDto.skeleton(),
+          ),
+        );
+      },
     );
   }
 }
@@ -319,7 +306,7 @@ class TicketListItem extends HookConsumerWidget {
                 .where((e) => e.tickets.contains(ticket.ordinalId))
                 .map((e) => _Tag(
                       name: e.name,
-                      color: Colors.transparent,
+                      color: e.color.withOpacity(0.5),
                     ))
                 .toList(),
           ),

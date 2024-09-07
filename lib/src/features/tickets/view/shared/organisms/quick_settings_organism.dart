@@ -77,6 +77,14 @@ class _LanguageDropdownWidget extends ConsumerWidget {
           return ButtonSegment(
             value: locale,
             label: Text(locale.name),
+            tooltip: switch (locale) {
+              SupportedLocale.ge =>
+                'The original in Georgian. No Martva translation',
+              SupportedLocale.en =>
+                'Tickets from original Georgian source lack translations',
+              SupportedLocale.ru =>
+                'Tickets from original Georgian source lack translations',
+            },
           );
         }).toList(),
         onSelectionChanged: (Set<SupportedLocale> newValue) {
@@ -120,6 +128,12 @@ class _TranslationDropdownWidget extends HookConsumerWidget {
           return ButtonSegment(
             value: translation,
             label: Text(translation.name),
+            tooltip: switch (translation) {
+              TicketTranslation.original =>
+                'Language and translations from original source: Georgian',
+              TicketTranslation.gpt4oMini =>
+                'Language and translations from Martva\'s translation model',
+            },
           );
         }).toList(),
         onSelectionChanged: (Set<TicketTranslation> newValue) {

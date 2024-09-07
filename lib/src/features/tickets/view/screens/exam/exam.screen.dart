@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:martva/src/core/theme/view/atoms/error_message.atom.dart';
+import 'package:martva/src/core/theme/view/templates/shimmer.template.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/constants.dart';
 import 'package:martva/src/core/utils/methods/answer_color.dart';
@@ -9,7 +10,6 @@ import 'package:martva/src/features/tickets/view/screens/exam/exam.controller.da
 import 'package:martva/src/features/tickets/view/screens/exam/exam.state.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/quick_settings_organism.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class ExamScreen extends HookConsumerWidget {
   const ExamScreen({super.key});
@@ -81,10 +81,8 @@ class _ExamBody extends HookConsumerWidget {
       drawer: const QuickSettingsOrganism(),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Skeletonizer(
+        title: ShimmerTemplate(
           enabled: isLoading,
-          ignorePointers: isLoading,
-          enableSwitchAnimation: true,
           child: Row(
             children: [
               const BackButton(),
@@ -152,9 +150,8 @@ class _TicketListTemplate extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenController = ref.read(examControllerProvider.notifier);
 
-    return Skeletonizer(
+    return ShimmerTemplate(
       enabled: isLoading,
-      enableSwitchAnimation: true,
       child: PageView.builder(
         controller: pageController,
         itemCount: screenState.solutions.length,

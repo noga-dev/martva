@@ -218,7 +218,7 @@ class SupabaseTicketRepo implements TicketRepo {
 
         return (
           tickets: <TicketDto>[],
-          totalCount: 0,
+          totalCount: response.count,
         );
       }
 

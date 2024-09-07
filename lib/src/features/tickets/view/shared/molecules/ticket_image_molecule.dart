@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:martva/src/core/theme/view/templates/shimmer.template.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_color_tokens.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/image_size.repo.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TicketImageMolecule extends ConsumerWidget {
@@ -145,7 +145,7 @@ class _Shimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Skeletonizer(
+    return ShimmerTemplate(
       enabled: true,
       child: AspectRatio(
         aspectRatio: aspectRatio,

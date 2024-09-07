@@ -1,4 +1,4 @@
-import 'package:martva/src/core/i18n/data/localization.repo.dart';
+import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.state.dart';
@@ -6,28 +6,26 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'ticket_list.controller.g.dart';
 
-@Riverpod(dependencies: [
-  LocalizationRepo,
-  TicketTranslationNotifer,
-  filteredTickets,
-])
+@Riverpod(dependencies: [filteredTickets, filteredTickets])
 class TicketListController extends _$TicketListController {
   @override
   Future<TicketListState> build() async {
-    ref.watch(licenseCategoryNotifierProvider);
-    ref.watch(questionCategoryNotifierProvider);
-    ref.watch(localizationRepoProvider);
-    ref.watch(ticketTranslationNotiferProvider);
+    final filtered = await ref.watch(
+      filteredTicketsProvider(limit: 0, offset: 0).future,
+    );
 
-    return const TicketListState();
+    logger.w('filtered: ${filtered.totalCount}');
+
+    return TicketListState(totalCount: filtered.totalCount);
   }
 
-  Future<
-      ({
-        List<TicketDto> tickets,
-        bool isLastPage,
-      })> fetchPage(int pageKey) async {
-    final currentPage = pageKey;
+  Future<void> fetchPage(int pageKey) async {
+    // if (pageKey != state.value!.page) {
+    //   return;
+    // }
+
+    final currentPage = pageKey - 1;
+
     final newItems = await ref.read(
       filteredTicketsProvider(
         limit: state.value!.limit,
@@ -38,27 +36,16 @@ class TicketListController extends _$TicketListController {
     final isLastPage = newItems.tickets.isEmpty;
 
     if (isLastPage) {
-      state = AsyncValue.data(
-        TicketListState(
-          tickets: [...state.value!.tickets, ...newItems.tickets],
-        ),
-      );
-      return (
-        tickets: <TicketDto>[],
-        isLastPage: true,
-      );
+      state = AsyncData(state.value!.copyWith(
+        tickets: [...state.value!.tickets, ...newItems.tickets],
+      ));
     } else {
       final nextPageKey = currentPage + 1;
       state = AsyncValue.data(
-        TicketListState(
+        state.value!.copyWith(
           page: nextPageKey,
           tickets: [...state.value!.tickets, ...newItems.tickets],
         ),
-      );
-
-      return (
-        tickets: newItems.tickets,
-        isLastPage: false,
       );
     }
   }

@@ -7,7 +7,7 @@ part of 'ticket_list.controller.dart';
 // **************************************************************************
 
 String _$ticketListControllerHash() =>
-    r'b4f6b86696cb0a8fedb1fe3b2a801632b8275cb8';
+    r'1e349817d3ad33d47e215fe5c6e96a7f3e570de6';
 
 /// See also [TicketListController].
 @ProviderFor(TicketListController)
@@ -18,16 +18,8 @@ final ticketListControllerProvider = AutoDisposeAsyncNotifierProvider<
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$ticketListControllerHash,
-  dependencies: <ProviderOrFamily>[
-    localizationRepoProvider,
-    ticketTranslationNotiferProvider,
-    filteredTicketsProvider
-  ],
+  dependencies: <ProviderOrFamily>[filteredTicketsProvider],
   allTransitiveDependencies: <ProviderOrFamily>{
-    localizationRepoProvider,
-    ...?localizationRepoProvider.allTransitiveDependencies,
-    ticketTranslationNotiferProvider,
-    ...?ticketTranslationNotiferProvider.allTransitiveDependencies,
     filteredTicketsProvider,
     ...?filteredTicketsProvider.allTransitiveDependencies
   },
