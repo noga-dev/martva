@@ -1,4 +1,3 @@
-import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.state.dart';
@@ -16,7 +15,7 @@ class TicketListController extends _$TicketListController {
       filteredTicketsProvider(limit: 0, offset: 0).future,
     );
 
-    logger.w('filtered: ${filtered.totalCount}');
+    // logger.w('filtered: ${filtered.totalCount}');
 
     state = AsyncData(TicketListState(totalCount: filtered.totalCount));
 
@@ -27,7 +26,7 @@ class TicketListController extends _$TicketListController {
 
   Future<void> loadMore() async {
     final currentState = state.value!;
-    logger.w('loadMore: ${currentState.isLoading} ${currentState.hasMore}');
+    // logger.w('loadMore: ${currentState.isLoading} ${currentState.hasMore}');
     if (currentState.isLoading || !currentState.hasMore) return;
 
     state = AsyncValue.data(currentState.copyWith(isLoading: true));
@@ -50,8 +49,8 @@ class TicketListController extends _$TicketListController {
         hasMore: hasMore,
       ));
 
-      logger.d(
-          'loadMore: ${updatedTickets.length} ${updatedTickets.map((e) => e.ordinalId).toList()}');
+      // logger.d(
+      //     'loadMore: ${updatedTickets.length} ${updatedTickets.map((e) => e.ordinalId).toList()}');
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
     }

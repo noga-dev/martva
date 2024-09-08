@@ -7,7 +7,6 @@ import 'package:martva/src/core/theme/view/templates/shimmer.template.dart';
 import 'package:martva/src/core/theme/view/tokens/ds_spacing_tokens.dart';
 import 'package:martva/src/core/utils/enums/license_category.dart';
 import 'package:martva/src/core/utils/enums/question_category.dart';
-import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
 import 'package:martva/src/features/tickets/repo/ticket.repo.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.controller.dart';
@@ -53,7 +52,7 @@ class _TicketsBody extends HookConsumerWidget {
         if (scrollController.position.maxScrollExtent -
                 scrollController.offset <=
             500) {
-          logger.w('loadMore: ${scrollController.offset}');
+          // logger.w('loadMore: ${scrollController.offset}');
           ref.read(ticketListControllerProvider.notifier).loadMore();
         }
       }
@@ -157,10 +156,19 @@ class _QuestionCategory extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final question = ref.watch(questionCategoryNotifierProvider);
 
-    return PopupMenuButton(
-      icon: question.icon,
+    return PopupMenuButton<QuestionCategory>(
+      icon: Icon(
+        question.icon.icon,
+        color: question == QuestionCategory.all
+            ? Theme.of(context)
+                .iconButtonTheme
+                .style
+                ?.iconColor
+                ?.resolve({WidgetState.selected})
+            : question.color,
+      ),
       itemBuilder: (context) => QuestionCategory.values
-          .map((e) => PopupMenuItem(
+          .map((e) => PopupMenuItem<QuestionCategory>(
                 value: e,
                 onTap: () => ref
                     .read(questionCategoryNotifierProvider.notifier)
@@ -184,7 +192,16 @@ class _LicenseCategory extends ConsumerWidget {
     final license = ref.watch(licenseCategoryNotifierProvider);
 
     return PopupMenuButton<LicenseCategory>(
-      icon: license.icon,
+      icon: Icon(
+        license.icon.icon,
+        color: license == LicenseCategory.all
+            ? Theme.of(context)
+                .iconButtonTheme
+                .style
+                ?.iconColor
+                ?.resolve({WidgetState.selected})
+            : license.color,
+      ),
       padding: EdgeInsets.zero,
       menuPadding: EdgeInsets.zero,
       itemBuilder: (context) => LicenseCategory.values
@@ -283,6 +300,9 @@ class TicketListItem extends HookConsumerWidget {
                 .map((e) => _Tag(
                       name: e.name,
                       color: e.color.withOpacity(0.5),
+                      onTap: () => ref
+                          .read(questionCategoryNotifierProvider.notifier)
+                          .update(e),
                     ))
                 .toList(),
           ),
@@ -298,6 +318,9 @@ class TicketListItem extends HookConsumerWidget {
               .map((e) => _Tag(
                     name: e.selectName,
                     color: e.color.withOpacity(0.5),
+                    onTap: () => ref
+                        .read(licenseCategoryNotifierProvider.notifier)
+                        .update(e),
                   ))
               .toList(),
         ),
@@ -311,15 +334,18 @@ class _Tag extends StatelessWidget {
   const _Tag({
     required this.name,
     required this.color,
+    required this.onTap,
   });
 
   final Color color;
   final String name;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
+    return ActionChip(
       // labelPadding: EdgeInsets.zero,
+      onPressed: onTap,
       padding: EdgeInsets.zero,
       label: Text(name),
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),

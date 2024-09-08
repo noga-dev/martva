@@ -84,19 +84,21 @@ class TicketDetailsController extends _$TicketDetailsController {
 
     final positionOfCurrentTicket = filteredTickets.indexOf(ticket.ordinalId);
 
-    return (
-      nextTicketId: positionOfCurrentTicket != filteredTickets.last
+    final result = (
+      nextTicketId: positionOfCurrentTicket <= filteredTickets.last
           ? (await ref.read(getTicketByOrdinalProvider(
                       ordinal: filteredTickets[positionOfCurrentTicket + 1])
                   .future))
               .id
           : '',
-      prevTicketId: positionOfCurrentTicket != filteredTickets.first
+      prevTicketId: positionOfCurrentTicket >= filteredTickets.first
           ? (await ref.read(getTicketByOrdinalProvider(
                       ordinal: filteredTickets[positionOfCurrentTicket - 1])
                   .future))
               .id
           : '',
     );
+
+    return result;
   }
 }

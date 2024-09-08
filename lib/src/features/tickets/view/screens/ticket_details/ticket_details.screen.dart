@@ -4,6 +4,7 @@ import 'package:martva/src/core/router/router.dart';
 import 'package:martva/src/core/theme/view/templates/shimmer.template.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_details/ticket_details.controller.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_details/ticket_details.state.dart';
+import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.screen.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/quick_settings_organism.dart';
 import 'package:martva/src/features/tickets/view/shared/organisms/ticket_card_organism.dart';
 
@@ -51,11 +52,24 @@ class _Body extends ConsumerWidget {
     return Dismissible(
       key: UniqueKey(),
       onDismissed: (direction) => direction == DismissDirection.endToStart
-          ? TicketDetailsRoute(id: screenState.nextTicketId).replace(context)
-          : TicketDetailsRoute(id: screenState.prevTicketId).replace(context),
-      background: TicketDetailScreen(ticketId: screenState.prevTicketId),
-      secondaryBackground:
-          TicketDetailScreen(ticketId: screenState.nextTicketId),
+          ? screenState.nextTicketId.isEmpty
+              ? Navigator.of(context).pop()
+              : TicketDetailsRoute(id: screenState.nextTicketId)
+                  .replace(context)
+          : screenState.prevTicketId.isEmpty
+              ? Navigator.of(context).pop()
+              : TicketDetailsRoute(id: screenState.prevTicketId)
+                  .replace(context),
+      background: IgnorePointer(
+        child: screenState.prevTicketId.isEmpty
+            ? const TicketListScreen()
+            : TicketDetailScreen(ticketId: screenState.prevTicketId),
+      ),
+      secondaryBackground: IgnorePointer(
+        child: screenState.nextTicketId.isEmpty
+            ? const Scaffold(body: Center(child: Text('No next ticket')))
+            : TicketDetailScreen(ticketId: screenState.nextTicketId),
+      ),
       child: Scaffold(
         drawer: const QuickSettingsOrganism(),
         appBar: AppBar(
