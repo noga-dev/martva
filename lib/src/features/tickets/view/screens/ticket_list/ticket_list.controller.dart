@@ -19,7 +19,7 @@ class TicketListController extends _$TicketListController {
 
     state = AsyncData(TicketListState(totalCount: filtered.totalCount));
 
-    await ref.read(ticketListControllerProvider.notifier).loadMore();
+    await loadMore();
 
     return state.value!;
   }

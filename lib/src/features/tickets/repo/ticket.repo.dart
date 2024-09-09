@@ -220,30 +220,6 @@ class QuestionCategoryNotifier extends _$QuestionCategoryNotifier {
   }
 }
 
-// @riverpod
-// Future<List<int>> ticketOrdinalsByLicenseCategory(
-//     TicketsByLicenseCategoryRef ref) async {
-//   final category = ref.watch(licenseCategoryNotifierProvider);
-//   final locale = ref.watch(localizationRepoProvider);
-//   final translation = ref.watch(ticketTranslationNotiferProvider);
-
-//   final ids = category.tickets
-
-//   return tickets;
-// }
-
-// @riverpod
-// Future<List<int>> ticketOrdinalsByQuestionCategory(
-//     TicketsByQuestionCategoryRef ref) async {
-//   final question = ref.watch(questionCategoryNotifierProvider);
-//   final locale = ref.watch(localizationRepoProvider);
-//   final translation = ref.watch(ticketTranslationNotiferProvider);
-
-//   final ordinals = question.tickets;
-
-//   return tickets;
-// }
-
 @Riverpod(dependencies: [
   LocalizationRepo,
   TicketTranslationNotifer,
@@ -298,10 +274,3 @@ Future<List<int>> filteredTicketOrdinals(FilteredTicketOrdinalsRef ref) async {
 
   return sorted;
 }
-
-// @riverpod
-// Future<int> getTotalTicketsCount(GetTotalTicketsCountRef ref) async {
-//   final ticketRepo = ref.watch(ticketRepoProvider);
-
-//   return ticketRepo.getTotalTicketsCount();
-// }

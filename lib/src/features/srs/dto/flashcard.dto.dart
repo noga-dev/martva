@@ -8,42 +8,12 @@ part 'flashcard.dto.g.dart';
 @Freezed(fromJson: false)
 class FlashcardDto with _$FlashcardDto {
   const factory FlashcardDto({
-    @Default('')
-    @JsonKey(
-      defaultValue: '',
-      name: 'id',
-    )
-    UUID id,
-    @Default('')
-    @JsonKey(
-      defaultValue: '',
-      name: 'ticket_id',
-    )
-    UUID ticketId,
-    @Default('')
-    @JsonKey(
-      defaultValue: '',
-      name: 'created_at',
-    )
-    DateTimeISO8601 createdAt,
-    @Default(-1)
-    @JsonKey(
-      defaultValue: -1,
-      name: 'answer_index',
-    )
-    int answerIndex,
-    @Default(0.0)
-    @JsonKey(
-      defaultValue: 0.0,
-      name: 'ease_factor',
-    )
-    double easeFactor,
-    @Default(0)
-    @JsonKey(
-      defaultValue: 0,
-      name: 'interval',
-    )
-    int interval,
+    @Default('') @JsonKey(defaultValue: '') UUID id,
+    @Default('') @JsonKey(defaultValue: '', name: 'ticket_id') UUID ticketId,
+    @Default('') @JsonKey(name: 'created_at') DateTimeISO8601 createdAt,
+    @Default('') @JsonKey(name: 'due_date') DateTimeISO8601 dueDate,
+    @Default(0.0) @JsonKey(defaultValue: 0.0) double stability,
+    @Default(0.0) @JsonKey(defaultValue: 0.0) double difficulty,
   }) = _FlashcardDto;
 
   factory FlashcardDto.fromJson(Map<String, dynamic> json) =>

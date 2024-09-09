@@ -7,12 +7,12 @@ part of 'flashcards.controller.dart';
 // **************************************************************************
 
 String _$flashcardsControllerHash() =>
-    r'68359ac0f7c85eb66f561e17c077defb27c1fdb6';
+    r'6ac8908d5a7747dbe4029905e3c892475e278858';
 
 /// See also [FlashcardsController].
 @ProviderFor(FlashcardsController)
 final flashcardsControllerProvider = AutoDisposeAsyncNotifierProvider<
-    FlashcardsController, List<FlashcardDto>>.internal(
+    FlashcardsController, FlashcardsState>.internal(
   FlashcardsController.new,
   name: r'flashcardsControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final flashcardsControllerProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$FlashcardsController = AutoDisposeAsyncNotifier<List<FlashcardDto>>;
+typedef _$FlashcardsController = AutoDisposeAsyncNotifier<FlashcardsState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
