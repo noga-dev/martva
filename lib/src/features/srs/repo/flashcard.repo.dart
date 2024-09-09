@@ -14,6 +14,7 @@ abstract class FlashcardRepo {
   Future<FlashcardDto> createFlashcard(UUID ticketId);
   Future<void> updateFlashcard(FlashcardDto flashcard);
   Future<void> logUserAnswer(UserAnswerDto userAnswer);
+  Future<List<FlashcardDto>> getAllFlashcards();
 }
 
 @riverpod

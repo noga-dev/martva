@@ -2,12 +2,6 @@ import 'dart:math';
 
 import 'package:martva/src/core/utils/aliases/string.dart';
 import 'package:martva/src/features/srs/dto/flashcard.dto.dart';
-import 'package:martva/src/features/srs/dto/user_answer.dto.dart';
-import 'package:martva/src/features/srs/repo/flashcard.repo.dart';
-import 'package:martva/src/features/tickets/dto/ticket.dto.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'flashcard.service.g.dart';
 
 class FSRS {
   static const double defaultDifficulty = 5.0;
@@ -54,51 +48,4 @@ class FSRS {
       dueDate: DateTime.now().toIso8601String(),
     );
   }
-}
-
-class FlashcardUseCase {
-  final FlashcardRepo _repo;
-
-  FlashcardUseCase(this._repo);
-
-  Future<List<TicketDto>> getTickets() => _repo.getTickets();
-
-  Future<List<FlashcardDto>> getDueFlashcards() => _repo.getDueFlashcards();
-
-  Future<void> answerFlashcard(FlashcardDto flashcard, UUID answerId) async {
-    final ticket = (await _repo.getTickets())
-        .firstWhere((t) => t.id == flashcard.ticketId);
-    final correct = ticket.answers.firstWhere((a) => a.id == answerId).correct;
-
-    final updatedFlashcard = FSRS.updateFlashcard(flashcard, correct);
-    await _repo.updateFlashcard(updatedFlashcard);
-
-    final userAnswer = UserAnswerDto(
-      flashcardId: flashcard.id,
-      answerId: answerId,
-      createdAt: DateTime.now().toIso8601String(),
-    );
-    await _repo.logUserAnswer(userAnswer);
-  }
-
-  Future<FlashcardDto> getOrCreateFlashcard(UUID ticketId) async {
-    final dueFlashcards = await _repo.getDueFlashcards();
-    final existingFlashcard = dueFlashcards.firstWhere(
-      (f) => f.ticketId == ticketId,
-      orElse: () => FlashcardDto(ticketId: ticketId),
-    );
-
-    if (existingFlashcard.id.isEmpty) {
-      return await _repo.createFlashcard(ticketId);
-    }
-
-    return existingFlashcard;
-  }
-}
-
-@riverpod
-FlashcardUseCase flashcardUseCase(FlashcardUseCaseRef ref) {
-  final repo = ref.watch(flashcardRepoProvider);
-
-  return FlashcardUseCase(repo);
 }

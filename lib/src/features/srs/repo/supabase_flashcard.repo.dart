@@ -13,7 +13,8 @@ class SupabaseFlashcardRepo implements FlashcardRepo {
 
   @override
   Future<List<TicketDto>> getTickets() async {
-    final response = await _client.from('tickets').select();
+    final response = await _client.from('tickets').select('id');
+
     return response.map((json) => TicketDto.fromJson(json)).toList();
   }
 
@@ -31,14 +32,22 @@ class SupabaseFlashcardRepo implements FlashcardRepo {
   Future<FlashcardDto> createFlashcard(UUID ticketId) async {
     final newFlashcard = FlashcardDto(
       ticketId: ticketId,
-      createdAt: DateTime.now().toIso8601String(),
       dueDate: DateTime.now().toIso8601String(),
       stability: FSRS.defaultStability,
       difficulty: FSRS.defaultDifficulty,
     );
-    final response =
-        await _client.from('flashcards').insert(newFlashcard.toJson());
-    return FlashcardDto.fromJson(response.data[0]);
+
+    final response = await _client
+        .from('flashcards')
+        .insert({
+          'ticket_id': newFlashcard.ticketId,
+          'stability': newFlashcard.stability,
+          'difficulty': newFlashcard.difficulty,
+          'due_date': newFlashcard.dueDate,
+        })
+        .select()
+        .single();
+    return FlashcardDto.fromJson(response);
   }
 
   @override
@@ -51,6 +60,16 @@ class SupabaseFlashcardRepo implements FlashcardRepo {
 
   @override
   Future<void> logUserAnswer(UserAnswerDto userAnswer) async {
-    await _client.from('user_answers').insert(userAnswer.toJson());
+    await _client.from('user_answers').insert({
+      'flashcard_id': userAnswer.flashcardId,
+      'answer_id': userAnswer.answerId,
+    });
+  }
+
+  @override
+  Future<List<FlashcardDto>> getAllFlashcards() async {
+    final response = await _client.from('flashcards').select();
+
+    return response.map((json) => FlashcardDto.fromJson(json)).toList();
   }
 }

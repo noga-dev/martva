@@ -28,58 +28,21 @@ class SupabaseTicketRepo implements TicketRepo {
   const SupabaseTicketRepo();
 
   @override
-  Future<List<TicketDto>> getTickets({
-    required SupportedLocale language,
-    required TicketTranslation translation,
-    required int limit,
-    required bool sortByOrdinalId,
-  }) async {
-    final String actualTranslation = "${language.dbName}_${translation.dbName}";
-
-    assert(actualTranslation != 'ge_gpt4o_mini', 'invalid translation');
-
-    final queryBuilder =
+  Future<List<TicketDto>> getTickets({int? limit, int? offset}) async {
+    PostgrestTransformBuilder<List<Map<String, dynamic>>> query =
         Supabase.instance.client.from('tickets').select(_selectTickets);
 
-    final filterBuilder = queryBuilder
-        .eq('ticket_details.translation', actualTranslation)
-        .eq('ticket_answers.translation', actualTranslation);
-
-    final orderBuilder = sortByOrdinalId
-        ? filterBuilder.order(
-            'ordinal_id',
-            ascending: true,
-          )
-        : filterBuilder;
-
-    final limitBuilder = orderBuilder.limit(limit);
-
-    try {
-      final response = await limitBuilder;
-
-      if (response.isEmpty) {
-        logger.t('No tickets found for translation: $actualTranslation');
-
-        return [];
-      }
-
-      final parsed = response.map(_extractTicket).toList();
-
-      // talker.verbose(response.first);
-
-      return parsed;
-    } catch (e) {
-      logger.e(
-        'Error fetching tickets: $e',
-        time: DateTime.now(),
-        error: e,
-        stackTrace: StackTrace.current,
-      );
-
-      rethrow;
-
-      // return [];
+    if (limit != null) {
+      query = query.limit(limit);
     }
+
+    if (offset != null) {
+      query = query.range(offset, offset + (limit ?? 10) - 1);
+    }
+
+    final response = await query;
+
+    return response.map(_extractTicket).toList();
   }
 
   @override
@@ -173,7 +136,6 @@ class SupabaseTicketRepo implements TicketRepo {
     required String answerId,
   }) async {
     await Supabase.instance.client.from('user_answers').insert({
-      'ticket_id': ticketId,
       'answer_id': answerId,
     });
   }

@@ -7,7 +7,7 @@ part of 'flashcards.controller.dart';
 // **************************************************************************
 
 String _$flashcardsControllerHash() =>
-    r'6ac8908d5a7747dbe4029905e3c892475e278858';
+    r'7885af037b30e2c3fa8d9206be5a2b00ba61ee44';
 
 /// See also [FlashcardsController].
 @ProviderFor(FlashcardsController)

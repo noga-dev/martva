@@ -31,9 +31,7 @@ enum TicketTranslation {
 abstract class TicketRepo {
   Future<List<TicketDto>> getTickets({
     required int limit,
-    required SupportedLocale language,
-    required TicketTranslation translation,
-    required bool sortByOrdinalId,
+    required int offset,
   });
 
   Future<List<TicketDto>> getExamTickets({
@@ -179,22 +177,22 @@ Future<TicketDto> getTicketByOrdinal(
   return result.tickets.first;
 }
 
-@Riverpod(dependencies: [
-  LocalizationRepo,
-  TicketTranslationNotifer,
-])
-Future<List<TicketDto>> getTickets(GetTicketsRef ref) async {
-  final localizationRepo = ref.watch(localizationRepoProvider);
-  final translation = ref.watch(ticketTranslationNotiferProvider);
-  final ticketRepo = ref.watch(ticketRepoProvider);
+// @Riverpod(dependencies: [
+//   LocalizationRepo,
+//   TicketTranslationNotifer,
+// ])
+// Future<List<TicketDto>> getTickets(GetTicketsRef ref) async {
+//   final localizationRepo = ref.watch(localizationRepoProvider);
+//   final translation = ref.watch(ticketTranslationNotiferProvider);
+//   final ticketRepo = ref.watch(ticketRepoProvider);
 
-  return ticketRepo.getTickets(
-    limit: 30,
-    language: localizationRepo,
-    translation: translation,
-    sortByOrdinalId: true,
-  );
-}
+//   return ticketRepo.getTickets(
+//     limit: 30,
+//     language: localizationRepo,
+//     translation: translation,
+//     sortByOrdinalId: true,
+//   );
+// }
 
 @riverpod
 class LicenseCategoryNotifier extends _$LicenseCategoryNotifier {

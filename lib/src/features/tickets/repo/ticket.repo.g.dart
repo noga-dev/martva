@@ -497,28 +497,6 @@ class _GetTicketByOrdinalProviderElement
   int get ordinal => (origin as GetTicketByOrdinalProvider).ordinal;
 }
 
-String _$getTicketsHash() => r'fcf919509a523d951237af5f0a7312cf83bf532d';
-
-/// See also [getTickets].
-@ProviderFor(getTickets)
-final getTicketsProvider = AutoDisposeFutureProvider<List<TicketDto>>.internal(
-  getTickets,
-  name: r'getTicketsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$getTicketsHash,
-  dependencies: <ProviderOrFamily>[
-    localizationRepoProvider,
-    ticketTranslationNotiferProvider
-  ],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    localizationRepoProvider,
-    ...?localizationRepoProvider.allTransitiveDependencies,
-    ticketTranslationNotiferProvider,
-    ...?ticketTranslationNotiferProvider.allTransitiveDependencies
-  },
-);
-
-typedef GetTicketsRef = AutoDisposeFutureProviderRef<List<TicketDto>>;
 String _$filteredTicketsHash() => r'6157251c8f990b9f18b511807a5c32068844d4b6';
 
 /// See also [filteredTickets].

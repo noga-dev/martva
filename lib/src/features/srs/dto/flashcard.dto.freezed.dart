@@ -28,6 +28,16 @@ mixin _$FlashcardDto {
   double get stability => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: 0.0)
   double get difficulty => throw _privateConstructorUsedError;
+  @JsonKey(name: 'ease_factor', defaultValue: 2.5)
+  double get easeFactor => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: 1)
+  int get interval => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: 0)
+  int get repetitions => throw _privateConstructorUsedError;
+  @JsonKey(name: 'last_reviewed_at')
+  String get lastReviewedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'next_review_at')
+  String get nextReviewAt => throw _privateConstructorUsedError;
 
   /// Serializes this FlashcardDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -51,7 +61,12 @@ abstract class $FlashcardDtoCopyWith<$Res> {
       @JsonKey(name: 'created_at') String createdAt,
       @JsonKey(name: 'due_date') String dueDate,
       @JsonKey(defaultValue: 0.0) double stability,
-      @JsonKey(defaultValue: 0.0) double difficulty});
+      @JsonKey(defaultValue: 0.0) double difficulty,
+      @JsonKey(name: 'ease_factor', defaultValue: 2.5) double easeFactor,
+      @JsonKey(defaultValue: 1) int interval,
+      @JsonKey(defaultValue: 0) int repetitions,
+      @JsonKey(name: 'last_reviewed_at') String lastReviewedAt,
+      @JsonKey(name: 'next_review_at') String nextReviewAt});
 }
 
 /// @nodoc
@@ -75,6 +90,11 @@ class _$FlashcardDtoCopyWithImpl<$Res, $Val extends FlashcardDto>
     Object? dueDate = null,
     Object? stability = null,
     Object? difficulty = null,
+    Object? easeFactor = null,
+    Object? interval = null,
+    Object? repetitions = null,
+    Object? lastReviewedAt = null,
+    Object? nextReviewAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -101,6 +121,26 @@ class _$FlashcardDtoCopyWithImpl<$Res, $Val extends FlashcardDto>
           ? _value.difficulty
           : difficulty // ignore: cast_nullable_to_non_nullable
               as double,
+      easeFactor: null == easeFactor
+          ? _value.easeFactor
+          : easeFactor // ignore: cast_nullable_to_non_nullable
+              as double,
+      interval: null == interval
+          ? _value.interval
+          : interval // ignore: cast_nullable_to_non_nullable
+              as int,
+      repetitions: null == repetitions
+          ? _value.repetitions
+          : repetitions // ignore: cast_nullable_to_non_nullable
+              as int,
+      lastReviewedAt: null == lastReviewedAt
+          ? _value.lastReviewedAt
+          : lastReviewedAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      nextReviewAt: null == nextReviewAt
+          ? _value.nextReviewAt
+          : nextReviewAt // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -119,7 +159,12 @@ abstract class _$$FlashcardDtoImplCopyWith<$Res>
       @JsonKey(name: 'created_at') String createdAt,
       @JsonKey(name: 'due_date') String dueDate,
       @JsonKey(defaultValue: 0.0) double stability,
-      @JsonKey(defaultValue: 0.0) double difficulty});
+      @JsonKey(defaultValue: 0.0) double difficulty,
+      @JsonKey(name: 'ease_factor', defaultValue: 2.5) double easeFactor,
+      @JsonKey(defaultValue: 1) int interval,
+      @JsonKey(defaultValue: 0) int repetitions,
+      @JsonKey(name: 'last_reviewed_at') String lastReviewedAt,
+      @JsonKey(name: 'next_review_at') String nextReviewAt});
 }
 
 /// @nodoc
@@ -141,6 +186,11 @@ class __$$FlashcardDtoImplCopyWithImpl<$Res>
     Object? dueDate = null,
     Object? stability = null,
     Object? difficulty = null,
+    Object? easeFactor = null,
+    Object? interval = null,
+    Object? repetitions = null,
+    Object? lastReviewedAt = null,
+    Object? nextReviewAt = null,
   }) {
     return _then(_$FlashcardDtoImpl(
       id: null == id
@@ -167,6 +217,26 @@ class __$$FlashcardDtoImplCopyWithImpl<$Res>
           ? _value.difficulty
           : difficulty // ignore: cast_nullable_to_non_nullable
               as double,
+      easeFactor: null == easeFactor
+          ? _value.easeFactor
+          : easeFactor // ignore: cast_nullable_to_non_nullable
+              as double,
+      interval: null == interval
+          ? _value.interval
+          : interval // ignore: cast_nullable_to_non_nullable
+              as int,
+      repetitions: null == repetitions
+          ? _value.repetitions
+          : repetitions // ignore: cast_nullable_to_non_nullable
+              as int,
+      lastReviewedAt: null == lastReviewedAt
+          ? _value.lastReviewedAt
+          : lastReviewedAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      nextReviewAt: null == nextReviewAt
+          ? _value.nextReviewAt
+          : nextReviewAt // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -180,7 +250,12 @@ class _$FlashcardDtoImpl implements _FlashcardDto {
       @JsonKey(name: 'created_at') this.createdAt = '',
       @JsonKey(name: 'due_date') this.dueDate = '',
       @JsonKey(defaultValue: 0.0) this.stability = 0.0,
-      @JsonKey(defaultValue: 0.0) this.difficulty = 0.0});
+      @JsonKey(defaultValue: 0.0) this.difficulty = 0.0,
+      @JsonKey(name: 'ease_factor', defaultValue: 2.5) this.easeFactor = 2.5,
+      @JsonKey(defaultValue: 1) this.interval = 1,
+      @JsonKey(defaultValue: 0) this.repetitions = 0,
+      @JsonKey(name: 'last_reviewed_at') this.lastReviewedAt = '',
+      @JsonKey(name: 'next_review_at') this.nextReviewAt = ''});
 
   @override
   @JsonKey(defaultValue: '')
@@ -200,10 +275,25 @@ class _$FlashcardDtoImpl implements _FlashcardDto {
   @override
   @JsonKey(defaultValue: 0.0)
   final double difficulty;
+  @override
+  @JsonKey(name: 'ease_factor', defaultValue: 2.5)
+  final double easeFactor;
+  @override
+  @JsonKey(defaultValue: 1)
+  final int interval;
+  @override
+  @JsonKey(defaultValue: 0)
+  final int repetitions;
+  @override
+  @JsonKey(name: 'last_reviewed_at')
+  final String lastReviewedAt;
+  @override
+  @JsonKey(name: 'next_review_at')
+  final String nextReviewAt;
 
   @override
   String toString() {
-    return 'FlashcardDto(id: $id, ticketId: $ticketId, createdAt: $createdAt, dueDate: $dueDate, stability: $stability, difficulty: $difficulty)';
+    return 'FlashcardDto(id: $id, ticketId: $ticketId, createdAt: $createdAt, dueDate: $dueDate, stability: $stability, difficulty: $difficulty, easeFactor: $easeFactor, interval: $interval, repetitions: $repetitions, lastReviewedAt: $lastReviewedAt, nextReviewAt: $nextReviewAt)';
   }
 
   @override
@@ -220,13 +310,34 @@ class _$FlashcardDtoImpl implements _FlashcardDto {
             (identical(other.stability, stability) ||
                 other.stability == stability) &&
             (identical(other.difficulty, difficulty) ||
-                other.difficulty == difficulty));
+                other.difficulty == difficulty) &&
+            (identical(other.easeFactor, easeFactor) ||
+                other.easeFactor == easeFactor) &&
+            (identical(other.interval, interval) ||
+                other.interval == interval) &&
+            (identical(other.repetitions, repetitions) ||
+                other.repetitions == repetitions) &&
+            (identical(other.lastReviewedAt, lastReviewedAt) ||
+                other.lastReviewedAt == lastReviewedAt) &&
+            (identical(other.nextReviewAt, nextReviewAt) ||
+                other.nextReviewAt == nextReviewAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, ticketId, createdAt, dueDate, stability, difficulty);
+      runtimeType,
+      id,
+      ticketId,
+      createdAt,
+      dueDate,
+      stability,
+      difficulty,
+      easeFactor,
+      interval,
+      repetitions,
+      lastReviewedAt,
+      nextReviewAt);
 
   /// Create a copy of FlashcardDto
   /// with the given fields replaced by the non-null parameter values.
@@ -246,13 +357,18 @@ class _$FlashcardDtoImpl implements _FlashcardDto {
 
 abstract class _FlashcardDto implements FlashcardDto {
   const factory _FlashcardDto(
-          {@JsonKey(defaultValue: '') final String id,
-          @JsonKey(defaultValue: '', name: 'ticket_id') final String ticketId,
-          @JsonKey(name: 'created_at') final String createdAt,
-          @JsonKey(name: 'due_date') final String dueDate,
-          @JsonKey(defaultValue: 0.0) final double stability,
-          @JsonKey(defaultValue: 0.0) final double difficulty}) =
-      _$FlashcardDtoImpl;
+      {@JsonKey(defaultValue: '') final String id,
+      @JsonKey(defaultValue: '', name: 'ticket_id') final String ticketId,
+      @JsonKey(name: 'created_at') final String createdAt,
+      @JsonKey(name: 'due_date') final String dueDate,
+      @JsonKey(defaultValue: 0.0) final double stability,
+      @JsonKey(defaultValue: 0.0) final double difficulty,
+      @JsonKey(name: 'ease_factor', defaultValue: 2.5) final double easeFactor,
+      @JsonKey(defaultValue: 1) final int interval,
+      @JsonKey(defaultValue: 0) final int repetitions,
+      @JsonKey(name: 'last_reviewed_at') final String lastReviewedAt,
+      @JsonKey(name: 'next_review_at')
+      final String nextReviewAt}) = _$FlashcardDtoImpl;
 
   @override
   @JsonKey(defaultValue: '')
@@ -272,6 +388,21 @@ abstract class _FlashcardDto implements FlashcardDto {
   @override
   @JsonKey(defaultValue: 0.0)
   double get difficulty;
+  @override
+  @JsonKey(name: 'ease_factor', defaultValue: 2.5)
+  double get easeFactor;
+  @override
+  @JsonKey(defaultValue: 1)
+  int get interval;
+  @override
+  @JsonKey(defaultValue: 0)
+  int get repetitions;
+  @override
+  @JsonKey(name: 'last_reviewed_at')
+  String get lastReviewedAt;
+  @override
+  @JsonKey(name: 'next_review_at')
+  String get nextReviewAt;
 
   /// Create a copy of FlashcardDto
   /// with the given fields replaced by the non-null parameter values.
