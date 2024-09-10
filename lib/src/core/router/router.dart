@@ -13,7 +13,7 @@ import 'package:martva/src/features/chat/view/chat_room_screen.dart';
 import 'package:martva/src/features/dev/view/db_seeder.screen.dart';
 import 'package:martva/src/features/home/view/home_screen.dart';
 import 'package:martva/src/features/settings/view/settings_screen.dart';
-import 'package:martva/src/features/srs/view/screens/flashcards.screen.dart';
+import 'package:martva/src/features/srs/view/screens/srs_screen.dart';
 import 'package:martva/src/features/tickets/view/screens/exam/exam.screen.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_details/ticket_details.screen.dart';
 import 'package:martva/src/features/tickets/view/screens/ticket_list/ticket_list.screen.dart';
@@ -113,13 +113,13 @@ class TicketDetailsRoute extends GoRouteData {
 
 // tickets end
 
-@TypedGoRoute<ReviewsRoute>(path: '/reviews')
+@TypedGoRoute<ReviewsRoute>(path: '/srs-study')
 class ReviewsRoute extends GoRouteData {
   const ReviewsRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const FlashcardsScreen();
+    return const SrsScreen();
   }
 }
 

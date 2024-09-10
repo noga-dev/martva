@@ -136,7 +136,7 @@ extension $TicketDetailsRouteExtension on TicketDetailsRoute {
 }
 
 RouteBase get $reviewsRoute => GoRouteData.$route(
-      path: '/reviews',
+      path: '/srs-study',
       factory: $ReviewsRouteExtension._fromState,
     );
 
@@ -144,7 +144,7 @@ extension $ReviewsRouteExtension on ReviewsRoute {
   static ReviewsRoute _fromState(GoRouterState state) => const ReviewsRoute();
 
   String get location => GoRouteData.$location(
-        '/reviews',
+        '/srs-study',
       );
 
   void go(BuildContext context) => context.go(location);

@@ -1,25 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'flashcard.repo.dart';
+part of 'srs_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$flashcardRepoHash() => r'03730534dcbc305a6059aa54bb73af56ce19ce05';
+String _$srsRepositoryHash() => r'f1ebe8b26fa0cd61914420315ef1a60d22afbe0a';
 
-/// See also [flashcardRepo].
-@ProviderFor(flashcardRepo)
-final flashcardRepoProvider = AutoDisposeProvider<FlashcardRepo>.internal(
-  flashcardRepo,
-  name: r'flashcardRepoProvider',
+/// See also [SrsRepository].
+@ProviderFor(SrsRepository)
+final srsRepositoryProvider =
+    AutoDisposeAsyncNotifierProvider<SrsRepository, void>.internal(
+  SrsRepository.new,
+  name: r'srsRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$flashcardRepoHash,
+      : _$srsRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef FlashcardRepoRef = AutoDisposeProviderRef<FlashcardRepo>;
+typedef _$SrsRepository = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
