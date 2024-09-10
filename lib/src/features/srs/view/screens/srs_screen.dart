@@ -23,7 +23,7 @@ class SrsScreen extends ConsumerWidget {
               _buildNextDueItemsCard(state.nextDueItems),
               Expanded(
                 child: state.dueTickets.isEmpty
-                    ? const Center(child: Text('No items due for practice'))
+                    ? _buildAllTicketsList(state.allTickets, ref)
                     : _buildDueItemsList(state.dueTickets, ref),
               ),
             ],
@@ -31,6 +31,66 @@ class SrsScreen extends ConsumerWidget {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
+      ),
+    );
+  }
+
+  Widget _buildAllTicketsList(List<TicketDto> allTickets, WidgetRef ref) {
+    return ListView.builder(
+      itemCount: allTickets.length,
+      itemBuilder: (context, index) {
+        final ticket = allTickets[index];
+        return Card(
+          child: ListTile(
+            title: Text('Question ${ticket.ordinalId}'),
+            subtitle: Text(ticket.question),
+            onTap: () => _showQuestionDialog(context, ticket, ref),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDueItemsList(List<TicketDto> dueTickets, WidgetRef ref) {
+    return ListView.builder(
+      itemCount: dueTickets.length,
+      itemBuilder: (context, index) {
+        final ticket = dueTickets[index];
+        return Card(
+          child: ListTile(
+            title: Text('Due Question ${ticket.ordinalId}'),
+            subtitle: Text(ticket.question),
+            onTap: () => _showQuestionDialog(context, ticket, ref),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showQuestionDialog(
+      BuildContext context, TicketDto ticket, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Question ${ticket.ordinalId}'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(ticket.question),
+            if (ticket.image.isNotEmpty) Image.network(ticket.image),
+            const SizedBox(height: 16),
+            ...ticket.answers.map((answer) => ElevatedButton(
+                  child: Text(answer.answer),
+                  onPressed: () {
+                    ref
+                        .read(srsNotifierProvider.notifier)
+                        .answerQuestion(ticket.id, answer.id);
+                    Navigator.of(context).pop();
+                  },
+                )),
+          ],
+        ),
       ),
     );
   }
@@ -73,39 +133,6 @@ class SrsScreen extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildDueItemsList(List<TicketDto> dueTickets, WidgetRef ref) {
-    return ListView.builder(
-      itemCount: dueTickets.length,
-      itemBuilder: (context, index) {
-        final ticket = dueTickets[index];
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Question ${index + 1}:',
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                Text(ticket.question),
-                if (ticket.image.isNotEmpty) Image.network(ticket.image),
-                const SizedBox(height: 16),
-                ...ticket.answers.map((answer) => ElevatedButton(
-                      child: Text(answer.answer),
-                      onPressed: () {
-                        ref
-                            .read(srsNotifierProvider.notifier)
-                            .answerQuestion(ticket.id, answer.id);
-                      },
-                    )),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }

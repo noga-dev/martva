@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SrsState {
+  List<TicketDto> get allTickets => throw _privateConstructorUsedError;
   List<TicketDto> get dueTickets => throw _privateConstructorUsedError;
   List<SrsItemDto> get nextDueItems => throw _privateConstructorUsedError;
   Map<String, dynamic> get statistics => throw _privateConstructorUsedError;
@@ -33,7 +34,8 @@ abstract class $SrsStateCopyWith<$Res> {
       _$SrsStateCopyWithImpl<$Res, SrsState>;
   @useResult
   $Res call(
-      {List<TicketDto> dueTickets,
+      {List<TicketDto> allTickets,
+      List<TicketDto> dueTickets,
       List<SrsItemDto> nextDueItems,
       Map<String, dynamic> statistics});
 }
@@ -53,11 +55,16 @@ class _$SrsStateCopyWithImpl<$Res, $Val extends SrsState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? allTickets = null,
     Object? dueTickets = null,
     Object? nextDueItems = null,
     Object? statistics = null,
   }) {
     return _then(_value.copyWith(
+      allTickets: null == allTickets
+          ? _value.allTickets
+          : allTickets // ignore: cast_nullable_to_non_nullable
+              as List<TicketDto>,
       dueTickets: null == dueTickets
           ? _value.dueTickets
           : dueTickets // ignore: cast_nullable_to_non_nullable
@@ -83,7 +90,8 @@ abstract class _$$SrsStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<TicketDto> dueTickets,
+      {List<TicketDto> allTickets,
+      List<TicketDto> dueTickets,
       List<SrsItemDto> nextDueItems,
       Map<String, dynamic> statistics});
 }
@@ -101,11 +109,16 @@ class __$$SrsStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? allTickets = null,
     Object? dueTickets = null,
     Object? nextDueItems = null,
     Object? statistics = null,
   }) {
     return _then(_$SrsStateImpl(
+      allTickets: null == allTickets
+          ? _value._allTickets
+          : allTickets // ignore: cast_nullable_to_non_nullable
+              as List<TicketDto>,
       dueTickets: null == dueTickets
           ? _value._dueTickets
           : dueTickets // ignore: cast_nullable_to_non_nullable
@@ -126,12 +139,22 @@ class __$$SrsStateImplCopyWithImpl<$Res>
 
 class _$SrsStateImpl implements _SrsState {
   const _$SrsStateImpl(
-      {required final List<TicketDto> dueTickets,
+      {required final List<TicketDto> allTickets,
+      required final List<TicketDto> dueTickets,
       required final List<SrsItemDto> nextDueItems,
       required final Map<String, dynamic> statistics})
-      : _dueTickets = dueTickets,
+      : _allTickets = allTickets,
+        _dueTickets = dueTickets,
         _nextDueItems = nextDueItems,
         _statistics = statistics;
+
+  final List<TicketDto> _allTickets;
+  @override
+  List<TicketDto> get allTickets {
+    if (_allTickets is EqualUnmodifiableListView) return _allTickets;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_allTickets);
+  }
 
   final List<TicketDto> _dueTickets;
   @override
@@ -159,7 +182,7 @@ class _$SrsStateImpl implements _SrsState {
 
   @override
   String toString() {
-    return 'SrsState(dueTickets: $dueTickets, nextDueItems: $nextDueItems, statistics: $statistics)';
+    return 'SrsState(allTickets: $allTickets, dueTickets: $dueTickets, nextDueItems: $nextDueItems, statistics: $statistics)';
   }
 
   @override
@@ -167,6 +190,8 @@ class _$SrsStateImpl implements _SrsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SrsStateImpl &&
+            const DeepCollectionEquality()
+                .equals(other._allTickets, _allTickets) &&
             const DeepCollectionEquality()
                 .equals(other._dueTickets, _dueTickets) &&
             const DeepCollectionEquality()
@@ -178,6 +203,7 @@ class _$SrsStateImpl implements _SrsState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(_allTickets),
       const DeepCollectionEquality().hash(_dueTickets),
       const DeepCollectionEquality().hash(_nextDueItems),
       const DeepCollectionEquality().hash(_statistics));
@@ -193,10 +219,13 @@ class _$SrsStateImpl implements _SrsState {
 
 abstract class _SrsState implements SrsState {
   const factory _SrsState(
-      {required final List<TicketDto> dueTickets,
+      {required final List<TicketDto> allTickets,
+      required final List<TicketDto> dueTickets,
       required final List<SrsItemDto> nextDueItems,
       required final Map<String, dynamic> statistics}) = _$SrsStateImpl;
 
+  @override
+  List<TicketDto> get allTickets;
   @override
   List<TicketDto> get dueTickets;
   @override

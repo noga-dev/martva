@@ -1,5 +1,7 @@
 // srs_notifier.dart
+
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:martva/src/core/utils/messaging/logger.dart';
 import 'package:martva/src/features/srs/data/srs_repository.dart';
 import 'package:martva/src/features/srs/domain/srs_item_dto.dart';
 import 'package:martva/src/features/srs/domain/srs_service.dart';
@@ -18,46 +20,50 @@ class SrsNotifier extends _$SrsNotifier {
   Future<SrsState> build() async {
     _repository = ref.watch(srsRepositoryProvider.notifier);
     _service = ref.watch(srsServiceProvider.notifier);
-
-    // Populate SRS items if needed
-    await _repository.populateSrsItemsForExistingTickets();
-
     return _loadSrsState();
   }
 
   Future<SrsState> _loadSrsState() async {
-    final dueItems = await _repository.getDueItems();
-    final nextDueItems = await _repository.getNextDueItems(limit: 5);
+    final allTickets = await _repository.getAllTickets();
+    final srsItems = await _repository.getSrsItems();
     final statistics = await _repository.getSrsStatistics();
-    final dueTickets = (await Future.wait(
-      dueItems.map((item) => _repository.getTicket(item.ticketId)),
-    ))
-        .whereType<TicketDto>()
-        .toList();
+
+    final dueTickets = allTickets.where((ticket) {
+      final srsItem = srsItems.firstWhere(
+        (item) => item.ticketId == ticket.id,
+        orElse: () => SrsItemDto(
+          id: '',
+          ticketId: ticket.id,
+          nextDueDate: DateTime.now().subtract(const Duration(days: 1)),
+          interval: 0,
+          easeFactor: 2.5,
+          createdAt: DateTime.now().toUtc(),
+          updatedAt: DateTime.now().toUtc(),
+        ),
+      );
+      return srsItem.nextDueDate.isBefore(DateTime.now());
+    }).toList();
+
+    final nextDueItems = srsItems
+      ..sort((a, b) => a.nextDueDate.compareTo(b.nextDueDate));
 
     return SrsState(
+      allTickets: allTickets,
       dueTickets: dueTickets,
-      nextDueItems: nextDueItems,
+      nextDueItems: nextDueItems.take(5).toList(),
       statistics: statistics,
     );
   }
 
   Future<void> answerQuestion(String ticketId, String answerId) async {
     final srsItem = await _repository.getOrCreateSrsItem(ticketId);
-    if (srsItem == null) {
-      print('Failed to get or create SRS item for ticket $ticketId');
-
-      return;
-    }
-
     final ticket = await _repository.getTicket(ticketId);
-    if (ticket == null) {
-      print('Failed to get ticket $ticketId');
+    final answer = ticket?.answers.firstWhere((a) => a.id == answerId);
 
-      return;
+    if (answer == null || srsItem == null) {
+      logger.d('$answer $srsItem');
+      throw Exception();
     }
-
-    final answer = ticket.answers.firstWhere((a) => a.id == answerId);
 
     await _service.processAnswer(srsItem, answerId, answer.correct);
     state = AsyncValue.data(await _loadSrsState());
@@ -67,6 +73,7 @@ class SrsNotifier extends _$SrsNotifier {
 @freezed
 class SrsState with _$SrsState {
   const factory SrsState({
+    required List<TicketDto> allTickets,
     required List<TicketDto> dueTickets,
     required List<SrsItemDto> nextDueItems,
     required Map<String, dynamic> statistics,

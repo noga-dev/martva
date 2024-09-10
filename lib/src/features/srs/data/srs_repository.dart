@@ -15,6 +15,20 @@ class SrsRepository extends _$SrsRepository {
     _supabase = Supabase.instance.client;
   }
 
+  Future<List<TicketDto>> getAllTickets() async {
+    final response = await _supabase
+        .from('tickets')
+        .select('*, ticket_answers(*)')
+        .order('ordinal_id');
+    return response.map((ticket) => TicketDto.fromJson(ticket)).toList();
+  }
+
+  Future<List<SrsItemDto>> getSrsItems() async {
+    final response =
+        await _supabase.from('srs_items').select().order('nextDueDate');
+    return response.map((item) => SrsItemDto.fromJson(item)).toList();
+  }
+
   Future<List<SrsItemDto>> getDueItems() async {
     final response = await _supabase
         .from('srs_items')

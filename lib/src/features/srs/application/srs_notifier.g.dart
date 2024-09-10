@@ -6,7 +6,7 @@ part of 'srs_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$srsNotifierHash() => r'd1fce18b9e63eeb44cb692ba877407cb054f58aa';
+String _$srsNotifierHash() => r'fe4ea7fba624a2b6476cc54d8f937295338974f1';
 
 /// See also [SrsNotifier].
 @ProviderFor(SrsNotifier)
