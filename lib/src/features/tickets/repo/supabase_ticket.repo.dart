@@ -28,19 +28,27 @@ class SupabaseTicketRepo implements TicketRepo {
   const SupabaseTicketRepo();
 
   @override
-  Future<List<TicketDto>> getTickets({int? limit, int? offset}) async {
-    PostgrestTransformBuilder<List<Map<String, dynamic>>> query =
+  Future<List<TicketDto>> getFlashcardTickets({
+    required SupportedLocale language,
+    required TicketTranslation translation,
+    int? limit,
+    int? offset,
+  }) async {
+    final query =
         Supabase.instance.client.from('tickets').select(_selectTickets);
 
-    if (limit != null) {
-      query = query.limit(limit);
-    }
+    final String actualTranslation = "${language.dbName}_${translation.dbName}";
 
-    if (offset != null) {
-      query = query.range(offset, offset + (limit ?? 10) - 1);
-    }
+    final filterBuilder = query
+        .eq('ticket_details.translation', actualTranslation)
+        .eq('ticket_answers.translation', actualTranslation);
 
-    final response = await query;
+    final limitBuilder = filterBuilder.limit(limit ?? 10);
+
+    final rangeBuilder =
+        limitBuilder.range(offset ?? 0, offset! + (limit ?? 10) - 1);
+
+    final response = await rangeBuilder;
 
     return response.map(_extractTicket).toList();
   }

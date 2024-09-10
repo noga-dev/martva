@@ -7,7 +7,7 @@ part of 'flashcards.controller.dart';
 // **************************************************************************
 
 String _$flashcardsControllerHash() =>
-    r'7885af037b30e2c3fa8d9206be5a2b00ba61ee44';
+    r'f841ff9ffc8710c351b0d3ddbffbdfc921274f36';
 
 /// See also [FlashcardsController].
 @ProviderFor(FlashcardsController)
@@ -18,8 +18,16 @@ final flashcardsControllerProvider = AutoDisposeAsyncNotifierProvider<
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$flashcardsControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[
+    localizationRepoProvider,
+    ticketTranslationNotiferProvider
+  ],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    localizationRepoProvider,
+    ...?localizationRepoProvider.allTransitiveDependencies,
+    ticketTranslationNotiferProvider,
+    ...?ticketTranslationNotiferProvider.allTransitiveDependencies
+  },
 );
 
 typedef _$FlashcardsController = AutoDisposeAsyncNotifier<FlashcardsState>;

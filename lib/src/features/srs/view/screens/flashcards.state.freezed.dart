@@ -18,8 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$FlashcardsState {
   List<TicketDto> get tickets => throw _privateConstructorUsedError;
   List<FlashcardDto> get dueFlashcards => throw _privateConstructorUsedError;
-  TicketDto? get currentTicket => throw _privateConstructorUsedError;
-  FlashcardDto? get currentFlashcard => throw _privateConstructorUsedError;
+  int? get currentTicketIndex => throw _privateConstructorUsedError;
+  int? get currentFlashcardIndex => throw _privateConstructorUsedError;
 
   /// Create a copy of FlashcardsState
   /// with the given fields replaced by the non-null parameter values.
@@ -37,11 +37,8 @@ abstract class $FlashcardsStateCopyWith<$Res> {
   $Res call(
       {List<TicketDto> tickets,
       List<FlashcardDto> dueFlashcards,
-      TicketDto? currentTicket,
-      FlashcardDto? currentFlashcard});
-
-  $TicketDtoCopyWith<$Res>? get currentTicket;
-  $FlashcardDtoCopyWith<$Res>? get currentFlashcard;
+      int? currentTicketIndex,
+      int? currentFlashcardIndex});
 }
 
 /// @nodoc
@@ -61,8 +58,8 @@ class _$FlashcardsStateCopyWithImpl<$Res, $Val extends FlashcardsState>
   $Res call({
     Object? tickets = null,
     Object? dueFlashcards = null,
-    Object? currentTicket = freezed,
-    Object? currentFlashcard = freezed,
+    Object? currentTicketIndex = freezed,
+    Object? currentFlashcardIndex = freezed,
   }) {
     return _then(_value.copyWith(
       tickets: null == tickets
@@ -73,43 +70,15 @@ class _$FlashcardsStateCopyWithImpl<$Res, $Val extends FlashcardsState>
           ? _value.dueFlashcards
           : dueFlashcards // ignore: cast_nullable_to_non_nullable
               as List<FlashcardDto>,
-      currentTicket: freezed == currentTicket
-          ? _value.currentTicket
-          : currentTicket // ignore: cast_nullable_to_non_nullable
-              as TicketDto?,
-      currentFlashcard: freezed == currentFlashcard
-          ? _value.currentFlashcard
-          : currentFlashcard // ignore: cast_nullable_to_non_nullable
-              as FlashcardDto?,
+      currentTicketIndex: freezed == currentTicketIndex
+          ? _value.currentTicketIndex
+          : currentTicketIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
+      currentFlashcardIndex: freezed == currentFlashcardIndex
+          ? _value.currentFlashcardIndex
+          : currentFlashcardIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
-  }
-
-  /// Create a copy of FlashcardsState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $TicketDtoCopyWith<$Res>? get currentTicket {
-    if (_value.currentTicket == null) {
-      return null;
-    }
-
-    return $TicketDtoCopyWith<$Res>(_value.currentTicket!, (value) {
-      return _then(_value.copyWith(currentTicket: value) as $Val);
-    });
-  }
-
-  /// Create a copy of FlashcardsState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $FlashcardDtoCopyWith<$Res>? get currentFlashcard {
-    if (_value.currentFlashcard == null) {
-      return null;
-    }
-
-    return $FlashcardDtoCopyWith<$Res>(_value.currentFlashcard!, (value) {
-      return _then(_value.copyWith(currentFlashcard: value) as $Val);
-    });
   }
 }
 
@@ -124,13 +93,8 @@ abstract class _$$FlashcardsStateImplCopyWith<$Res>
   $Res call(
       {List<TicketDto> tickets,
       List<FlashcardDto> dueFlashcards,
-      TicketDto? currentTicket,
-      FlashcardDto? currentFlashcard});
-
-  @override
-  $TicketDtoCopyWith<$Res>? get currentTicket;
-  @override
-  $FlashcardDtoCopyWith<$Res>? get currentFlashcard;
+      int? currentTicketIndex,
+      int? currentFlashcardIndex});
 }
 
 /// @nodoc
@@ -148,8 +112,8 @@ class __$$FlashcardsStateImplCopyWithImpl<$Res>
   $Res call({
     Object? tickets = null,
     Object? dueFlashcards = null,
-    Object? currentTicket = freezed,
-    Object? currentFlashcard = freezed,
+    Object? currentTicketIndex = freezed,
+    Object? currentFlashcardIndex = freezed,
   }) {
     return _then(_$FlashcardsStateImpl(
       tickets: null == tickets
@@ -160,14 +124,14 @@ class __$$FlashcardsStateImplCopyWithImpl<$Res>
           ? _value._dueFlashcards
           : dueFlashcards // ignore: cast_nullable_to_non_nullable
               as List<FlashcardDto>,
-      currentTicket: freezed == currentTicket
-          ? _value.currentTicket
-          : currentTicket // ignore: cast_nullable_to_non_nullable
-              as TicketDto?,
-      currentFlashcard: freezed == currentFlashcard
-          ? _value.currentFlashcard
-          : currentFlashcard // ignore: cast_nullable_to_non_nullable
-              as FlashcardDto?,
+      currentTicketIndex: freezed == currentTicketIndex
+          ? _value.currentTicketIndex
+          : currentTicketIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
+      currentFlashcardIndex: freezed == currentFlashcardIndex
+          ? _value.currentFlashcardIndex
+          : currentFlashcardIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -178,8 +142,8 @@ class _$FlashcardsStateImpl implements _FlashcardsState {
   const _$FlashcardsStateImpl(
       {final List<TicketDto> tickets = const [],
       final List<FlashcardDto> dueFlashcards = const [],
-      this.currentTicket,
-      this.currentFlashcard})
+      this.currentTicketIndex,
+      this.currentFlashcardIndex})
       : _tickets = tickets,
         _dueFlashcards = dueFlashcards;
 
@@ -202,13 +166,13 @@ class _$FlashcardsStateImpl implements _FlashcardsState {
   }
 
   @override
-  final TicketDto? currentTicket;
+  final int? currentTicketIndex;
   @override
-  final FlashcardDto? currentFlashcard;
+  final int? currentFlashcardIndex;
 
   @override
   String toString() {
-    return 'FlashcardsState(tickets: $tickets, dueFlashcards: $dueFlashcards, currentTicket: $currentTicket, currentFlashcard: $currentFlashcard)';
+    return 'FlashcardsState(tickets: $tickets, dueFlashcards: $dueFlashcards, currentTicketIndex: $currentTicketIndex, currentFlashcardIndex: $currentFlashcardIndex)';
   }
 
   @override
@@ -219,10 +183,10 @@ class _$FlashcardsStateImpl implements _FlashcardsState {
             const DeepCollectionEquality().equals(other._tickets, _tickets) &&
             const DeepCollectionEquality()
                 .equals(other._dueFlashcards, _dueFlashcards) &&
-            (identical(other.currentTicket, currentTicket) ||
-                other.currentTicket == currentTicket) &&
-            (identical(other.currentFlashcard, currentFlashcard) ||
-                other.currentFlashcard == currentFlashcard));
+            (identical(other.currentTicketIndex, currentTicketIndex) ||
+                other.currentTicketIndex == currentTicketIndex) &&
+            (identical(other.currentFlashcardIndex, currentFlashcardIndex) ||
+                other.currentFlashcardIndex == currentFlashcardIndex));
   }
 
   @override
@@ -230,8 +194,8 @@ class _$FlashcardsStateImpl implements _FlashcardsState {
       runtimeType,
       const DeepCollectionEquality().hash(_tickets),
       const DeepCollectionEquality().hash(_dueFlashcards),
-      currentTicket,
-      currentFlashcard);
+      currentTicketIndex,
+      currentFlashcardIndex);
 
   /// Create a copy of FlashcardsState
   /// with the given fields replaced by the non-null parameter values.
@@ -247,17 +211,17 @@ abstract class _FlashcardsState implements FlashcardsState {
   const factory _FlashcardsState(
       {final List<TicketDto> tickets,
       final List<FlashcardDto> dueFlashcards,
-      final TicketDto? currentTicket,
-      final FlashcardDto? currentFlashcard}) = _$FlashcardsStateImpl;
+      final int? currentTicketIndex,
+      final int? currentFlashcardIndex}) = _$FlashcardsStateImpl;
 
   @override
   List<TicketDto> get tickets;
   @override
   List<FlashcardDto> get dueFlashcards;
   @override
-  TicketDto? get currentTicket;
+  int? get currentTicketIndex;
   @override
-  FlashcardDto? get currentFlashcard;
+  int? get currentFlashcardIndex;
 
   /// Create a copy of FlashcardsState
   /// with the given fields replaced by the non-null parameter values.

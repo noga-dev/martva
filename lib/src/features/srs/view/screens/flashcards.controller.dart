@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:martva/src/core/i18n/data/localization.repo.dart';
 import 'package:martva/src/core/utils/aliases/string.dart';
 import 'package:martva/src/core/utils/extensions/string.dart';
 import 'package:martva/src/features/srs/dto/flashcard.dto.dart';
@@ -14,7 +15,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'flashcards.controller.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [
+  LocalizationRepo,
+  TicketTranslationNotifer,
+])
 class FlashcardsController extends _$FlashcardsController {
   @override
   Future<FlashcardsState> build() async {
@@ -28,14 +32,29 @@ class FlashcardsController extends _$FlashcardsController {
       final flashcardRepo = ref.read(flashcardRepoProvider);
       final ticketRepo = ref.read(ticketRepoProvider);
 
-      var dueFlashcards = await flashcardRepo.getDueFlashcards();
+      final dueFlashcards = await flashcardRepo.getDueFlashcards();
+
+      // get all ticket ids
+      // get all flashcards
+      // filter due and not due flashcards
+      // if flashcards's ticket ids are in tickets ids and flashcards is not due, make sure there are no dupes
+      // if flashcards is empty, get all tickets without flashcards and create new ones
+      // if flashcards is not empty, get all tickets with flashcards and get the next due flashcard
+
+      final language = ref.read(localizationRepoProvider);
+      final translation = ref.read(ticketTranslationNotiferProvider);
 
       if (dueFlashcards.isEmpty) {
         // If no due flashcards, get tickets without flashcards and create new ones
         final allFlashcards = await flashcardRepo.getAllFlashcards();
         final ticketsWithFlashcards =
             allFlashcards.map((f) => f.ticketId).toSet();
-        final allTickets = await ticketRepo.getTickets(limit: 10, offset: 0);
+        final allTickets = await ticketRepo.getFlashcardTickets(
+          limit: 10,
+          offset: 0,
+          language: language,
+          translation: translation,
+        );
 
         final ticketsWithoutFlashcards = allTickets
             .where((t) => !ticketsWithFlashcards.contains(t.id))
@@ -44,18 +63,26 @@ class FlashcardsController extends _$FlashcardsController {
         if (ticketsWithoutFlashcards.isNotEmpty) {
           final newFlashcards = await Future.wait(ticketsWithoutFlashcards
               .map((t) => flashcardRepo.createFlashcard(t.id)));
-          dueFlashcards = newFlashcards;
+
+          dueFlashcards.addAll(newFlashcards);
         }
       }
 
       final tickets = dueFlashcards.isNotEmpty
-          ? await ticketRepo.getTickets(limit: dueFlashcards.length, offset: 0)
+          ? await ticketRepo.getFlashcardTickets(
+              limit: dueFlashcards.length,
+              offset: 0,
+              language: language,
+              translation: translation,
+            )
           : <TicketDto>[];
 
       state = AsyncData(
         FlashcardsState(
           tickets: tickets,
           dueFlashcards: dueFlashcards,
+          currentTicketIndex: 0,
+          currentFlashcardIndex: 0,
         ),
       );
 
@@ -63,24 +90,28 @@ class FlashcardsController extends _$FlashcardsController {
         await _loadNextFlashcard();
       }
     } catch (e) {
-      state = AsyncError(e.toString(), StackTrace.current);
+      state = AsyncError(
+        e.toString(),
+        StackTrace.current,
+      );
     }
   }
 
-  Future<void> answerCurrentFlashcard(UUID answerId) async {
-    if (state.value!.currentFlashcard == null ||
-        state.value!.currentTicket == null) {
-      return;
+  Future<FlashcardDto?> answerCurrentFlashcard(UUID answerId) async {
+    if (state.value!.currentFlashcardIndex == null ||
+        state.value!.currentTicketIndex == null) {
+      return null;
     }
 
     final flashcardRepo = ref.read(flashcardRepoProvider);
-    final currentFlashcard = state.value!.currentFlashcard!;
-    final currentTicket = state.value!.currentTicket!;
+    final currentFlashcard =
+        state.value!.dueFlashcards[state.value!.currentFlashcardIndex!];
+    final currentTicket =
+        state.value!.tickets[state.value!.currentTicketIndex!];
 
     final correct =
         currentTicket.answers.firstWhere((a) => a.id == answerId).correct;
 
-    // Implement FSRS logic
     final updatedFlashcard =
         _updateFlashcardWithFSRS(currentFlashcard, correct);
 
@@ -94,6 +125,8 @@ class FlashcardsController extends _$FlashcardsController {
     await flashcardRepo.logUserAnswer(userAnswer);
 
     await _loadNextFlashcard();
+
+    return updatedFlashcard;
   }
 
   FlashcardDto _updateFlashcardWithFSRS(FlashcardDto flashcard, bool correct) {
@@ -127,6 +160,7 @@ class FlashcardsController extends _$FlashcardsController {
 
     // Calculate new ease factor
     double newEaseFactor = flashcard.easeFactor;
+
     if (correct) {
       newEaseFactor += 0.1 *
           (1 - (daysElapsed - flashcard.interval) / flashcard.interval)
@@ -136,6 +170,7 @@ class FlashcardsController extends _$FlashcardsController {
           (1 + (daysElapsed - flashcard.interval) / flashcard.interval)
               .clamp(0, 1);
     }
+
     newEaseFactor = newEaseFactor.clamp(1.3, 2.5);
 
     // Update repetitions
@@ -164,19 +199,15 @@ class FlashcardsController extends _$FlashcardsController {
   Future<void> _loadNextFlashcard() async {
     if (state.value!.dueFlashcards.isEmpty) {
       state = AsyncData(state.value!.copyWith(
-        currentFlashcard: null,
-        currentTicket: null,
+        currentFlashcardIndex: null,
+        currentTicketIndex: null,
       ));
       return;
     }
 
-    final nextFlashcard = state.value!.dueFlashcards.first;
-    final currentTicket =
-        state.value!.tickets.firstWhere((t) => t.id == nextFlashcard.ticketId);
-
     state = AsyncData(state.value!.copyWith(
-      currentFlashcard: nextFlashcard,
-      currentTicket: currentTicket,
+      currentFlashcardIndex: state.value!.currentFlashcardIndex! + 1,
+      currentTicketIndex: state.value!.currentTicketIndex! + 1,
       dueFlashcards: state.value!.dueFlashcards.skip(1).toList(),
     ));
   }

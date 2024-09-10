@@ -10,7 +10,7 @@ class FlashcardsState with _$FlashcardsState {
   const factory FlashcardsState({
     @Default([]) List<TicketDto> tickets,
     @Default([]) List<FlashcardDto> dueFlashcards,
-    TicketDto? currentTicket,
-    FlashcardDto? currentFlashcard,
+    int? currentTicketIndex,
+    int? currentFlashcardIndex,
   }) = _FlashcardsState;
 }

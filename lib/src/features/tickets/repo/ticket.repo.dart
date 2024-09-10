@@ -29,9 +29,11 @@ enum TicketTranslation {
 }
 
 abstract class TicketRepo {
-  Future<List<TicketDto>> getTickets({
+  Future<List<TicketDto>> getFlashcardTickets({
     required int limit,
     required int offset,
+    required SupportedLocale language,
+    required TicketTranslation translation,
   });
 
   Future<List<TicketDto>> getExamTickets({
